@@ -17,7 +17,6 @@
     <div id="navActions">
       <a href="index.html" class="nav-link">Rapid Response</a>
       <a href="dash.html" class="nav-link">Dashboard</a>
-      <a href="eg.html" class="nav-link">Examples</a>
       <a href="settings.html" class="nav-link">Settings</a>
     </div>
   </nav>
@@ -121,9 +120,22 @@
     </div>
   </section>
 
+  <!-- MANAGER LOG -->
+  <section id="managerLog">
+    <h2>Manager Alerts</h2>
+    <div class="subtext">Only shows exceptions: unclaimed leads, duplicates, routing failures, or slow response behavior.</div>
+    <div id="managerStatus" class="muted">No alerts — all clear. Leads are being claimed on time.</div>
+    <div id="managerLogList" aria-live="polite"></div>
+    <div class="muted sample-alerts">
+      Escalation: Lead unclaimed after 180s. Manager action recommended.<br />
+      Duplicate: Potential duplicate detected. Review before pushing to DealerSocket.<br />
+      Delivery issue: Notification delivery delayed. Check Twilio status.
+    </div>
+  </section>
+
   <!-- CUSTOMER MESSAGE -->
   <section id="customer">
-    <h2>Lead Activity Timeline</h2>
+    <h2>Lead Previews</h2>
     <div class="subtext">See exactly what arrived, what happened next, and what will be pushed to DealerSocket.</div>
     <div id="leadPreviewList"></div>
   </section>

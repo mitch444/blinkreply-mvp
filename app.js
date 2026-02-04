@@ -53,14 +53,30 @@ function seedDemoLeads() {
 }
 
 function createLead(source) {
+  const names = [
+    "Ava K",
+    "Liam P",
+    "Noah R",
+    "Mia T",
+    "Olivia J",
+    "Ethan S",
+    "Sophia D",
+    "Lucas W",
+    "Isabella M",
+    "Mason H",
+    "Charlotte B",
+    "Logan C"
+  ];
+  const randomName = names[Math.floor(Math.random() * names.length)];
   return {
     id: Date.now() + Math.floor(Math.random() * 1000),
-    customer: "Sarah M",
+    customer: randomName,
     vehicle: "2024 Elantra Hybrid",
     source,
     receivedAt: new Date(),
     state: "OPEN",
     escalatedAt: null,
+    escalatedEver: false,
     claimedAt: null,
     winningRep: null
   };
@@ -113,6 +129,7 @@ function tickContests() {
       if (lead) {
         lead.state = "ESCALATED";
         lead.escalatedAt = new Date();
+        lead.escalatedEver = true;
       }
       notifyManagerUnclaimed(contest);
     }
@@ -442,8 +459,8 @@ function updateStats() {
   let claimTimes = [];
 
   leads.forEach(lead => {
-    if (lead.state === "ESCALATED") escalated++;
-    else if (lead.state === "CLAIMED") claimed++;
+    if (lead.escalatedEver) escalated++;
+    if (lead.state === "CLAIMED") claimed++;
     else open++;
 
     if (lead.claimedAt && lead.receivedAt) {
