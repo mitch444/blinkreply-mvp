@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DealerSignal – Rapid Response MVP</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <nav id="topNav">
+    <div id="brandBlock">
+      <img src="logo.png" alt="DealerSignal logo" id="logo" />
+      <div>
+        <div id="brandTitle">DealerSignal — BlinkReply Rapid Response (Local MVP)</div>
+        <div class="helper-line">Speed-to-lead routing that plugs into PrairieCRM and syncs to DealerSocket.</div>
+      </div>
+    </div>
+    <div id="navActions">
+      <a href="index.html" class="nav-link">Rapid Response</a>
+      <a href="dash.html" class="nav-link">Dashboard</a>
+      <a href="eg.html" class="nav-link">Examples</a>
+      <a href="settings.html" class="nav-link">Settings</a>
+    </div>
+  </nav>
+
+  <section id="intro">
+    <h2>Imagine if speed was no longer a guessing game.</h2>
+    <p>Imagine if every internet lead was treated the same way your best managers wish they were treated.</p>
+    <p>No delays.<br />No “I thought someone else grabbed it.”<br />No quiet erosion between marketing spend and real results.</p>
+    <p>The moment a customer raises their hand, the clock starts — and the first professional to respond earns the conversation.</p>
+    <p>BlinkReply turns response time into a visible, fair, and competitive advantage. Not through assignments. Not through micromanagement. But by letting urgency and ownership do what they’re meant to do.</p>
+    <p>This isn’t about being faster for the sake of it. It’s about respecting intent, creating accountability, and winning more of the opportunities you already pay for.</p>
+  </section>
+
+  <!-- TOP-OF-FUNNEL SOURCES -->
+  <section id="sources">
+    <div class="section-header">
+      <div>
+        <h2>Top-of-Funnel Lead Sources</h2>
+        <div class="subtext">Click a source to simulate a real lead arrival. Great for training and manager demos.</div>
+      </div>
+      <div class="section-actions">
+        <button class="primary" onclick="seedDemoLeads()">Run a Live Test</button>
+        <button onclick="seedDemoLeads()" title="Adds a few realistic test leads so you can demo claiming + escalation.">Seed Demo Leads</button>
+      </div>
+    </div>
+    <div id="sourceTiles">
+      <button class="source-tile" onclick="ingestLeadFromSource('AutoTrader')">
+        <div class="source-name">AutoTrader</div>
+        <div class="source-cta">Click to ingest lead → notify reps → start claim timer.</div>
+      </button>
+      <button class="source-tile" onclick="ingestLeadFromSource('Website')">
+        <div class="source-name">Website</div>
+        <div class="source-cta">Click to ingest lead → notify reps → start claim timer.</div>
+      </button>
+      <button class="source-tile" onclick="ingestLeadFromSource('Optimy')">
+        <div class="source-name">Optimy</div>
+        <div class="source-cta">Click to ingest lead → notify reps → start claim timer.</div>
+      </button>
+      <button class="source-tile" onclick="ingestLeadFromSource('DrivingIt')">
+        <div class="source-name">DrivingIt</div>
+        <div class="source-cta">Click to ingest lead → notify reps → start claim timer.</div>
+      </button>
+      <button class="source-tile" onclick="ingestLeadFromSource('CarGurus')">
+        <div class="source-name">CarGurus</div>
+        <div class="source-cta">Click to ingest lead → notify reps → start claim timer.</div>
+      </button>
+    </div>
+  </section>
+
+  <!-- LEAD INTAKE -->
+  <section id="intake">
+    <h2>ADF/XML Intake</h2>
+    <div class="subtext">Paste ADF/XML here to simulate real inbound emails. BlinkReply will parse, create a lead record, and start the contest timer.</div>
+    <textarea id="adfInput" placeholder="Paste ADF/XML lead payload…"></textarea>
+    <button onclick="ingestLead()">Ingest Lead</button>
+  </section>
+
+  <!-- CONTEST DASHBOARD -->
+  <section id="contest">
+    <h2>Live Lead Contest</h2>
+    <div class="subtext">This is what managers watch. New leads appear here instantly. First rep to claim wins the lead.</div>
+    <div id="contestList"></div>
+    <button onclick="jumpToEscalation()" title="Fast-forward to validate escalation behavior + manager alerts.">Jump to 179s (Test)</button>
+    <label id="soundToggleLabel">
+      <input type="checkbox" id="soundToggle" />
+      Demo sounds
+    </label>
+    <div class="helper-line">Adds audio cues for training demos (can be disabled anytime).</div>
+  </section>
+
+  <!-- SESSION STATS -->
+  <section id="stats">
+    <h2>Session Stats</h2>
+    <div class="subtext">Real-time scoreboard for speed and ownership.</div>
+    <div id="statsGrid">
+      <div class="stat">
+        <div class="stat-label">Leads Ingested</div>
+        <div class="stat-helper">Total received this session</div>
+        <div class="stat-value" id="statTotal">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Open</div>
+        <div class="stat-helper">Unclaimed leads still in play</div>
+        <div class="stat-value" id="statOpen">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Escalated</div>
+        <div class="stat-helper">Leads that hit manager threshold</div>
+        <div class="stat-value" id="statEscalated">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Claimed</div>
+        <div class="stat-helper">Successfully assigned to a rep</div>
+        <div class="stat-value" id="statClaimed">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Avg Time to Claim</div>
+        <div class="stat-helper">Speed-to-lead indicator</div>
+        <div class="stat-value" id="statAvgClaim">—</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MANAGER LOG -->
+  <section id="managerLog">
+    <h2>Manager Alerts</h2>
+    <div class="subtext">Only shows exceptions: unclaimed leads, duplicates, routing failures, or slow response behavior.</div>
+    <div id="managerStatus" class="muted">No alerts — all clear. Leads are being claimed on time.</div>
+    <div id="managerLogList" aria-live="polite"></div>
+    <div class="muted sample-alerts">
+      Escalation: Lead unclaimed after 180s. Manager action recommended.<br />
+      Duplicate: Potential duplicate detected. Review before pushing to DealerSocket.<br />
+      Delivery issue: Notification delivery delayed. Check Twilio status.
+    </div>
+  </section>
+
+  <!-- CUSTOMER MESSAGE -->
+  <section id="customer">
+    <h2>Lead Previews</h2>
+    <div class="subtext">See exactly what arrived, what happened next, and what will be pushed to DealerSocket.</div>
+    <div id="leadPreviewList"></div>
+  </section>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

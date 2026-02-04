@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DealerSignal Examples</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    #examples {
+      border: 1px solid #cfd6de;
+      border-radius: 14px;
+      padding: 16px;
+      background: #ffffff;
+    }
+
+    #examples h1 {
+      margin: 0 0 6px;
+      font-size: 22px;
+    }
+
+    #examples .subtext {
+      margin-bottom: 16px;
+    }
+
+    .carousel {
+      position: relative;
+      border: 1px solid #e1e6eb;
+      border-radius: 14px;
+      padding: 12px;
+      background: #f9fbfc;
+    }
+
+    .carousel-viewport {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .carousel-slide {
+      display: none;
+      text-align: center;
+    }
+
+    .carousel-slide.active {
+      display: block;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      display: block;
+      cursor: zoom-in;
+    }
+
+    .carousel-caption {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #5f6b76;
+      text-align: left;
+    }
+
+    .carousel-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .carousel-btn {
+      border: 1px solid #cfd6de;
+      background: #ffffff;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .carousel-btn:hover {
+      background: #eef3f7;
+    }
+
+    .carousel-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #c6ced6;
+    }
+
+    .dot.active {
+      background: #3a6ea5;
+    }
+
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 14, 20, 0.92);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      padding: 20px;
+    }
+
+    #lightbox.show {
+      display: flex;
+    }
+
+    #lightbox img {
+      max-width: 95vw;
+      max-height: 95vh;
+      border-radius: 10px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+      cursor: zoom-out;
+    }
+  </style>
+</head>
+<body>
+  <nav id="topNav">
+    <div id="brandBlock">
+      <img src="logo.png" alt="DealerSignal logo" id="logo" />
+      <div>
+        <div id="brandTitle">DealerSignal — BlinkReply Rapid Response (Local MVP)</div>
+        <div class="helper-line">Speed-to-lead routing that plugs into PrairieCRM and syncs to DealerSocket.</div>
+      </div>
+    </div>
+    <div id="navActions">
+      <a href="index.html" class="nav-link">Rapid Response</a>
+      <a href="dash.html" class="nav-link">Dashboard</a>
+      <a href="eg.html" class="nav-link">Examples</a>
+      <a href="settings.html" class="nav-link">Settings</a>
+    </div>
+  </nav>
+
+  <section id="examples">
+    <h1>Product Examples</h1>
+    <div class="subtext">Visual placeholders for how the tool can look in production. Replace these with real screenshots as they become available.</div>
+    <div class="carousel">
+      <div class="carousel-viewport" id="carouselViewport">
+        <div class="carousel-slide active">
+          <img src="ai_img1.png" alt="Example view 1" />
+          <div class="carousel-caption">Example View 1 — Rapid response workflow</div>
+        </div>
+        <div class="carousel-slide">
+          <img src="ai_img2.png" alt="Example view 2" />
+          <div class="carousel-caption">Example View 2 — Manager dashboard</div>
+        </div>
+        <div class="carousel-slide">
+          <img src="ai_img3.png" alt="Example view 3" />
+          <div class="carousel-caption">Example View 3 — Lead detail view</div>
+        </div>
+        <div class="carousel-slide">
+          <img src="ai_img4.png" alt="Example view 4" />
+          <div class="carousel-caption">Example View 4 — Alerts and escalation view</div>
+        </div>
+      </div>
+      <div class="carousel-controls">
+        <button class="carousel-btn" id="prevBtn">← Prev</button>
+        <div class="carousel-dots" id="carouselDots"></div>
+        <button class="carousel-btn" id="nextBtn">Next →</button>
+      </div>
+    </div>
+  </section>
+
+  <div id="lightbox" aria-hidden="true">
+    <img src="" alt="Expanded view" />
+  </div>
+
+  <script>
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = lightbox.querySelector("img");
+
+    const slides = Array.from(document.querySelectorAll(".carousel-slide"));
+    const dotsContainer = document.getElementById("carouselDots");
+    let activeIndex = 0;
+
+    function renderDots() {
+      dotsContainer.innerHTML = "";
+      slides.forEach((_, idx) => {
+        const dot = document.createElement("div");
+        dot.className = `dot${idx === activeIndex ? " active" : ""}`;
+        dot.addEventListener("click", () => showSlide(idx));
+        dotsContainer.appendChild(dot);
+      });
+    }
+
+    function showSlide(index) {
+      activeIndex = (index + slides.length) % slides.length;
+      slides.forEach((slide, idx) => {
+        slide.classList.toggle("active", idx === activeIndex);
+      });
+      renderDots();
+    }
+
+    document.getElementById("prevBtn").addEventListener("click", () => {
+      showSlide(activeIndex - 1);
+    });
+
+    document.getElementById("nextBtn").addEventListener("click", () => {
+      showSlide(activeIndex + 1);
+    });
+
+    document.getElementById("carouselViewport").addEventListener("click", () => {
+      showSlide(activeIndex + 1);
+    });
+
+    renderDots();
+
+    document.querySelectorAll(".carousel-slide img").forEach(img => {
+      img.addEventListener("click", () => {
+        lightboxImg.src = img.src;
+        lightbox.classList.add("show");
+        lightbox.setAttribute("aria-hidden", "false");
+      });
+    });
+
+    lightbox.addEventListener("click", () => {
+      lightbox.classList.remove("show");
+      lightbox.setAttribute("aria-hidden", "true");
+      lightboxImg.src = "";
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") showSlide(activeIndex - 1);
+      if (e.key === "ArrowRight") showSlide(activeIndex + 1);
+      if (e.key === "Escape" && lightbox.classList.contains("show")) {
+        lightbox.classList.remove("show");
+        lightbox.setAttribute("aria-hidden", "true");
+        lightboxImg.src = "";
+      }
+    });
+  </script>
+</body>
+</html>

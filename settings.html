@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DealerSignal Settings</title>
+  <style>
+    :root {
+      --bg: #f7f9fb;
+      --panel: #ffffff;
+      --border: #d7dde3;
+      --text: #1f2a37;
+      --muted: #6b7a89;
+      --accent: #3a6ea5;
+      --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    #topNav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 20px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--panel);
+      margin-bottom: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    #brandBlock {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    #logo {
+      width: 160px;
+      height: 160px;
+      object-fit: contain;
+    }
+
+    #brandTitle {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .helper-line {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    #navActions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-link {
+      font-size: 12px;
+      color: var(--accent);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      border-radius: 6px;
+      background: #f1f5f9;
+    }
+
+    .nav-link:hover {
+      background: #e8edf3;
+    }
+
+    h1 {
+      margin: 10px 0 6px;
+    }
+
+    .subtext {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .card h2 {
+      margin: 0 0 6px;
+      font-size: 16px;
+    }
+
+    .card p {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #eef2f6;
+    }
+
+    .row:last-child { border-bottom: none; }
+
+    .label {
+      font-size: 13px;
+    }
+
+    .value {
+      font-weight: bold;
+      font-size: 13px;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #e8edf3;
+      font-size: 12px;
+      color: #334155;
+    }
+
+    .note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <nav id="topNav">
+      <div id="brandBlock">
+        <img src="logo.png" alt="DealerSignal logo" id="logo" />
+        <div>
+          <div id="brandTitle">DealerSignal — BlinkReply Rapid Response (Local MVP)</div>
+          <div class="helper-line">Speed-to-lead routing that plugs into PrairieCRM and syncs to DealerSocket.</div>
+        </div>
+      </div>
+      <div id="navActions">
+        <a href="index.html" class="nav-link">Rapid Response</a>
+        <a href="dash.html" class="nav-link">Dashboard</a>
+        <a href="eg.html" class="nav-link">Examples</a>
+        <a href="settings.html" class="nav-link">Settings</a>
+      </div>
+    </nav>
+
+    <h1>Settings / Escalation Rules</h1>
+    <div class="subtext">Configuration overview for routing, escalation, and integrations. (Static demo view)</div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Contest Rules</h2>
+        <p>Core lead-claim behavior and escalation timings.</p>
+        <div class="row">
+          <div class="label">Contest State</div>
+          <div class="value">Open until claimed</div>
+        </div>
+        <div class="row">
+          <div class="label">Escalation Threshold</div>
+          <div class="value">180 seconds</div>
+        </div>
+        <div class="row">
+          <div class="label">Auto Assignment</div>
+          <div class="value">Disabled</div>
+        </div>
+        <div class="row">
+          <div class="label">Claim Timer</div>
+          <div class="value">Live per lead</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Routing & Coverage</h2>
+        <p>Who gets notified and when.</p>
+        <div class="row">
+          <div class="label">Primary Queue</div>
+          <div class="value">All active reps</div>
+        </div>
+        <div class="row">
+          <div class="label">Manager Escalation</div>
+          <div class="value">Jaiden, Kaelen, Mitch</div>
+        </div>
+        <div class="row">
+          <div class="label">After-Hours Routing</div>
+          <div class="value">Disabled</div>
+        </div>
+        <div class="row">
+          <div class="label">Duplicate Detection</div>
+          <div class="value"><span class="pill">Stubbed</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Notifications</h2>
+        <p>Channels and demo toggles.</p>
+        <div class="row">
+          <div class="label">Rep Alerts</div>
+          <div class="value">In-app + (mock)</div>
+        </div>
+        <div class="row">
+          <div class="label">Manager Alerts</div>
+          <div class="value">Console + Alerts panel</div>
+        </div>
+        <div class="row">
+          <div class="label">Demo Sounds</div>
+          <div class="value">Optional toggle</div>
+        </div>
+        <div class="row">
+          <div class="label">Delivery Health</div>
+          <div class="value"><span class="pill">Monitoring placeholder</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Integrations</h2>
+        <p>Data flow targets.</p>
+        <div class="row">
+          <div class="label">PrairieCRM</div>
+          <div class="value">Inbound lead source</div>
+        </div>
+        <div class="row">
+          <div class="label">DealerSocket</div>
+          <div class="value">Lead sync on claim</div>
+        </div>
+        <div class="row">
+          <div class="label">Twilio</div>
+          <div class="value"><span class="pill">Not connected</span></div>
+        </div>
+        <div class="row">
+          <div class="label">ADF/XML Parser</div>
+          <div class="value">Local simulation</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note">This settings page is a static MVP view for demos only. No backend changes are applied.</div>
+  </div>
+</body>
+</html>

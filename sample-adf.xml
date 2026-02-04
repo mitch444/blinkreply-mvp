@@ -1,0 +1,15 @@
+<adf>
+  <prospect>
+    <customer>
+      <name>
+        <first>Sarah</first>
+        <last>M</last>
+      </name>
+    </customer>
+    <vehicle>
+      <year>2024</year>
+      <model>Elantra Hybrid</model>
+    </vehicle>
+    <source>OEM Website</source>
+  </prospect>
+</adf>
