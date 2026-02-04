@@ -301,6 +301,7 @@ function setLeadAlert(lead, state, rep) {
   if (state === "ESCALATED") {
     lead.managerAlert = "Escalation sent after 180s.";
     lead.managerAlertState = "ESCALATED";
+    lead.escalatedEver = true;
   } else if (state === "CLAIMED" && rep) {
     const prior = lead.managerAlert ? `${lead.managerAlert} → ` : "";
     lead.managerAlert = `${prior}Resolved: claimed by ${rep.name}.`;
@@ -438,12 +439,19 @@ function buildLeadNarrative(lead) {
   } else {
     item3.innerText = "Once claimed, this lead will be created/updated in DealerSocket with the correct identifiers.";
   }
+  const itemEscalation = document.createElement("li");
+  if (lead.escalatedEver && lead.managerAlertState === "CLAIMED" && lead.winningRep) {
+    itemEscalation.innerText = `Escalation was triggered at 180s and resolved when ${lead.winningRep.name} claimed the lead.`;
+  } else if (lead.escalatedEver) {
+    itemEscalation.innerText = "Escalation was triggered at 180s to ensure manager visibility.";
+  }
   const item4 = document.createElement("li");
   item4.innerText = "From there, normal DealerSocket workflows apply (tasks, follow-up, templates, reporting).";
 
   list.appendChild(item1);
   list.appendChild(item2);
   list.appendChild(item3);
+  if (itemEscalation.innerText) list.appendChild(itemEscalation);
   list.appendChild(item4);
 
   wrapper.appendChild(title);
@@ -459,7 +467,7 @@ function updateStats() {
   let claimTimes = [];
 
   leads.forEach(lead => {
-    if (lead.escalatedEver) escalated++;
+    if (lead.escalatedEver || lead.state === "ESCALATED") escalated++;
     if (lead.state === "CLAIMED") claimed++;
     else open++;
 
