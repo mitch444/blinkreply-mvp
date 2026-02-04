@@ -18,7 +18,6 @@ let leads = [];
 let contests = [];
 let contestTickInterval = null;
 let toastTimeout = null;
-const managerLogEntries = {};
 
 function ingestLead() {
   const xml = document.getElementById("adfInput").value;
@@ -268,7 +267,7 @@ function notifyManagerUnclaimed(contest) {
   const source = lead?.source || "Unknown source";
   const message = `Escalation sent to managers: ${managers.join(", ")} (unclaimed after 180s) — ${source}`;
   console.log(`Manager alert: ${message}`);
-  upsertManagerLog(lead, "ESCALATED");
+  setLeadAlert(lead, "ESCALATED");
   playSound("escalate");
 }
 
@@ -277,47 +276,18 @@ function notifyManagerResolved(contest, rep) {
   const source = lead?.source || "Unknown source";
   const message = `Resolution sent to managers: Lead claimed by ${rep.name} — ${source}`;
   console.log(`Manager update: ${message}. Managers notified: ${managers.join(", ")}`);
-  upsertManagerLog(lead, "CLAIMED", rep);
+  setLeadAlert(lead, "CLAIMED", rep);
 }
 
-function upsertManagerLog(lead, state, rep) {
+function setLeadAlert(lead, state, rep) {
   if (!lead) return;
-  const statusEl = document.getElementById("managerStatus");
-  const list = document.getElementById("managerLogList");
-  const existing = managerLogEntries[lead.id];
-  let row = existing;
-
-  if (!row) {
-    row = document.createElement("div");
-    row.className = "manager-row";
-    row.dataset.leadId = String(lead.id);
-    row.innerHTML = `
-      <span class="manager-lead">${lead.source || "Unknown source"} • ${lead.vehicle || "Lead"}</span>
-      <span class="manager-actions"></span>
-    `;
-    list.prepend(row);
-    managerLogEntries[lead.id] = row;
-  }
-
-  const actions = row.querySelector(".manager-actions");
-  if (!actions) return;
-
   if (state === "ESCALATED") {
-    row.classList.add("escalated");
-    actions.innerText = "Escalation sent after 180s.";
+    lead.managerAlert = "Escalation sent after 180s.";
+    lead.managerAlertState = "ESCALATED";
   } else if (state === "CLAIMED" && rep) {
-    row.classList.add("resolved");
-    const current = actions.innerText.trim();
-    const suffix = `Resolved: claimed by ${rep.name}.`;
-    actions.innerText = current ? `${current} → ${suffix}` : suffix;
-  }
-
-  if (state === "ESCALATED") {
-    statusEl.classList.remove("muted");
-    statusEl.innerText = "Manager escalation sent.";
-  } else if (state === "CLAIMED") {
-    statusEl.classList.remove("muted");
-    statusEl.innerText = "Manager resolution sent.";
+    const prior = lead.managerAlert ? `${lead.managerAlert} → ` : "";
+    lead.managerAlert = `${prior}Resolved: claimed by ${rep.name}.`;
+    lead.managerAlertState = "CLAIMED";
   }
 }
 
@@ -344,13 +314,6 @@ function formatRelative(timestamp) {
 }
 
 function refreshRelativeTimes() {
-  const items = document.querySelectorAll("#managerLogList .alert-card");
-  items.forEach(item => {
-    const timeEl = item.querySelector(".alert-time");
-    const ts = Number(item.dataset.time);
-    if (timeEl && ts) timeEl.innerText = formatRelative(ts);
-  });
-
   const leadMeta = document.querySelectorAll("#leadPreviewList .lead-meta");
   leadMeta.forEach(meta => {
     const ts = Number(meta.dataset.received);
@@ -423,6 +386,13 @@ function renderLeadPreviews() {
     const body = document.createElement("div");
     body.className = "lead-body";
     body.appendChild(buildLeadNarrative(lead));
+
+    if (lead.managerAlert) {
+      const alert = document.createElement("div");
+      alert.className = `lead-alert${lead.managerAlertState === "CLAIMED" ? " resolved" : ""}`;
+      alert.innerText = lead.managerAlert;
+      body.appendChild(alert);
+    }
 
     card.appendChild(header);
     card.appendChild(meta);

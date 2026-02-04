@@ -128,21 +128,6 @@ button.primary {
   color: #6b6b6b;
 }
 
-#managerLog {
-  border-color: #d9a441;
-  background: #fff8e7;
-}
-
-#managerStatus {
-  font-weight: bold;
-  margin-bottom: 8px;
-}
-
-#managerLogList {
-  font-size: 14px;
-  line-height: 1.4;
-}
-
 .muted {
   color: #6b6b6b;
   font-weight: normal;
@@ -296,11 +281,6 @@ button.primary {
   opacity: 1;
 }
 
-.sample-alerts {
-  margin-top: 8px;
-  font-size: 12px;
-}
-
 #toast {
   position: fixed;
   right: 20px;
@@ -351,30 +331,20 @@ button.primary {
   transition: background 0.4s ease;
 }
 
-#managerLogList .manager-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding: 8px 0;
-  border-bottom: 1px solid #efe7d1;
-  font-size: 13px;
+.lead-alert {
+  margin: 6px 0 0;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: #fff3d6;
+  border: 1px solid #e5c28b;
+  color: #6b4a00;
+  font-size: 12px;
 }
 
-#managerLogList .manager-row:last-child {
-  border-bottom: none;
-}
-
-#managerLogList .manager-row.escalated .manager-actions {
-  color: #9a6b00;
-  font-weight: bold;
-}
-
-#managerLogList .manager-row.resolved .manager-actions {
+.lead-alert.resolved {
+  background: #e8f5e9;
+  border-color: #9bd0a3;
   color: #1b5e20;
-}
-
-#managerLogList .manager-lead {
-  font-weight: bold;
 }
 
 #soundToggleLabel {
