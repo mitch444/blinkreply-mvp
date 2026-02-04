@@ -18,6 +18,7 @@
       <a href="index.html" class="nav-link">Rapid Response</a>
       <a href="dash.html" class="nav-link">Dashboard</a>
       <a href="eg.html" class="nav-link">Examples</a>
+      <a href="walk.html" class="nav-link">Walkthrough</a>
       <a href="settings.html" class="nav-link">Settings</a>
     </div>
   </nav>
@@ -42,30 +43,97 @@
         <button class="primary" onclick="seedDemoLeads()">Run a Live Test</button>
       </div>
     </div>
-    <div id="sourceTiles">
-      <button class="source-tile" onclick="ingestLeadFromSource('AutoTrader')">
-        <div class="source-name">AutoTrader</div>
-        <div class="source-cta">Click to ingest lead → notify reps → start claim timer.</div>
-      </button>
-      <button class="source-tile" onclick="ingestLeadFromSource('Website')">
-        <div class="source-name">Website</div>
-        <div class="source-cta">Click to ingest lead → notify reps → start claim timer.</div>
-      </button>
-      <button class="source-tile" onclick="ingestLeadFromSource('Optimy')">
-        <div class="source-name">Optimy</div>
-        <div class="source-cta">Click to ingest lead → notify reps → start claim timer.</div>
-      </button>
-      <button class="source-tile" onclick="ingestLeadFromSource('DrivingIt')">
-        <div class="source-name">DrivingIt</div>
-        <div class="source-cta">Click to ingest lead → notify reps → start claim timer.</div>
-      </button>
-      <button class="source-tile" onclick="ingestLeadFromSource('CarGurus')">
-        <div class="source-name">CarGurus</div>
-        <div class="source-cta">Click to ingest lead → notify reps → start claim timer.</div>
-      </button>
+    <div id="sourcesGrid">
+      <div>
+        <div class="source-tools">
+          <div class="source-helper">Click a source to simulate a real lead arrival. Great for training and manager demos.</div>
+          <div class="source-meta">Live preview updates in real time.</div>
+        </div>
+        <div id="sourceTiles">
+        <button class="source-tile" onclick="ingestLeadFromSource('AutoTrader')">
+          <div class="source-name">AutoTrader</div>
+          <div class="source-cta">Click to ingest lead → notify reps → start claim timer.</div>
+        </button>
+        <button class="source-tile" onclick="ingestLeadFromSource('Website')">
+          <div class="source-name">Website</div>
+          <div class="source-cta">Click to ingest lead → notify reps → start claim timer.</div>
+        </button>
+        <button class="source-tile" onclick="ingestLeadFromSource('Optimy')">
+          <div class="source-name">Optimy</div>
+          <div class="source-cta">Click to ingest lead → notify reps → start claim timer.</div>
+        </button>
+        <button class="source-tile" onclick="ingestLeadFromSource('DrivingIt')">
+          <div class="source-name">DrivingIt</div>
+          <div class="source-cta">Click to ingest lead → notify reps → start claim timer.</div>
+        </button>
+        <button class="source-tile" onclick="ingestLeadFromSource('CarGurus')">
+          <div class="source-name">CarGurus</div>
+          <div class="source-cta">Click to ingest lead → notify reps → start claim timer.</div>
+        </button>
+        </div>
+        <div class="examples-link">
+          Examples page: <a href="eg.html">View example screens</a>
+        </div>
+      </div>
+      <div id="phoneMock">
+        <div class="phone-shell">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="phone-status">BlinkReply Alerts</div>
+            <div class="sms-card" id="smsCard">
+              <div class="sms-title" id="smsTitle">⚡ New Lead (0s old)</div>
+              <div class="sms-body" id="smsBody">Select a source to simulate an inbound lead.</div>
+              <div class="sms-meta" id="smsMeta">Ready to notify reps.</div>
+            </div>
+            <div class="sms-card claimed" id="smsClaimed" style="display:none;">
+              <div class="sms-title">Lead Claimed</div>
+              <div class="sms-body" id="smsClaimedBody">Claimed by —</div>
+              <div class="sms-meta">Timer stopped</div>
+            </div>
+            <div class="sms-stack" id="smsStack"></div>
+          </div>
+        </div>
+        <div class="subtext">Live notification preview (auto-updates during demo).</div>
+      </div>
     </div>
-    <div class="subtext">
-      Examples page: <a href="eg.html">View example screens</a>
+  </section>
+
+  <section id="reality">
+    <div class="section-header">
+      <div>
+        <h2>The 120-Second Reality</h2>
+        <div class="subtext">Digital delay feels like showroom abandonment.</div>
+      </div>
+    </div>
+    <div id="realityClock">
+      <div class="clock-label">Live Delay Clock</div>
+      <div class="clock-time" id="delayClock">02:00</div>
+      <div class="clock-sub" id="clockSub">Countdown to escalation</div>
+    </div>
+    <div id="realitySplit">
+      <div class="reality-panel">
+        <div class="panel-title">Digital Lead Summary</div>
+        <div class="panel-body">
+          <div class="lead-pill">Guest: <span id="realityGuest">New guest</span></div>
+          <div class="lead-pill">Vehicle: <span id="realityVehicle">Vehicle interest</span></div>
+          <div class="lead-pill">Source: <span id="realitySource">Inbound lead</span></div>
+        </div>
+      </div>
+      <div class="reality-panel showroom" id="showroomPanel">
+        <div class="panel-title">If This Guest Were Standing on Your Floor</div>
+        <div class="showroom-scene" id="showroomScene">
+          <div class="showroom-narration" id="showroomNarration">A guest just walked in.</div>
+          <div class="showroom-overlay" id="showroomOverlay">
+            <div class="overlay-title">BlinkReply escalates before this moment.</div>
+            <div class="overlay-sub">Because online guests deserve the same respect as in-store guests.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="behavior-card" id="behaviorCard">
+      <div class="behavior-title" id="behaviorTitle">Guest just walked in.</div>
+      <div class="behavior-body" id="behaviorBody">They’re looking around. Expectations are high.</div>
+      <div class="behavior-meta" id="behaviorMeta">00:00–00:20</div>
     </div>
   </section>
 
@@ -75,6 +143,36 @@
     <div class="subtext">Paste ADF/XML here to simulate real inbound emails. BlinkReply will parse, create a lead record, and start the contest timer.</div>
     <textarea id="adfInput" placeholder="Paste ADF/XML lead payload…"></textarea>
     <button onclick="ingestLead()">Ingest Lead</button>
+    <div id="adfExperience">
+      <div class="adf-col">
+        <div class="adf-header">Raw ADF/XML</div>
+        <details id="adfRawDetails">
+          <summary>View Raw XML</summary>
+          <pre id="adfRaw">Paste or load an ADF/XML payload to view it here.</pre>
+        </details>
+      </div>
+      <div class="adf-col">
+        <div class="adf-header">Key Signals Detected</div>
+        <div id="adfParsingState" class="muted">Waiting for ADF/XML…</div>
+        <div id="adfSignals"></div>
+      </div>
+      <div class="adf-col">
+        <div class="adf-header">Rep-Ready Lead Card</div>
+        <div id="adfLeadCard" class="rep-card">
+          <div class="rep-name">—</div>
+          <div class="rep-contact">Phone • Email</div>
+          <div class="rep-location">Location</div>
+          <div class="rep-vehicle">Vehicle summary</div>
+          <div class="rep-badges"></div>
+          <div class="rep-source">Source</div>
+          <div class="rep-actions">
+            <button class="primary">⚡ Claim & Respond</button>
+            <button class="ghost">Preview Message</button>
+            <button class="ghost" onclick="toggleRawLead()">View Raw Lead</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- CONTEST DASHBOARD -->
@@ -82,7 +180,6 @@
     <h2>Live Lead Contest</h2>
     <div class="subtext">This is what managers watch. New leads appear here instantly. First rep to claim wins the lead.</div>
     <div id="contestList"></div>
-    <button onclick="jumpToEscalation()" title="Fast-forward to validate escalation behavior + manager alerts.">Jump to 179s (Test)</button>
     <label id="soundToggleLabel">
       <input type="checkbox" id="soundToggle" />
       Demo sounds
@@ -141,6 +238,37 @@
     <h2>Lead Previews</h2>
     <div class="subtext">See exactly what arrived, what happened next, and what will be pushed to DealerSocket.</div>
     <div id="leadPreviewList"></div>
+  </section>
+
+  <section id="dsFaq">
+    <h2>DealerSocket Integration — A+++ Accuracy</h2>
+    <div class="subtext">DealerSocket is the system of record. BlinkReply is the system of urgency.</div>
+    <div class="accordion">
+      <div class="accordion-item">
+        <button class="accordion-toggle">Does this replace DealerSocket?</button>
+        <div class="accordion-content">No. DealerSocket remains the source of truth. BlinkReply accelerates response and routes ownership without altering DealerSocket data integrity.</div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-toggle">How we preserve ADF/XML + field mapping</button>
+        <div class="accordion-content">ADF/XML is preserved as-is. We map fields directly without rewriting or truncating so DealerSocket receives the same payload.</div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-toggle">Duplicate handling</button>
+        <div class="accordion-content">Potential duplicates are held for manager review before any push to DealerSocket.</div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-toggle">Audit trail</button>
+        <div class="accordion-content">Every claim, escalation, and routing decision is timestamped for visibility and accountability.</div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-toggle">Failure modes</button>
+        <div class="accordion-content">If delivery is delayed (Twilio), we retry and surface the event with clear visibility so nothing goes dark.</div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-toggle">After-hours routing</button>
+        <div class="accordion-content">After-hours routing is available but currently disabled in the Settings MVP.</div>
+      </div>
+    </div>
   </section>
 
   <div id="toast" role="status" aria-live="polite"></div>

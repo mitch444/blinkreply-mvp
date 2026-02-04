@@ -29,7 +29,7 @@
     }
 
     .page {
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
       padding: 24px;
     }
@@ -332,23 +332,55 @@
 
     .kpi-targets {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 10px;
+      grid-template-columns: repeat(7, minmax(140px, 1fr));
+      gap: 8px;
       margin-top: 12px;
     }
 
     .kpi-target {
       background: var(--panel-2);
       border-radius: 10px;
-      padding: 10px;
-      font-size: 12px;
+      padding: 8px 10px;
+      font-size: 11px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .kpi-target .goal-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .kpi-target .goal-label {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .thermo {
+      height: 6px;
+      border-radius: 999px;
+      background: #223041;
+      overflow: hidden;
+    }
+
+    .thermo .fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #2dd4bf, #47b1ff);
+      border-radius: 999px;
     }
 
     .funnel {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(6, minmax(120px, 1fr));
       gap: 8px;
       align-items: stretch;
+      overflow-x: auto;
     }
 
     .funnel-step {
@@ -359,13 +391,13 @@
     }
 
     .funnel-step .count {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: bold;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
     .funnel-step .label {
-      font-size: 12px;
+      font-size: 11px;
       color: var(--muted);
     }
 
@@ -408,6 +440,7 @@
         <a href="index.html" class="nav-link">Rapid Response</a>
         <a href="dash.html" class="nav-link">Dashboard</a>
         <a href="eg.html" class="nav-link">Examples</a>
+        <a href="walk.html" class="nav-link">Walkthrough</a>
         <a href="settings.html" class="nav-link">Settings</a>
       </div>
     </nav>
@@ -460,37 +493,6 @@
           <p class="subtext">Mon–Sun totals for the current week snapshot.</p>
           <div class="daily-chart" id="dailyChart"></div>
         </div>
-
-        <div class="panel">
-          <h2>Rep Funnel Performance</h2>
-          <p class="subtext">Conversion rates by rep against KPI targets.</p>
-          <table>
-            <thead>
-              <tr>
-                <th>Rep</th>
-                <th>Leads</th>
-                <th>Avg Response</th>
-                <th>Contacted</th>
-                <th>Appt / Contacted</th>
-                <th>Show / Appt</th>
-                <th>Closed / Show</th>
-                <th>Delivered / Closed</th>
-                <th>Lead → Closed</th>
-                <th>Lead → Appt</th>
-              </tr>
-            </thead>
-            <tbody id="repTable"></tbody>
-          </table>
-          <div class="kpi-targets">
-            <div class="kpi-target">Contacted &gt; 80%</div>
-            <div class="kpi-target">Appt of Contacted &gt; 50%</div>
-            <div class="kpi-target">Show of Appt &gt; 90%</div>
-            <div class="kpi-target">Show to Closed &gt; 60%</div>
-            <div class="kpi-target">Closed to Delivered &gt; 90%</div>
-            <div class="kpi-target">Lead to Closed &gt; 20%</div>
-            <div class="kpi-target">Lead to Appt &gt; 30%</div>
-          </div>
-        </div>
       </div>
 
       <div>
@@ -506,6 +508,37 @@
           <p class="subtext">Last 3 leads with ownership and response status.</p>
           <div id="recentLeads"></div>
         </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Rep Funnel Performance</h2>
+      <p class="subtext">Conversion rates by rep against KPI targets.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Rep</th>
+            <th>Leads</th>
+            <th>Avg Response</th>
+            <th>Contacted</th>
+            <th>Appt / Contacted</th>
+            <th>Show / Appt</th>
+            <th>Closed / Show</th>
+            <th>Delivered / Closed</th>
+            <th>Lead → Closed</th>
+            <th>Lead → Appt</th>
+          </tr>
+        </thead>
+        <tbody id="repTable"></tbody>
+      </table>
+      <div class="kpi-targets">
+        <div class="kpi-target">Contacted &gt; 80%</div>
+        <div class="kpi-target">Appt of Contacted &gt; 50%</div>
+        <div class="kpi-target">Show of Appt &gt; 90%</div>
+        <div class="kpi-target">Show to Closed &gt; 60%</div>
+        <div class="kpi-target">Closed to Delivered &gt; 90%</div>
+        <div class="kpi-target">Lead to Closed &gt; 20%</div>
+        <div class="kpi-target">Lead to Appt &gt; 30%</div>
       </div>
     </div>
   </div>
@@ -776,19 +809,38 @@
       const leadToAppt = pct(counts.Appointed, leads.length);
 
       const statsList = [
-        `Contacted: ${contactedPct}% (KPI > 80%)`,
-        `Appointed of Contacted: ${appointedPct}% (KPI > 50%)`,
-        `Show of Appointed: ${showPct}% (KPI > 90%)`,
-        `Show to Closed: ${closePct}% (KPI > 60%)`,
-        `Closed to Delivered: ${deliveredPct}% (KPI > 90%)`,
-        `Lead to Closed: ${leadToClosed}% (KPI > 20%)`,
-        `Lead to Appt: ${leadToAppt}% (KPI > 30%)`
+        { label: "Contacted", value: contactedPct, target: 80 },
+        { label: "Appt of Contacted", value: appointedPct, target: 50 },
+        { label: "Show of Appt", value: showPct, target: 90 },
+        { label: "Show to Closed", value: closePct, target: 60 },
+        { label: "Closed to Delivered", value: deliveredPct, target: 90 },
+        { label: "Lead to Closed", value: leadToClosed, target: 20 },
+        { label: "Lead to Appt", value: leadToAppt, target: 30 }
       ];
 
-      statsList.forEach(text => {
+      statsList.forEach(item => {
         const card = document.createElement("div");
         card.className = "kpi-target";
-        card.innerText = text;
+
+        const header = document.createElement("div");
+        header.className = "goal-label";
+        header.innerText = item.label;
+
+        const row = document.createElement("div");
+        row.className = "goal-row";
+        row.innerHTML = `<span>${item.value}%</span><span>KPI > ${item.target}%</span>`;
+
+        const thermo = document.createElement("div");
+        thermo.className = "thermo";
+        const fill = document.createElement("div");
+        fill.className = "fill";
+        const pct = Math.min(100, Math.round((item.value / item.target) * 100));
+        fill.style.width = `${pct}%`;
+        thermo.appendChild(fill);
+
+        card.appendChild(header);
+        card.appendChild(row);
+        card.appendChild(thermo);
         stats.appendChild(card);
       });
     }

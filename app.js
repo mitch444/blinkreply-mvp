@@ -18,6 +18,12 @@ let leads = [];
 let contests = [];
 let contestTickInterval = null;
 let toastTimeout = null;
+let phoneTimer = null;
+let phoneStartTime = null;
+let phoneActive = false;
+let realityTimer = null;
+let phoneHistory = [];
+let adfParseTimer = null;
 
 function ingestLead() {
   const xml = document.getElementById("adfInput").value;
@@ -27,6 +33,7 @@ function ingestLead() {
     return;
   }
 
+  runAdfExperience(xml);
   activeLead = createLead("ADF/XML");
   trackLead(activeLead);
   startContest(activeLead);
@@ -38,6 +45,7 @@ function ingestLeadFromSource(source) {
   trackLead(activeLead);
   startContest(activeLead);
   showToast("Lead ingested. Contest started.");
+  updatePhoneMock(activeLead.source);
 }
 
 function seedDemoLeads() {
@@ -109,6 +117,7 @@ function startContest(lead) {
   updateStats();
   playSound("start");
   ensureContestTick();
+  startPhoneTimer(lead.source);
 }
 
 function ensureContestTick() {
@@ -176,6 +185,7 @@ function claimLead(contestId, repId) {
   renderContests();
   updateCustomerMessage();
   updateStats();
+  markPhoneClaimed(rep.name);
 }
 
 function renderContests() {
@@ -232,7 +242,7 @@ function renderContests() {
     });
 
     const jumpBtn = document.createElement("button");
-    jumpBtn.innerText = "Jump to 179s (Test)";
+    jumpBtn.innerText = "Jump to 109s (Test)";
     jumpBtn.onclick = () => jumpToEscalation(contest.id);
 
     card.appendChild(header);
@@ -320,7 +330,7 @@ function jumpToEscalation(contestId) {
     contest = contests.find(c => c.state !== "CLAIMED");
   }
   if (!contest) return alert("No open contest found.");
-  contest.startTime = Date.now() - 179000;
+  contest.startTime = Date.now() - 11000;
   renderContests();
 }
 
@@ -376,6 +386,315 @@ function playSound(type) {
 
 function updateCustomerMessage() {
   renderLeadPreviews();
+}
+
+function runAdfExperience(xml) {
+  const raw = document.getElementById("adfRaw");
+  const state = document.getElementById("adfParsingState");
+  const signals = document.getElementById("adfSignals");
+  if (!raw || !state || !signals) return;
+
+  raw.textContent = xml.trim();
+  state.innerText = "Parsing ADF/XML…";
+  signals.innerHTML = "";
+
+  if (adfParseTimer) clearTimeout(adfParseTimer);
+  adfParseTimer = setTimeout(() => {
+    const data = parseAdfXml(xml);
+    state.innerText = "Signals detected";
+    renderSignals(signals, data);
+    renderLeadCard(data);
+  }, 500);
+}
+
+function parseAdfXml(xml) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(xml, "text/xml");
+
+  function get(path) {
+    const el = doc.querySelector(path);
+    return el ? el.textContent.trim() : "";
+  }
+
+  function getByAttr(path, attr, value) {
+    const el = doc.querySelector(`${path}[${attr}="${value}"]`);
+    return el ? el.textContent.trim() : "";
+  }
+
+  const source =
+    get("source") ||
+    get("provider name") ||
+    get("provider > name") ||
+    getByAttr("provider name", "type", "business") ||
+    getByAttr("provider name", "part", "full") ||
+    getByAttr("id", "source", "CarGurus") ||
+    "ADF/XML";
+
+  const year = get("vehicle year");
+  const make = get("vehicle make");
+  const model = get("vehicle model");
+  const trim = get("vehicle trim");
+  const stock = get("vehicle stock");
+  const vin = get("vehicle vin");
+  const price = get("vehicle price");
+  const currency = get("vehicle price")
+    ? (doc.querySelector("vehicle price")?.getAttribute("currency") || "USD")
+    : "";
+  const odo = get("vehicle odometer");
+  const odoUnits = doc.querySelector("vehicle odometer")?.getAttribute("units") || "";
+
+  const first =
+    get("customer name first") ||
+    getByAttr("customer contact name", "part", "first") ||
+    getByAttr("customer contact name", "type", "individual");
+  const last =
+    get("customer name last") ||
+    getByAttr("customer contact name", "part", "last");
+  const phone = get("customer contact phone") || get("customer phone");
+  const email = get("customer contact email") || get("customer email");
+  const city = get("customer address city") || get("customer contact address city");
+  const region =
+    get("customer address region") ||
+    get("customer address state") ||
+    get("customer address regioncode") ||
+    get("customer contact address regioncode");
+  const timeframe = get("timeframe description") || get("customer timeframe description");
+  const financing = get("finance method") || get("vehicle finance method") || get("finance");
+  const comments = get("comments") || get("customer comments");
+
+  return {
+    source,
+    vehicle: { year, make, model, trim, stock, vin, price, currency, odo, odoUnits },
+    customer: { first, last, phone, email, city, region },
+    timeframe,
+    financing,
+    comments
+  };
+}
+
+function renderSignals(container, data) {
+  const items = [
+    { label: "Source", value: data.source || "—" },
+    { label: "Vehicle", value: [data.vehicle.year, data.vehicle.make, data.vehicle.model, data.vehicle.trim].filter(Boolean).join(" ") || "—" },
+    { label: "Stock / VIN", value: [data.vehicle.stock, data.vehicle.vin].filter(Boolean).join(" • ") || "—" },
+    { label: "Price", value: data.vehicle.price ? `${data.vehicle.price} ${data.vehicle.currency || ""}` : "—" },
+    { label: "Odometer", value: data.vehicle.odo ? `${data.vehicle.odo} ${data.vehicle.odoUnits || ""}` : "—" },
+    { label: "Customer", value: [data.customer.first, data.customer.last].filter(Boolean).join(" ") || "—" },
+    { label: "Phone", value: data.customer.phone || "—" },
+    { label: "Email", value: data.customer.email || "—" },
+    { label: "City / Region", value: [data.customer.city, data.customer.region].filter(Boolean).join(", ") || "—" },
+    { label: "Timeframe", value: data.timeframe || "—" },
+    { label: "Financing", value: data.financing || "—" },
+    { label: "Market Context", value: data.comments || "—" }
+  ];
+
+  items.forEach((item, idx) => {
+    const el = document.createElement("div");
+    el.className = "signal-item";
+    el.innerHTML = `<div class="signal-label">${item.label}</div><div class="signal-value">${item.value}</div>`;
+    container.appendChild(el);
+    setTimeout(() => el.classList.add("show"), 200 + idx * 220);
+  });
+}
+
+function renderLeadCard(data) {
+  const card = document.getElementById("adfLeadCard");
+  if (!card) return;
+  const name = [data.customer.first, data.customer.last].filter(Boolean).join(" ") || "Guest";
+  const location = [data.customer.city, data.customer.region].filter(Boolean).join(", ") || "Location";
+  const vehicle = [data.vehicle.year, data.vehicle.make, data.vehicle.model, data.vehicle.trim].filter(Boolean).join(" ") || "Vehicle";
+  const intentBadges = [];
+  if (data.timeframe) intentBadges.push(data.timeframe);
+  if (data.financing) intentBadges.push(data.financing);
+  if (data.comments) intentBadges.push(data.comments);
+
+  card.querySelector(".rep-name").innerText = name;
+  card.querySelector(".rep-contact").innerText = `${data.customer.phone || "Phone"} • ${data.customer.email || "Email"}`;
+  card.querySelector(".rep-location").innerText = location;
+  card.querySelector(".rep-vehicle").innerText = vehicle;
+  card.querySelector(".rep-source").innerText = `Source: ${data.source || "ADF/XML"}`;
+
+  const badges = card.querySelector(".rep-badges");
+  badges.innerHTML = "";
+  intentBadges.slice(0, 3).forEach(text => {
+    const badge = document.createElement("div");
+    badge.className = "rep-badge";
+    badge.innerText = text;
+    badges.appendChild(badge);
+  });
+}
+
+function toggleRawLead() {
+  const details = document.getElementById("adfRawDetails");
+  if (details) details.open = !details.open;
+}
+
+function startPhoneTimer(source) {
+  phoneStartTime = Date.now();
+  phoneActive = true;
+  updatePhoneMock(source);
+  if (phoneTimer) clearInterval(phoneTimer);
+  phoneTimer = setInterval(() => {
+    if (!phoneActive) return;
+    updatePhoneMock(source);
+  }, 1000);
+}
+
+function updatePhoneMock(source) {
+  const title = document.getElementById("smsTitle");
+  const body = document.getElementById("smsBody");
+  const meta = document.getElementById("smsMeta");
+  const card = document.getElementById("smsCard");
+  const claimed = document.getElementById("smsClaimed");
+  const stack = document.getElementById("smsStack");
+  if (!title || !body || !meta || !card || !claimed) return;
+
+  const elapsed = phoneStartTime ? Math.max(0, Math.floor((Date.now() - phoneStartTime) / 1000)) : 0;
+  title.innerText = `⚡ New Lead (${elapsed}s old)`;
+  body.innerText = `${source || "Lead Source"} – Tap to Claim`;
+  meta.innerText = "Reps notified in real time.";
+  card.style.display = "block";
+  claimed.style.display = "none";
+
+  if (stack && source) {
+    const exists = phoneHistory.find(item => item.source === source);
+    if (!exists) {
+      phoneHistory.unshift({ source, time: Date.now() });
+      phoneHistory = phoneHistory.slice(0, 3);
+      stack.innerHTML = "";
+      phoneHistory.forEach(item => {
+        const row = document.createElement("div");
+        row.className = "sms-mini";
+        row.innerText = `${item.source} • ${formatRelative(item.time)}`;
+        stack.appendChild(row);
+      });
+    }
+  }
+}
+
+function markPhoneClaimed(repName) {
+  const card = document.getElementById("smsCard");
+  const claimed = document.getElementById("smsClaimed");
+  const body = document.getElementById("smsClaimedBody");
+  if (!card || !claimed || !body) return;
+  phoneActive = false;
+  if (phoneTimer) clearInterval(phoneTimer);
+  body.innerText = `Claimed by ${repName}`;
+  card.style.display = "none";
+  claimed.style.display = "block";
+}
+
+function initRealityTimeline() {
+  const clock = document.getElementById("delayClock");
+  const clockSub = document.getElementById("clockSub");
+  const card = document.getElementById("behaviorCard");
+  const title = document.getElementById("behaviorTitle");
+  const body = document.getElementById("behaviorBody");
+  const meta = document.getElementById("behaviorMeta");
+  const guest = document.getElementById("realityGuest");
+  const vehicle = document.getElementById("realityVehicle");
+  const source = document.getElementById("realitySource");
+  const reality = document.getElementById("reality");
+  const showroomScene = document.getElementById("showroomScene");
+  const showroomNarration = document.getElementById("showroomNarration");
+  const showroomOverlay = document.getElementById("showroomOverlay");
+  if (!clock || !clockSub || !card || !title || !body || !meta || !guest || !vehicle || !source || !reality) return;
+
+  const total = 120;
+  const ranges = [
+    { from: 0, to: 20, headline: "Guest just walked in.", subtext: "They’re looking around. Expectations are high.", narration: "A guest just walked in." },
+    { from: 21, to: 40, headline: "They’re still waiting.", subtext: "They assume someone will be right with them.", narration: "They’re waiting near the desk." },
+    { from: 41, to: 60, headline: "This is starting to feel uncomfortable.", subtext: "No greeting. No acknowledgment.", narration: "No one has acknowledged them yet." },
+    { from: 61, to: 80, headline: "A manager would notice this.", subtext: "This wouldn’t be acceptable on the floor.", narration: "This would feel uncomfortable in person." },
+    { from: 81, to: 105, headline: "They’re questioning the store.", subtext: "Professionalism. Care. Attention.", narration: "A manager would step in by now." },
+    { from: 106, to: 119, headline: "They’re about to leave.", subtext: "And they won’t tell you why.", narration: "They’re deciding whether to leave." }
+  ];
+
+  let startTime = Date.now();
+  let frozen = false;
+
+  function formatTime(seconds) {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+  }
+
+  function updateNarrative(elapsed) {
+    const range = ranges.find(r => elapsed >= r.from && elapsed <= r.to);
+    if (range) {
+      title.innerText = range.headline;
+      body.innerText = range.subtext;
+      meta.innerText = `${formatTime(range.from)}–${formatTime(range.to)}`;
+      if (showroomNarration) {
+        showroomNarration.style.opacity = "0";
+        showroomNarration.style.transform = "translateY(4px)";
+        setTimeout(() => {
+          showroomNarration.innerText = range.narration;
+          showroomNarration.style.opacity = "1";
+          showroomNarration.style.transform = "translateY(0)";
+        }, 200);
+      }
+    }
+  }
+
+  function updateVisuals(elapsed, remaining) {
+    const dimLevel = Math.min(6, Math.floor((elapsed / total) * 6) + 1);
+    const classes = ["reality-dim-1", "reality-dim-2", "reality-dim-3", "reality-dim-4", "reality-dim-5", "reality-dim-6"];
+    reality.classList.remove(...classes);
+    reality.classList.add(classes[dimLevel - 1]);
+
+    if (elapsed >= 75) {
+      reality.classList.add("reality-emphasis");
+    } else {
+      reality.classList.remove("reality-emphasis");
+    }
+
+    if (remaining <= 10) {
+      reality.classList.add("reality-last10");
+    } else {
+      reality.classList.remove("reality-last10");
+    }
+
+    if (showroomScene) {
+      const brightness = elapsed <= 75 ? 1 - (elapsed / 75) * 0.4 : 0.6 - ((elapsed - 75) / 45) * 0.2;
+      const saturation = elapsed <= 75 ? 1 - (elapsed / 75) * 0.25 : 0.75 - ((elapsed - 75) / 45) * 0.25;
+      showroomScene.style.filter = `brightness(${Math.max(0.4, brightness)}) saturate(${Math.max(0.4, saturation)})`;
+    }
+  }
+
+  function tick() {
+    if (frozen) return;
+    const elapsed = Math.min(total, Math.floor((Date.now() - startTime) / 1000));
+    const remaining = Math.max(0, total - elapsed);
+    clock.innerText = formatTime(remaining);
+    clockSub.innerText = remaining === 0 ? "Escalation reached" : "Countdown to escalation";
+    card.classList.remove("escalated");
+    updateNarrative(elapsed);
+    updateVisuals(elapsed, remaining);
+
+    if (activeLead) {
+      guest.innerText = activeLead.customer || "New guest";
+      vehicle.innerText = activeLead.vehicle || "Vehicle interest";
+      source.innerText = activeLead.source || "Inbound lead";
+    }
+
+    if (remaining === 0) {
+      frozen = true;
+      title.innerText = "BlinkReply escalates before this moment.";
+      body.innerText = "Because online guests deserve the same respect as in-store guests.";
+      meta.innerText = "Escalation / manager visibility";
+      card.classList.add("escalated");
+      if (showroomOverlay) showroomOverlay.classList.add("show");
+      setTimeout(() => {
+        frozen = false;
+        if (showroomOverlay) showroomOverlay.classList.remove("show");
+        startTime = Date.now();
+      }, 2500);
+    }
+  }
+
+  setInterval(tick, 1000);
+  tick();
 }
 
 function renderLeadPreviews() {
@@ -502,7 +821,11 @@ function updateStats() {
 
 function isValidXmlPayload(xml) {
   if (!xml) return false;
-  return xml.includes("<adf") && xml.includes("</adf>");
+  const trimmed = xml.trim().toLowerCase();
+  return (
+    (trimmed.includes("<adf") && trimmed.includes("</adf>")) ||
+    (trimmed.includes("<prospect") && trimmed.includes("</prospect>"))
+  );
 }
 
 function showToast(message, isError = false) {
@@ -520,3 +843,19 @@ function showToast(message, isError = false) {
 function findLead(leadId) {
   return leads.find(lead => lead.id === leadId);
 }
+
+function initAccordion() {
+  const toggles = document.querySelectorAll(".accordion-toggle");
+  toggles.forEach(toggle => {
+    toggle.addEventListener("click", () => {
+      const item = toggle.parentElement;
+      if (!item) return;
+      item.classList.toggle("open");
+    });
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  initRealityTimeline();
+  initAccordion();
+});

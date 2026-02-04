@@ -25,9 +25,9 @@
     }
 
     .page {
-      max-width: 1100px;
+      max-width: 1400px;
       margin: 0 auto;
-      padding: 20px;
+      padding: 24px;
     }
 
     #topNav {
@@ -101,6 +101,13 @@
       gap: 16px;
     }
 
+    .grid-wide {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
     .card {
       background: var(--panel);
       border: 1px solid var(--border);
@@ -154,6 +161,133 @@
       color: var(--muted);
       margin-top: 10px;
     }
+
+    .field {
+      display: grid;
+      gap: 6px;
+      margin-bottom: 10px;
+      font-size: 12px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="url"],
+    input[type="password"],
+    select,
+    textarea {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 13px;
+      width: 100%;
+      background: #ffffff;
+    }
+
+    textarea { min-height: 80px; }
+
+    .btn {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #f1f5f9;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .btn.primary {
+      background: #0f4d7a;
+      color: #fff;
+      border-color: #0f4d7a;
+    }
+
+    .pill-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #e8edf3;
+      font-size: 12px;
+      color: #334155;
+    }
+
+    .rep-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+
+    .rep-table th,
+    .rep-table td {
+      text-align: left;
+      padding: 6px 4px;
+      border-bottom: 1px solid #eef2f6;
+    }
+
+    .rep-table th {
+      color: var(--muted);
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 11px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      background: #22c55e;
+    }
+
+    .status-dot.off {
+      background: #ef4444;
+    }
+
+    .visual-bar {
+      height: 8px;
+      border-radius: 999px;
+      background: #e8edf3;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+
+    .visual-bar .fill {
+      height: 100%;
+      background: linear-gradient(90deg, #2dd4bf, #3a6ea5);
+      width: 60%;
+    }
+
+    .flow-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 8px;
+    }
+
+    .flow-step {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      background: #f8fafc;
+      font-size: 12px;
+    }
+
+    .flow-step strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    @media (max-width: 980px) {
+      .grid-wide { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -170,6 +304,7 @@
         <a href="index.html" class="nav-link">Rapid Response</a>
         <a href="dash.html" class="nav-link">Dashboard</a>
         <a href="eg.html" class="nav-link">Examples</a>
+        <a href="walk.html" class="nav-link">Walkthrough</a>
         <a href="settings.html" class="nav-link">Settings</a>
       </div>
     </nav>
@@ -260,6 +395,309 @@
           <div class="label">ADF/XML Parser</div>
           <div class="value">Local simulation</div>
         </div>
+      </div>
+    </div>
+
+    <div class="grid-wide">
+      <div class="card">
+        <h2>Sales Rep Directory</h2>
+        <p>Add reps, set coverage, and manage on-call rotation.</p>
+        <div class="field">
+          <label>New Rep Name</label>
+          <input type="text" placeholder="e.g., Jordan Lee" />
+        </div>
+        <div class="field">
+          <label>Primary Email</label>
+          <input type="email" placeholder="rep@dealership.com" />
+        </div>
+        <div class="field">
+          <label>Mobile (SMS)</label>
+          <input type="tel" placeholder="+1 (555) 123-4567" />
+        </div>
+        <div class="field">
+          <label>Coverage Group</label>
+          <select>
+            <option>All Sales</option>
+            <option>Internet</option>
+            <option>Commercial</option>
+            <option>BDC</option>
+          </select>
+        </div>
+        <button class="btn primary">Add Rep</button>
+
+        <table class="rep-table">
+          <thead>
+            <tr>
+              <th>Rep</th>
+              <th>Status</th>
+              <th>Group</th>
+              <th>Escalation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Eric</td>
+              <td><span class="status-dot"></span> Active</td>
+              <td>Internet</td>
+              <td>Manager after 180s</td>
+            </tr>
+            <tr>
+              <td>Brady</td>
+              <td><span class="status-dot"></span> Active</td>
+              <td>All Sales</td>
+              <td>Manager after 180s</td>
+            </tr>
+            <tr>
+              <td>Sumit</td>
+              <td><span class="status-dot off"></span> Off</td>
+              <td>BDC</td>
+              <td>Manager after 180s</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="note">Rep list is demo-only. Edits are not persisted.</div>
+      </div>
+
+      <div class="card">
+        <h2>Routing Visualization</h2>
+        <p>How a lead moves from intake to ownership.</p>
+        <div class="flow-steps">
+          <div class="flow-step">
+            <strong>Lead Intake</strong>
+            Source → ADF/XML payload
+          </div>
+          <div class="flow-step">
+            <strong>Notify Reps</strong>
+            SMS + in-app
+          </div>
+          <div class="flow-step">
+            <strong>Contest Window</strong>
+            180s until escalation
+          </div>
+          <div class="flow-step">
+            <strong>Manager Alert</strong>
+            If unclaimed
+          </div>
+          <div class="flow-step">
+            <strong>DealerSocket Sync</strong>
+            Claim → record update
+          </div>
+        </div>
+        <div class="note">This is a visual walkthrough for internal training.</div>
+      </div>
+    </div>
+
+    <div class="grid-wide">
+      <div class="card">
+        <h2>Twilio SMS Lines</h2>
+        <p>Provision and manage messaging numbers.</p>
+        <div class="field">
+          <label>Twilio Account SID</label>
+          <input type="text" placeholder="ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" />
+        </div>
+        <div class="field">
+          <label>Twilio Auth Token</label>
+          <input type="password" placeholder="••••••••••••••••••" />
+        </div>
+        <div class="field">
+          <label>Default From Number</label>
+          <input type="tel" placeholder="+1 (555) 222-2222" />
+        </div>
+        <button class="btn primary">Connect Twilio</button>
+        <div class="visual-bar"><div class="fill"></div></div>
+        <div class="note">Connection health: 98% delivery (demo).</div>
+
+        <div class="field">
+          <label>Provision New Line</label>
+          <div class="pill-group">
+            <span class="pill">Local Area Code</span>
+            <span class="pill">Toll-Free</span>
+            <span class="pill">Branded Sender ID</span>
+          </div>
+        </div>
+        <button class="btn">Create SMS Line</button>
+      </div>
+
+      <div class="card">
+        <h2>API Credentials</h2>
+        <p>Manage integrations and webhooks.</p>
+        <div class="field">
+          <label>DealerSocket API Endpoint</label>
+          <input type="url" placeholder="https://api.dealersocket.com/v2/leads" />
+        </div>
+        <div class="field">
+          <label>DealerSocket API Key</label>
+          <input type="password" placeholder="••••••••••••••••••" />
+        </div>
+        <div class="field">
+          <label>PrairieCRM Webhook URL</label>
+          <input type="url" placeholder="https://hooks.blinkreply.com/prairiecrm" />
+        </div>
+        <div class="field">
+          <label>Health Checks</label>
+          <textarea placeholder="GET /health\nPOST /lead/validate\nPOST /lead/push"></textarea>
+        </div>
+        <button class="btn">Save API Settings</button>
+        <div class="note">Keys and endpoints are masked in demo mode.</div>
+      </div>
+    </div>
+
+    <div class="grid-wide">
+      <div class="card">
+        <h2>Advanced Escalation Rules</h2>
+        <p>Fine-tune what happens at 180s and beyond.</p>
+        <div class="field">
+          <label>Escalation Threshold (seconds)</label>
+          <input type="text" value="180" />
+        </div>
+        <div class="field">
+          <label>Manager Escalation List</label>
+          <input type="text" value="Jaiden, Kaelen, Mitch" />
+        </div>
+        <div class="field">
+          <label>Duplicate Handling</label>
+          <select>
+            <option>Hold for manager review</option>
+            <option>Auto-merge if same email/phone</option>
+            <option>Auto-reject duplicates</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Escalation Messaging</label>
+          <textarea>Lead unclaimed after 180s. Manager action recommended.</textarea>
+        </div>
+        <button class="btn">Save Escalation Rules</button>
+      </div>
+
+      <div class="card">
+        <h2>After-Hours Coverage</h2>
+        <p>Define off-hours routing and holiday schedules.</p>
+        <div class="field">
+          <label>After-Hours Routing</label>
+          <select>
+            <option>Disabled (current)</option>
+            <option>On-call manager</option>
+            <option>Rotating rep pool</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>On-Call Rotation</label>
+          <input type="text" placeholder="Eric, Brady, Sonny" />
+        </div>
+        <div class="field">
+          <label>Holiday Calendar</label>
+          <input type="text" placeholder="Import .ics or add dates" />
+        </div>
+        <button class="btn">Save After-Hours Rules</button>
+      </div>
+    </div>
+
+    <div class="grid-wide">
+      <div class="card">
+        <h2>Email Performance Newsletter</h2>
+        <p>Automated insights on response speed and funnel performance.</p>
+        <div class="row">
+          <div class="label">Weekly Roundup</div>
+          <div class="value">Mondays at 11:00 AM</div>
+        </div>
+        <div class="field">
+          <label>Recipient List</label>
+          <input type="text" placeholder="manager@dealer.com, gm@dealer.com" />
+        </div>
+        <div class="field">
+          <label>Default Snapshot Window</label>
+          <select>
+            <option>Previous 7 days (recommended)</option>
+            <option>Rolling 14 days</option>
+            <option>Rolling 30 days</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Included Sections</label>
+          <div class="pill-group">
+            <span class="pill">Response Time</span>
+            <span class="pill">Escalations</span>
+            <span class="pill">Rep KPIs</span>
+            <span class="pill">Source Mix</span>
+            <span class="pill">Funnel Health</span>
+          </div>
+        </div>
+        <button class="btn primary">Save Weekly Settings</button>
+        <div class="note">Newsletter schedules are demo-only in this MVP.</div>
+      </div>
+
+      <div class="card">
+        <h2>Custom Digest Schedules</h2>
+        <p>Create additional performance snapshots for specific cadences.</p>
+        <div class="field">
+          <label>Digest Name</label>
+          <input type="text" placeholder="Morning 3-Day Snapshot" />
+        </div>
+        <div class="field">
+          <label>Frequency</label>
+          <select>
+            <option>Daily</option>
+            <option>Mon / Wed / Fri</option>
+            <option>Weekly</option>
+            <option>Monthly</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Send Time</label>
+          <input type="text" placeholder="08:00 AM" />
+        </div>
+        <div class="field">
+          <label>Snapshot Window</label>
+          <select>
+            <option>Rolling 3 days</option>
+            <option>Rolling 10 days</option>
+            <option>Rolling 14 days</option>
+            <option>Rolling 30 days</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Delivery Days</label>
+          <div class="pill-group">
+            <span class="pill">Mon</span>
+            <span class="pill">Tue</span>
+            <span class="pill">Wed</span>
+            <span class="pill">Thu</span>
+            <span class="pill">Fri</span>
+          </div>
+        </div>
+        <button class="btn">Add Digest</button>
+
+        <table class="rep-table">
+          <thead>
+            <tr>
+              <th>Digest</th>
+              <th>Window</th>
+              <th>Schedule</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Morning 3-Day Snapshot</td>
+              <td>Rolling 3 days</td>
+              <td>Daily • 8:00 AM</td>
+              <td><span class="status-dot"></span> Active</td>
+            </tr>
+            <tr>
+              <td>10-Day KPI Pulse</td>
+              <td>Rolling 10 days</td>
+              <td>Mon/Wed/Fri • 7:30 AM</td>
+              <td><span class="status-dot"></span> Active</td>
+            </tr>
+            <tr>
+              <td>Weekly Funnel Review</td>
+              <td>Previous 7 days</td>
+              <td>Mon • 11:00 AM</td>
+              <td><span class="status-dot off"></span> Paused</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="note">Schedules shown are examples for internal alignment.</div>
       </div>
     </div>
 

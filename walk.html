@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BlinkReply Live Walkthrough</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      background: #0b1118;
+      color: #e6edf3;
+    }
+
+    #topNav {
+      background: #0f1722;
+      border-color: #1f2b3a;
+    }
+
+    .hazard {
+      background: #2b1b0f;
+      border: 1px solid #f59e0b;
+      color: #fef3c7;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+
+    .walk-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 16px;
+    }
+
+    .walk-panel {
+      background: #101826;
+      border: 1px solid #1f2b3a;
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    .walk-panel h2 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    .walk-sub {
+      font-size: 12px;
+      color: #9fb0c0;
+      margin-bottom: 10px;
+    }
+
+    .funnel {
+      display: grid;
+      gap: 10px;
+    }
+
+    .funnel-step {
+      background: #0f1a28;
+      border: 1px solid #1f2b3a;
+      border-radius: 12px;
+      padding: 12px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .funnel-step.active {
+      border-color: #47b1ff;
+      box-shadow: 0 0 0 1px rgba(71, 177, 255, 0.3);
+    }
+
+    .step-title {
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .step-meta {
+      font-size: 12px;
+      color: #9fb0c0;
+    }
+
+    .step-status {
+      font-size: 12px;
+      color: #e6edf3;
+      background: #1a2a3d;
+      padding: 6px 10px;
+      border-radius: 999px;
+    }
+
+    .adf-input {
+      width: 100%;
+      min-height: 140px;
+      border-radius: 10px;
+      border: 1px solid #1f2b3a;
+      background: #0f1a28;
+      color: #e6edf3;
+      padding: 10px;
+      font-size: 12px;
+    }
+
+    .btn {
+      background: #0f4d7a;
+      border: 1px solid #0f4d7a;
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #162437;
+      border: 1px solid #1f2b3a;
+      font-size: 12px;
+      color: #e6edf3;
+    }
+
+    .contact-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .contact-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid #1f2b3a;
+      background: #0f1a28;
+    }
+
+    @media (max-width: 980px) {
+      .walk-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <nav id="topNav">
+    <div id="brandBlock">
+      <img src="logo2.png" alt="DealerSignal logo" id="logo" />
+      <div>
+        <div id="brandTitle">DealerSignal — BlinkReply Rapid Response (Local MVP)</div>
+        <div class="helper-line">Speed-to-lead routing that plugs into PrairieCRM and syncs to DealerSocket.</div>
+      </div>
+    </div>
+    <div id="navActions">
+      <a href="index.html" class="nav-link">Rapid Response</a>
+      <a href="dash.html" class="nav-link">Dashboard</a>
+      <a href="eg.html" class="nav-link">Examples</a>
+      <a href="walk.html" class="nav-link">Walkthrough</a>
+      <a href="settings.html" class="nav-link">Settings</a>
+    </div>
+  </nav>
+
+  <div class="hazard">This will actually text these people. Give them a heads up if you're running tests, please.</div>
+
+  <div class="walk-grid">
+    <div class="walk-panel">
+      <h2>ADF/XML Intake (Live Test)</h2>
+      <div class="walk-sub">Paste a dummy lead and start a real contest. This flow is prepared for Twilio.</div>
+      <textarea class="adf-input" id="walkXml" placeholder="Paste ADF/XML here..."></textarea>
+      <button class="btn" id="walkStart">Start Live Contest</button>
+      <div class="walk-sub">Twilio is expected to be configured server-side. This page is UI-only prep.</div>
+    </div>
+
+    <div class="walk-panel">
+      <h2>Live Funnel — Flight Control View</h2>
+      <div class="walk-sub">Single lead, two reps, one escalation path.</div>
+      <div class="funnel" id="walkFunnel">
+        <div class="funnel-step active">
+          <div>
+            <div class="step-title">Lead Ingested</div>
+            <div class="step-meta">ADF/XML parsed → Lead created</div>
+          </div>
+          <div class="step-status" id="stepIngest">Waiting</div>
+        </div>
+        <div class="funnel-step">
+          <div>
+            <div class="step-title">Notify Reps</div>
+            <div class="step-meta">SMS to Jaiden + Mitch</div>
+          </div>
+          <div class="step-status" id="stepNotify">Pending</div>
+        </div>
+        <div class="funnel-step">
+          <div>
+            <div class="step-title">Contest Window</div>
+            <div class="step-meta">120s to escalation</div>
+          </div>
+          <div class="step-status" id="stepContest">Idle</div>
+        </div>
+        <div class="funnel-step">
+          <div>
+            <div class="step-title">Manager Escalation</div>
+            <div class="step-meta">Kaelen alerted at 120s</div>
+          </div>
+          <div class="step-status" id="stepEscalate">Standby</div>
+        </div>
+        <div class="funnel-step">
+          <div>
+            <div class="step-title">Ownership</div>
+            <div class="step-meta">Claimed by first rep</div>
+          </div>
+          <div class="step-status" id="stepClaim">Unclaimed</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="walk-grid" style="margin-top:16px;">
+    <div class="walk-panel">
+      <h2>Rep Contacts (Hardcoded)</h2>
+      <div class="walk-sub">Only manager-approved numbers are used in this test.</div>
+      <div class="contact-list">
+        <div class="contact-row"><span>Jaiden (Rep)</span><span class="pill" id="repJaiden">+1 204***2052</span></div>
+        <div class="contact-row"><span>Mitch (Rep)</span><span class="pill" id="repMitch">+1 431***1044</span></div>
+      </div>
+    </div>
+    <div class="walk-panel">
+      <h2>Manager Escalation</h2>
+      <div class="walk-sub">Escalation routes only to Kaelen.</div>
+      <div class="contact-list">
+        <div class="contact-row"><span>Kaelen (Manager)</span><span class="pill" id="mgrKaelen">+1 204***5555</span></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const steps = {
+      ingest: document.getElementById("stepIngest"),
+      notify: document.getElementById("stepNotify"),
+      contest: document.getElementById("stepContest"),
+      escalate: document.getElementById("stepEscalate"),
+      claim: document.getElementById("stepClaim")
+    };
+
+    document.getElementById("walkStart").addEventListener("click", () => {
+      steps.ingest.innerText = "Parsed";
+      steps.notify.innerText = "Sent";
+      steps.contest.innerText = "Live";
+      steps.escalate.innerText = "Scheduled";
+      steps.claim.innerText = "Unclaimed";
+    });
+  </script>
+</body>
+</html>
