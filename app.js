@@ -53,21 +53,24 @@ function seedDemoLeads() {
 }
 
 function createLead(source) {
-  const names = [
-    "Ava K",
-    "Liam P",
-    "Noah R",
-    "Mia T",
-    "Olivia J",
-    "Ethan S",
-    "Sophia D",
-    "Lucas W",
-    "Isabella M",
-    "Mason H",
-    "Charlotte B",
-    "Logan C"
+  const firstNames = [
+    "Ava",
+    "Liam",
+    "Noah",
+    "Mia",
+    "Olivia",
+    "Ethan",
+    "Sophia",
+    "Lucas",
+    "Isabella",
+    "Mason",
+    "Charlotte",
+    "Logan"
   ];
-  const randomName = names[Math.floor(Math.random() * names.length)];
+  const lastInitials = ["K", "P", "R", "T", "J", "S", "D", "W", "M", "H", "B", "C"];
+  const first = firstNames[Math.floor(Math.random() * firstNames.length)];
+  const last = lastInitials[Math.floor(Math.random() * lastInitials.length)];
+  const randomName = `${first} ${last}`;
   return {
     id: Date.now() + Math.floor(Math.random() * 1000),
     customer: randomName,
@@ -336,8 +339,9 @@ function refreshRelativeTimes() {
   leadMeta.forEach(meta => {
     const ts = Number(meta.dataset.received);
     if (ts) {
-      const statusText = meta.innerText.split(" • Status: ")[1] || "OPEN";
-      meta.innerText = `Received ${formatRelative(ts)} • Status: ${statusText}`;
+      const statusText = meta.dataset.status || "OPEN";
+      const escalated = meta.dataset.escalated === "true";
+      meta.innerText = `Received ${formatRelative(ts)} • Status: ${statusText}${escalated ? " • Escalated" : ""}`;
     }
   });
 }
@@ -399,7 +403,9 @@ function renderLeadPreviews() {
     meta.className = "lead-meta";
     const receivedAt = lead.receivedAt ? new Date(lead.receivedAt).getTime() : Date.now();
     meta.dataset.received = String(receivedAt);
-    meta.innerText = `Received ${formatRelative(receivedAt)} • Status: ${state}`;
+    meta.dataset.status = state;
+    meta.dataset.escalated = lead.escalatedEver ? "true" : "false";
+    meta.innerText = `Received ${formatRelative(receivedAt)} • Status: ${state}${lead.escalatedEver ? " • Escalated" : ""}`;
 
     const body = document.createElement("div");
     body.className = "lead-body";
