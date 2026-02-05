@@ -598,6 +598,14 @@ function initRealityTimeline() {
   const showroomScene = document.getElementById("showroomScene");
   const showroomNarration = document.getElementById("showroomNarration");
   const showroomOverlay = document.getElementById("showroomOverlay");
+  const thoughtLine = document.getElementById("thoughtLine");
+  const patienceFill = document.getElementById("patienceFill");
+  const patienceCopy = document.getElementById("patienceCopy");
+  const attentionYour = document.getElementById("attentionYour");
+  const attentionBirchwood = document.getElementById("attentionBirchwood");
+  const attentionFocus = document.getElementById("attentionFocus");
+  const attentionMurray = document.getElementById("attentionMurray");
+  const finalOverlay = document.getElementById("realityFinalOverlay");
   if (!clock || !clockSub || !card || !title || !body || !meta || !guest || !vehicle || !source || !reality) return;
 
   const total = 120;
@@ -609,6 +617,27 @@ function initRealityTimeline() {
     { from: 81, to: 105, headline: "They’re questioning the store.", subtext: "Professionalism. Care. Attention.", narration: "A manager would step in by now." },
     { from: 106, to: 119, headline: "They’re about to leave.", subtext: "And they won’t tell you why.", narration: "They’re deciding whether to leave." }
   ];
+
+  const patienceStates = [
+    { from: 0, to: 30, text: "Engaged. Expecting a response." },
+    { from: 31, to: 60, text: "Waiting politely." },
+    { from: 61, to: 90, text: "Confidence slipping." },
+    { from: 91, to: 110, text: "Reconsidering the store." },
+    { from: 111, to: 120, text: "About to move on." }
+  ];
+
+  const thoughtLines = [
+    "Did my message even go through?",
+    "Maybe Birchwood will reply faster.",
+    "This is a big purchase — I don’t want to regret it.",
+    "If they’re slow now, what about service later?",
+    "Winter’s coming. I need confidence in the store.",
+    "I don’t want to make the wrong choice."
+  ];
+
+  const thoughtDurations = [10, 9, 11, 8, 10, 9];
+  let lastThoughtIndex = -1;
+  let lastPatienceText = "";
 
   let startTime = Date.now();
   let frozen = false;
@@ -634,6 +663,82 @@ function initRealityTimeline() {
           showroomNarration.style.transform = "translateY(0)";
         }, 200);
       }
+    }
+  }
+
+  function mixColor(start, end, ratio) {
+    const mix = (a, b) => Math.round(a + (b - a) * ratio);
+    return `rgb(${mix(start[0], end[0])}, ${mix(start[1], end[1])}, ${mix(start[2], end[2])})`;
+  }
+
+  function updatePatience(elapsed) {
+    if (!patienceFill || !patienceCopy) return;
+    const baseRemaining = 1 - elapsed / total;
+    const accel = elapsed > 90 ? Math.pow((elapsed - 90) / 30, 2) * 0.08 : 0;
+    const remaining = Math.max(0.02, baseRemaining - accel);
+    patienceFill.style.width = `${Math.max(0, Math.min(1, remaining)) * 100}%`;
+
+    const progress = 1 - remaining;
+    const startColor = [120, 176, 208];
+    const midColor = [184, 192, 201];
+    const endColor = [214, 170, 120];
+    let color = "";
+    if (progress < 0.6) {
+      color = mixColor(startColor, midColor, progress / 0.6);
+    } else {
+      color = mixColor(midColor, endColor, (progress - 0.6) / 0.4);
+    }
+    patienceFill.style.backgroundColor = color;
+
+    const state = patienceStates.find(s => elapsed >= s.from && elapsed <= s.to);
+    if (state && state.text !== lastPatienceText) {
+      lastPatienceText = state.text;
+      patienceCopy.style.opacity = "0";
+      setTimeout(() => {
+        patienceCopy.textContent = state.text;
+        patienceCopy.style.opacity = "1";
+      }, 220);
+    }
+  }
+
+  function updateAttentionSplit(elapsed) {
+    if (!attentionYour || !attentionBirchwood || !attentionFocus || !attentionMurray) return;
+    const t = Math.min(1, elapsed / total);
+    const drift = Math.min(1, t + Math.max(0, (t - 0.75)) * 0.2);
+    let yourShare = 0.68 - drift * 0.18;
+    yourShare = Math.max(0.46, Math.min(0.7, yourShare));
+    const competitorTotal = 1 - yourShare;
+    const weights = [0.36, 0.34, 0.30];
+    const birchwood = competitorTotal * weights[0];
+    const focus = competitorTotal * weights[1];
+    const murray = competitorTotal * weights[2];
+
+    attentionYour.style.width = `${yourShare * 100}%`;
+    attentionBirchwood.style.width = `${birchwood * 100}%`;
+    attentionFocus.style.width = `${focus * 100}%`;
+    attentionMurray.style.width = `${murray * 100}%`;
+  }
+
+  function updateThoughts(elapsed) {
+    if (!thoughtLine) return;
+    const totalCycle = thoughtDurations.reduce((sum, value) => sum + value, 0);
+    const position = elapsed % totalCycle;
+    let index = 0;
+    let cursor = 0;
+    for (let i = 0; i < thoughtDurations.length; i++) {
+      cursor += thoughtDurations[i];
+      if (position < cursor) {
+        index = i;
+        break;
+      }
+    }
+    if (index !== lastThoughtIndex) {
+      lastThoughtIndex = index;
+      thoughtLine.style.opacity = "0";
+      setTimeout(() => {
+        thoughtLine.textContent = thoughtLines[index % thoughtLines.length];
+        thoughtLine.style.opacity = "1";
+      }, 240);
     }
   }
 
@@ -671,6 +776,9 @@ function initRealityTimeline() {
     card.classList.remove("escalated");
     updateNarrative(elapsed);
     updateVisuals(elapsed, remaining);
+    updatePatience(elapsed);
+    updateAttentionSplit(elapsed);
+    updateThoughts(elapsed);
 
     if (activeLead) {
       guest.innerText = activeLead.customer || "New guest";
@@ -684,10 +792,16 @@ function initRealityTimeline() {
       body.innerText = "Because online guests deserve the same respect as in-store guests.";
       meta.innerText = "Escalation / manager visibility";
       card.classList.add("escalated");
-      if (showroomOverlay) showroomOverlay.classList.add("show");
+      if (finalOverlay) {
+        finalOverlay.classList.add("show");
+        finalOverlay.setAttribute("aria-hidden", "false");
+      }
       setTimeout(() => {
         frozen = false;
-        if (showroomOverlay) showroomOverlay.classList.remove("show");
+        if (finalOverlay) {
+          finalOverlay.classList.remove("show");
+          finalOverlay.setAttribute("aria-hidden", "true");
+        }
         startTime = Date.now();
       }, 2500);
     }

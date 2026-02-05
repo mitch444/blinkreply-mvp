@@ -3,155 +3,644 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BlinkReply Live Walkthrough</title>
+  <title>BlinkReply Mission Control</title>
+  <link rel="icon" href="icon.png" />
   <link rel="stylesheet" href="styles.css" />
   <style>
+    :root {
+      --bg: #0b1118;
+      --bg-2: #0f1622;
+      --panel: #101826;
+      --panel-2: #0f1a28;
+      --border: #1f2b3a;
+      --text: #e6edf3;
+      --muted: #9fb0c0;
+      --accent: #47b1ff;
+      --accent-2: #8b5cf6;
+      --warn: #f59e0b;
+      --good: #34d399;
+      --bad: #ef4444;
+      --shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+    }
+
+    * { box-sizing: border-box; }
+
     body {
-      background: #0b1118;
-      color: #e6edf3;
+      margin: 0;
+      font-family: "Segoe UI", "Roboto", Arial, sans-serif;
+      background: radial-gradient(circle at top, #1b2a3b, #0b1118 60%);
+      color: var(--text);
+      padding: 18px;
     }
 
     #topNav {
-      background: #0f1722;
-      border-color: #1f2b3a;
+      background: rgba(16, 24, 38, 0.9);
+      border-color: #1c2a3a;
+      backdrop-filter: blur(8px);
+      box-shadow: var(--shadow);
     }
 
-    .hazard {
-      background: #2b1b0f;
-      border: 1px solid #f59e0b;
-      color: #fef3c7;
-      padding: 12px 16px;
-      border-radius: 12px;
+    #logo {
+      width: 150px;
+      height: 150px;
+    }
+
+    #brandTitle {
+      font-size: 18px;
+    }
+
+    .page {
+      max-width: 1250px;
+      margin: 0 auto;
+    }
+
+    .panel {
+      background: linear-gradient(150deg, rgba(18, 28, 45, 0.95), rgba(12, 18, 28, 0.95));
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .panel + .panel {
+      margin-top: 14px;
+    }
+
+    .panel h2 {
+      margin: 0 0 6px;
+      font-size: 22px;
+    }
+
+    .subtext {
+      color: var(--muted);
       font-size: 13px;
-      margin-bottom: 16px;
+      margin: 0 0 12px;
     }
 
-    .walk-grid {
+    .status-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .status-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border: 1px solid transparent;
+    }
+
+    .chip-good { background: rgba(52, 211, 153, 0.15); border-color: rgba(52, 211, 153, 0.4); color: #9ff0cd; }
+    .chip-warn { background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.4); color: #f6d08b; }
+    .chip-info { background: rgba(71, 177, 255, 0.15); border-color: rgba(71, 177, 255, 0.4); color: #9fd3ff; }
+    .chip-purple { background: rgba(139, 92, 246, 0.18); border-color: rgba(139, 92, 246, 0.5); color: #d6c5ff; }
+
+    .server-note {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #fcd34d;
+    }
+
+    .arm-panel {
       display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 16px;
-    }
-
-    .walk-panel {
-      background: #101826;
-      border: 1px solid #1f2b3a;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      align-items: center;
+      margin-top: 14px;
+      padding: 12px;
       border-radius: 14px;
-      padding: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      border: 1px solid #233247;
+      background: rgba(8, 13, 20, 0.6);
     }
 
-    .walk-panel h2 {
-      margin: 0 0 8px;
+    .arm-toggle {
+      position: relative;
+      width: 88px;
+      height: 48px;
+      border-radius: 999px;
+      background: #0b1320;
+      border: 1px solid #2a3b52;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.6);
+      cursor: pointer;
+    }
+
+    .arm-toggle input {
+      position: absolute;
+      opacity: 0;
+      inset: 0;
+      cursor: pointer;
+    }
+
+    .arm-toggle .arm-lever {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #cbd5e1, #64748b);
+      border: 1px solid #273547;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.6);
+      transition: transform 0.25s ease, background 0.25s ease;
+    }
+
+    .arm-toggle.active .arm-lever {
+      transform: translateX(42px);
+      background: radial-gradient(circle at 30% 30%, #f8cf6a, #b45309);
+    }
+
+    .arm-state {
+      display: grid;
+      gap: 6px;
+    }
+
+    .arm-state .label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #94a3b8;
+    }
+
+    .arm-state .value {
       font-size: 16px;
+      font-weight: 600;
+      color: #e2e8f0;
     }
 
-    .walk-sub {
+    .arm-state .note {
       font-size: 12px;
       color: #9fb0c0;
-      margin-bottom: 10px;
     }
 
-    .funnel {
+    .range-alert {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 20px;
+      margin-bottom: 12px;
+      border-radius: 14px;
+      background: linear-gradient(120deg, #2b1208, #8b2c0c 60%, #c2410c);
+      color: #fff7ed;
+      border: 1px solid rgba(255, 226, 186, 0.35);
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+      opacity: 0;
+      transform: translateY(-10px);
+      pointer-events: none;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .range-alert.show {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .range-flash {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(185, 28, 28, 0.95), rgba(127, 29, 29, 0.98));
+      opacity: 0;
+      pointer-events: none;
+      z-index: 1200;
+      transition: opacity 0.9s ease;
+    }
+
+    .range-flash.show {
+      opacity: 1;
+    }
+
+    .range-alert h1 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: 0.08em;
+    }
+
+    .range-alert p {
+      margin: 4px 0 0;
+      font-size: 12px;
+      color: #ffedd5;
+    }
+
+    .range-alert .alert-chip {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 226, 186, 0.4);
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .server-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .server-row input {
+      flex: 1;
+      min-width: 220px;
+      background: #0f1a28;
+      border: 1px solid #1f2b3a;
+      border-radius: 10px;
+      padding: 8px 10px;
+      color: var(--text);
+      font-size: 12px;
+    }
+
+    .server-btn {
+      border: 1px solid #2a3b4d;
+      background: #0f1a28;
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .server-btn:hover {
+      border-color: var(--accent);
+      color: #cfe7ff;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .card {
+      background: rgba(13, 20, 30, 0.9);
+      border: 1px solid #1e2a3a;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+    }
+
+    .card h3 {
+      margin: 0 0 6px;
+      font-size: 16px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #b9c6d3;
+    }
+
+    .source-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .source-tile {
+      border: 1px solid #1f2b3a;
+      background: #101a28;
+      color: var(--text);
+      border-radius: 12px;
+      padding: 10px;
+      text-align: left;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .source-tile span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 4px;
+    }
+
+    .source-tile:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(71, 177, 255, 0.3);
+    }
+
+    .primary-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      background: linear-gradient(135deg, #6d28d9, #8b5cf6);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .lead-meta {
+      margin-top: 12px;
+      border-top: 1px solid #1f2b3a;
+      padding-top: 12px;
+      font-size: 13px;
+      color: #cbd5e1;
+    }
+
+    .payload-area {
+      margin-top: 12px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .payload-area textarea {
+      width: 100%;
+      min-height: 110px;
+      background: #0f1a28;
+      border: 1px solid #1f2b3a;
+      border-radius: 10px;
+      padding: 10px;
+      color: var(--text);
+      font-size: 12px;
+    }
+
+    .timeline {
       display: grid;
       gap: 10px;
     }
 
-    .funnel-step {
-      background: #0f1a28;
-      border: 1px solid #1f2b3a;
-      border-radius: 12px;
-      padding: 12px;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: center;
-      gap: 12px;
+    .timer {
+      font-size: 48px;
+      font-weight: 700;
+      color: #ff8b3d;
     }
 
-    .funnel-step.active {
-      border-color: #47b1ff;
-      box-shadow: 0 0 0 1px rgba(71, 177, 255, 0.3);
-    }
-
-    .step-title {
-      font-weight: bold;
-      margin-bottom: 4px;
-    }
-
-    .step-meta {
-      font-size: 12px;
-      color: #9fb0c0;
-    }
-
-    .step-status {
-      font-size: 12px;
-      color: #e6edf3;
-      background: #1a2a3d;
-      padding: 6px 10px;
+    .progress {
+      height: 8px;
       border-radius: 999px;
+      background: #1a2330;
+      overflow: hidden;
     }
 
-    .adf-input {
-      width: 100%;
-      min-height: 140px;
-      border-radius: 10px;
-      border: 1px solid #1f2b3a;
-      background: #0f1a28;
-      color: #e6edf3;
-      padding: 10px;
-      font-size: 12px;
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #ff7a18, #ff4d4d);
+      transition: width 0.3s ease;
     }
 
-    .btn {
-      background: #0f4d7a;
-      border: 1px solid #0f4d7a;
-      color: #fff;
-      padding: 10px 14px;
-      border-radius: 8px;
-      font-size: 12px;
-      cursor: pointer;
-      margin-top: 8px;
-    }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: #162437;
-      border: 1px solid #1f2b3a;
-      font-size: 12px;
-      color: #e6edf3;
-    }
-
-    .contact-list {
+    .signal-grid {
       display: grid;
-      gap: 8px;
-      margin-top: 8px;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 14px;
+      margin-top: 16px;
     }
 
-    .contact-row {
+    .signal-card {
+      background: rgba(13, 20, 30, 0.9);
+      border: 1px solid #1f2b3a;
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .signal-title {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 10px;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #b9c6d3;
+    }
+
+    .signal-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid #273447;
+      background: rgba(15, 23, 40, 0.6);
+      color: #cbd5e1;
+    }
+
+    .signal-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .signal-row {
+      display: grid;
+      grid-template-columns: 16px 1fr auto;
+      align-items: center;
+      gap: 10px;
       font-size: 12px;
+      color: #d8e2ee;
       padding: 8px 10px;
       border-radius: 10px;
       border: 1px solid #1f2b3a;
       background: #0f1a28;
     }
 
-    @media (max-width: 980px) {
-      .walk-grid { grid-template-columns: 1fr; }
+    .signal-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.4);
+    }
+
+    .signal-dot.warn {
+      background: #f59e0b;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.35);
+    }
+
+    .signal-dot.bad {
+      background: #ef4444;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.35);
+    }
+
+    .signal-tag {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid #2a3b52;
+      background: rgba(15, 23, 40, 0.7);
+      color: #93c5fd;
+    }
+
+    .dial-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .dial {
+      display: grid;
+      gap: 8px;
+      justify-items: center;
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid #1f2b3a;
+      background: #0f1a28;
+    }
+
+    .dial-face {
+      width: 86px;
+      height: 86px;
+      border-radius: 50%;
+      background:
+        conic-gradient(#22c55e 0deg 210deg, #f59e0b 210deg 255deg, #ef4444 255deg 285deg, #1f2937 285deg 360deg);
+      display: grid;
+      place-items: center;
+      border: 1px solid #2a3b52;
+      position: relative;
+    }
+
+    .dial-needle {
+      width: 2px;
+      height: 32px;
+      background: #f8fafc;
+      position: absolute;
+      top: 10px;
+      transform-origin: bottom center;
+      transform: rotate(-40deg);
+      border-radius: 2px;
+      box-shadow: 0 0 6px rgba(248, 250, 252, 0.4);
+    }
+
+    .dial-center {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #0f172a;
+      border: 1px solid #475569;
+      z-index: 2;
+    }
+
+    .dial-label {
+      font-size: 11px;
+      color: #cbd5e1;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      text-align: center;
+    }
+
+    .dial-value {
+      font-size: 12px;
+      color: #9fd3ff;
+    }
+
+    .flight-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .list-card {
+      background: #0f1724;
+      border: 1px solid #1f2b3a;
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .rep-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid #1f2b3a;
+      background: #0f1a28;
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+
+    .rep-row .tag {
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 10px;
+      border: 1px solid transparent;
+    }
+
+    .tag-warn { background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.4); color: #f6d08b; }
+    .tag-good { background: rgba(52, 211, 153, 0.15); border-color: rgba(52, 211, 153, 0.4); color: #9ff0cd; }
+
+    .manager-input {
+      width: 100%;
+      min-height: 90px;
+      background: #0f1a28;
+      border: 1px solid #1f2b3a;
+      border-radius: 10px;
+      padding: 10px;
+      color: var(--text);
+      font-size: 12px;
+    }
+
+    .ghost-btn {
+      margin-top: 10px;
+      border: 1px solid #1f2b3a;
+      background: #0f1a28;
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .event-row {
+      display: grid;
+      grid-template-columns: 50px 1fr;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #1f2b3a;
+      font-size: 12px;
+      color: #cbd5e1;
+    }
+
+    .event-row:last-child {
+      border-bottom: none;
+    }
+
+    @media (max-width: 1100px) {
+      .grid { grid-template-columns: 1fr; }
+      .flight-grid { grid-template-columns: 1fr; }
+      .source-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .signal-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .source-grid { grid-template-columns: 1fr; }
+      #logo { width: 110px; height: 110px; }
+      .timer { font-size: 36px; }
     }
   </style>
 </head>
 <body>
+  <div class="range-flash" id="rangeFlash" aria-hidden="true"></div>
+  <div class="range-alert" id="rangeAlert" role="status" aria-live="assertive">
+    <div>
+      <h1>THE RANGE IS HOT</h1>
+      <p>Arming cleared. Live alerts and escalation paths are active.</p>
+    </div>
+    <span class="alert-chip">Live Mode</span>
+  </div>
   <nav id="topNav">
     <div id="brandBlock">
       <img src="logo2.png" alt="DealerSignal logo" id="logo" />
       <div>
-        <div id="brandTitle">DealerSignal — BlinkReply Rapid Response (Local MVP)</div>
+        <div id="brandTitle">DealerSignal - BlinkReply Rapid Response (Local MVP)</div>
         <div class="helper-line">Speed-to-lead routing that plugs into PrairieCRM and syncs to DealerSocket.</div>
       </div>
     </div>
@@ -164,94 +653,409 @@
     </div>
   </nav>
 
-  <div class="hazard">This will actually text these people. Give them a heads up if you're running tests, please.</div>
-
-  <div class="walk-grid">
-    <div class="walk-panel">
-      <h2>ADF/XML Intake (Live Test)</h2>
-      <div class="walk-sub">Paste a dummy lead and start a real contest. This flow is prepared for Twilio.</div>
-      <textarea class="adf-input" id="walkXml" placeholder="Paste ADF/XML here..."></textarea>
-      <button class="btn" id="walkStart">Start Live Contest</button>
-      <div class="walk-sub">Twilio is expected to be configured server-side. This page is UI-only prep.</div>
-    </div>
-
-    <div class="walk-panel">
-      <h2>Live Funnel — Flight Control View</h2>
-      <div class="walk-sub">Single lead, two reps, one escalation path.</div>
-      <div class="funnel" id="walkFunnel">
-        <div class="funnel-step active">
-          <div>
-            <div class="step-title">Lead Ingested</div>
-            <div class="step-meta">ADF/XML parsed → Lead created</div>
-          </div>
-          <div class="step-status" id="stepIngest">Waiting</div>
-        </div>
-        <div class="funnel-step">
-          <div>
-            <div class="step-title">Notify Reps</div>
-            <div class="step-meta">SMS to Jaiden + Mitch</div>
-          </div>
-          <div class="step-status" id="stepNotify">Pending</div>
-        </div>
-        <div class="funnel-step">
-          <div>
-            <div class="step-title">Contest Window</div>
-            <div class="step-meta">120s to escalation</div>
-          </div>
-          <div class="step-status" id="stepContest">Idle</div>
-        </div>
-        <div class="funnel-step">
-          <div>
-            <div class="step-title">Manager Escalation</div>
-            <div class="step-meta">Kaelen alerted at 120s</div>
-          </div>
-          <div class="step-status" id="stepEscalate">Standby</div>
-        </div>
-        <div class="funnel-step">
-          <div>
-            <div class="step-title">Ownership</div>
-            <div class="step-meta">Claimed by first rep</div>
-          </div>
-          <div class="step-status" id="stepClaim">Unclaimed</div>
+  <div class="page">
+    <section class="panel">
+      <h2>BlinkReply Mission Control</h2>
+      <p class="subtext">Real-time lead response, visualized.</p>
+      <div class="status-row">
+        <span class="status-chip chip-good">SMS Engine: Active</span>
+        <span class="status-chip chip-info">Contest Engine: Armed</span>
+        <span class="status-chip chip-warn">Escalation Logic: Standing By</span>
+        <span class="status-chip chip-purple" id="serverStatus">Server: Ready to Arm</span>
+      </div>
+      <div class="arm-panel">
+        <label class="arm-toggle" id="armToggle">
+          <input type="checkbox" id="armSwitch" aria-label="Arm live range toggle" />
+          <span class="arm-lever"></span>
+        </label>
+        <div class="arm-state">
+          <div class="label">Safety Interlock</div>
+          <div class="value" id="armState">Safe • Systems Locked</div>
+          <div class="note">Lift the safety toggle to enable arming and outbound alerts.</div>
         </div>
       </div>
-    </div>
-  </div>
+      <div class="server-row">
+        <input id="serverUrl" type="url" value="http://localhost:3030" />
+        <button class="server-btn" id="pingServer">Ping Server</button>
+        <button class="server-btn" id="armServer">Arm & Send</button>
+      </div>
+      <div class="server-note" id="serverNote">Server not reachable. Start the demo server on :3030 to send SMS.</div>
+      <div class="server-note">Twilio live fire: set `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_FROM`, `TWILIO_TO_REPS`, `TWILIO_TO_MANAGER` before running `backend/ingest/live_fire_server.js`.</div>
+    </section>
 
-  <div class="walk-grid" style="margin-top:16px;">
-    <div class="walk-panel">
-      <h2>Rep Contacts (Hardcoded)</h2>
-      <div class="walk-sub">Only manager-approved numbers are used in this test.</div>
-      <div class="contact-list">
-        <div class="contact-row"><span>Jaiden (Rep)</span><span class="pill" id="repJaiden">+1 204***2052</span></div>
-        <div class="contact-row"><span>Mitch (Rep)</span><span class="pill" id="repMitch">+1 431***1044</span></div>
-      </div>
+    <div class="grid">
+      <section class="card">
+        <h3>Live Lead Simulator</h3>
+        <p class="subtext">Trigger a live lead to see how the system responds.</p>
+        <div class="source-grid">
+          <button class="source-tile" data-source="CarGurus">CarGurus<span>Marketplace lead</span></button>
+          <button class="source-tile" data-source="Website">Website<span>Direct intent form</span></button>
+          <button class="source-tile" data-source="AutoTrader">AutoTrader<span>High intent shopper</span></button>
+          <button class="source-tile" data-source="Cars.com">Cars.com<span>Third-party lead</span></button>
+          <button class="source-tile" data-source="Facebook">Facebook<span>Social funnel</span></button>
+          <button class="source-tile" data-source="DriveIt">DriveIt<span>Local interest</span></button>
+        </div>
+        <button class="primary-btn" id="simulateLead">⚡ Simulate Incoming Lead</button>
+        <div class="payload-area">
+          <div class="subtext">Localhost ADF/XML (optional). If blank, a demo payload is sent.</div>
+          <textarea id="adfPayload" placeholder="Paste ADF/XML payload for localhost /lead..."></textarea>
+        </div>
+        <div class="lead-meta" id="leadMeta">
+          <div><strong>Active lead:</strong> —</div>
+          <div><strong>Vehicle:</strong> —</div>
+          <div><strong>Lead ID:</strong> —</div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>Contest Timeline</h3>
+        <div class="timeline">
+          <div class="subtext">Countdown to escalation</div>
+          <div class="timer" id="timer">02:00</div>
+          <div class="subtext" id="claimLine">Lead claimed by —</div>
+          <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+          <div class="subtext">Clock never pauses. Intensity rises as time drops.</div>
+        </div>
+      </section>
     </div>
-    <div class="walk-panel">
-      <h2>Manager Escalation</h2>
-      <div class="walk-sub">Escalation routes only to Kaelen.</div>
-      <div class="contact-list">
-        <div class="contact-row"><span>Kaelen (Manager)</span><span class="pill" id="mgrKaelen">+1 204***5555</span></div>
+
+    <section class="panel" style="margin-top:16px;">
+      <h3 style="margin:0 0 6px; font-size:14px; text-transform:uppercase; color:#cbd5e1;">Flight Room Dashboard</h3>
+      <p class="subtext">Operational visibility for reps, managers, and executives.</p>
+      <div class="flight-grid">
+        <div class="list-card">
+          <div class="subtext" style="margin-bottom:8px; text-transform:uppercase; letter-spacing:0.08em;">Rep Panel</div>
+          <div class="rep-row">
+            <div>
+              <strong>Jaiden</strong>
+              <div class="subtext" style="margin:2px 0 0;">Lost to Mitch at 134s</div>
+            </div>
+            <span class="tag tag-warn">Lost</span>
+          </div>
+          <div class="rep-row">
+            <div>
+              <strong>Mitch</strong>
+              <div class="subtext" style="margin:2px 0 0;">Reaction time: 134s</div>
+            </div>
+            <span class="tag tag-good">Claimed</span>
+          </div>
+        </div>
+
+        <div class="list-card">
+          <div class="subtext" style="margin-bottom:8px; text-transform:uppercase; letter-spacing:0.08em;">Manager Panel</div>
+          <div class="subtext" style="margin-bottom:8px;">Kaelen</div>
+          <div class="subtext">Status: <strong>Resolved</strong></div>
+          <div class="subtext">Escalation SMS: 02:00</div>
+          <div class="subtext">Manager link: --</div>
+          <textarea class="manager-input" placeholder="Optional message to reps..."></textarea>
+          <button class="ghost-btn">Send Nudge</button>
+          <div class="subtext" style="margin-top:8px;">Nudge sent: it does!!!!</div>
+        </div>
+
+        <div class="list-card">
+          <div class="subtext" style="margin-bottom:8px; text-transform:uppercase; letter-spacing:0.08em;">Event Log</div>
+          <div id="eventLog">
+            <div class="event-row"><span>00:00</span><span>Lead received from CarGurus.</span></div>
+            <div class="event-row"><span>00:00</span><span>Lead dispatched to reps.</span></div>
+            <div class="event-row"><span>00:00</span><span>SMS delayed for Jaiden.</span></div>
+            <div class="event-row"><span>00:00</span><span>SMS sent to Mitch.</span></div>
+            <div class="event-row"><span>02:00</span><span>Escalation window reached.</span></div>
+            <div class="event-row"><span>02:00</span><span>Escalation SMS delayed for Kaelen.</span></div>
+            <div class="event-row"><span>02:14</span><span>Lead claimed by Mitch (134s).</span></div>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
+
+    <section class="panel">
+      <div class="signal-grid">
+        <div class="signal-card">
+          <div class="signal-title">
+            Lead Signal Verification
+            <span class="signal-status">AI Sync: Locked</span>
+          </div>
+          <div class="signal-list">
+            <div class="signal-row">
+              <span class="signal-dot"></span>
+              Lead mapping matched + deduped
+              <span class="signal-tag">Confirmed</span>
+            </div>
+            <div class="signal-row">
+              <span class="signal-dot"></span>
+              Follow-up intent detected + queued
+              <span class="signal-tag">Aligned</span>
+            </div>
+            <div class="signal-row">
+              <span class="signal-dot warn"></span>
+              Response cadence calibration
+              <span class="signal-tag">Stabilizing</span>
+            </div>
+            <div class="signal-row">
+              <span class="signal-dot"></span>
+              Text + email injection armed
+              <span class="signal-tag">Live</span>
+            </div>
+            <div class="signal-row">
+              <span class="signal-dot"></span>
+              Tracking loop locked + auditing
+              <span class="signal-tag">Secure</span>
+            </div>
+          </div>
+        </div>
+        <div class="signal-card">
+          <div class="signal-title">
+            Calibration Dials
+            <span class="signal-status">System Ready</span>
+          </div>
+          <div class="dial-grid">
+            <div class="dial">
+              <div class="dial-face">
+                <div class="dial-needle" style="transform: rotate(-20deg);"></div>
+                <div class="dial-center"></div>
+              </div>
+              <div class="dial-label">Lead Match</div>
+              <div class="dial-value">98% lock</div>
+            </div>
+            <div class="dial">
+              <div class="dial-face">
+                <div class="dial-needle" style="transform: rotate(10deg);"></div>
+                <div class="dial-center"></div>
+              </div>
+              <div class="dial-label">Response Sync</div>
+              <div class="dial-value">Stable</div>
+            </div>
+            <div class="dial">
+              <div class="dial-face">
+                <div class="dial-needle" style="transform: rotate(-55deg);"></div>
+                <div class="dial-center"></div>
+              </div>
+              <div class="dial-label">Escalation</div>
+              <div class="dial-value">On watch</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 
   <script>
-    const steps = {
-      ingest: document.getElementById("stepIngest"),
-      notify: document.getElementById("stepNotify"),
-      contest: document.getElementById("stepContest"),
-      escalate: document.getElementById("stepEscalate"),
-      claim: document.getElementById("stepClaim")
-    };
+    const leadMeta = document.getElementById("leadMeta");
+    const timerEl = document.getElementById("timer");
+    const claimLine = document.getElementById("claimLine");
+    const progressFill = document.getElementById("progressFill");
+    const eventLog = document.getElementById("eventLog");
+    const sourceButtons = document.querySelectorAll(".source-tile");
+    const serverUrlInput = document.getElementById("serverUrl");
+    const serverStatus = document.getElementById("serverStatus");
+    const serverNote = document.getElementById("serverNote");
+    const adfPayload = document.getElementById("adfPayload");
+    const armToggle = document.getElementById("armToggle");
+    const armSwitch = document.getElementById("armSwitch");
+    const armState = document.getElementById("armState");
+    const rangeAlert = document.getElementById("rangeAlert");
+    const rangeFlash = document.getElementById("rangeFlash");
 
-    document.getElementById("walkStart").addEventListener("click", () => {
-      steps.ingest.innerText = "Parsed";
-      steps.notify.innerText = "Sent";
-      steps.contest.innerText = "Live";
-      steps.escalate.innerText = "Scheduled";
-      steps.claim.innerText = "Unclaimed";
+    const leadBank = [
+      { name: "Ava T.", vehicle: "2023 Ford Explorer XLT" },
+      { name: "Marcus R.", vehicle: "2024 Toyota RAV4 Hybrid" },
+      { name: "Lena J.", vehicle: "2022 Jeep Grand Cherokee" },
+      { name: "Chris P.", vehicle: "2021 BMW X3" },
+      { name: "Sasha V.", vehicle: "2020 Honda CR-V" }
+    ];
+
+    let timer = null;
+    let remaining = 120;
+    let activeSource = "CarGurus";
+    let serverReachable = false;
+    let armed = false;
+
+    function renderTimer() {
+      const minutes = String(Math.floor(remaining / 60)).padStart(2, "0");
+      const seconds = String(remaining % 60).padStart(2, "0");
+      timerEl.textContent = `${minutes}:${seconds}`;
+      const pct = ((120 - remaining) / 120) * 100;
+      progressFill.style.width = `${pct}%`;
+    }
+
+    function logEvent(message) {
+      const row = document.createElement("div");
+      row.className = "event-row";
+      const timestamp = document.createElement("span");
+      timestamp.textContent = "00:00";
+      const detail = document.createElement("span");
+      detail.textContent = message;
+      row.appendChild(timestamp);
+      row.appendChild(detail);
+      eventLog.prepend(row);
+    }
+
+    function setServerStatus(ok, note) {
+      serverReachable = ok;
+      if (!serverStatus) return;
+      serverStatus.classList.remove("chip-good", "chip-warn", "chip-info", "chip-purple");
+      if (ok) {
+        serverStatus.classList.add("chip-good");
+        serverStatus.textContent = "Server: Connected";
+      } else {
+        serverStatus.classList.add("chip-warn");
+        serverStatus.textContent = "Server: Offline";
+      }
+      if (serverNote) serverNote.textContent = note;
+    }
+
+    function setArmedState(next) {
+      armed = next;
+      if (armToggle) armToggle.classList.toggle("active", armed);
+      if (armSwitch) armSwitch.checked = armed;
+      if (armState) armState.textContent = armed ? "Armed • Live Alerts Enabled" : "Safe • Systems Locked";
+      if (rangeAlert) rangeAlert.classList.toggle("show", armed);
+      if (armed && rangeFlash) {
+        rangeFlash.classList.add("show");
+        rangeFlash.setAttribute("aria-hidden", "false");
+        setTimeout(() => {
+          rangeFlash.classList.remove("show");
+          rangeFlash.setAttribute("aria-hidden", "true");
+        }, 900);
+      }
+      const alertTimer = armed ? "the_range_is_hot" : "";
+      if (armed) {
+        logEvent("Safety interlock lifted. Range is hot.");
+      } else {
+        logEvent("Safety interlock restored. Range safe.");
+      }
+      if (alertTimer && localStorage) localStorage.setItem("blinkreplyRangeAlert", alertTimer);
+      if (!armed && localStorage) localStorage.removeItem("blinkreplyRangeAlert");
+    }
+
+    async function pingServer() {
+      const base = serverUrlInput?.value?.trim() || "http://localhost:3030";
+      try {
+        const res = await fetch(`${base}/health`, { method: "GET" });
+        if (!res.ok) throw new Error("Health check failed");
+        setServerStatus(true, `Connected to ${base}. Ready to send SMS.`);
+      } catch (err) {
+        setServerStatus(false, `Server not reachable at ${base}. Start the demo server to send SMS.`);
+      }
+    }
+
+    function buildDemoAdf(source, lead) {
+      return `<?xml version="1.0"?>
+<adf>
+  <prospect>
+    <id source="${source}">${Date.now()}</id>
+    <customer>
+      <contact>
+        <name part="first">${lead.name.split(" ")[0]}</name>
+        <name part="last">${lead.name.split(" ")[1] || "T"}</name>
+        <email>guest@example.com</email>
+        <phone>+1 555-555-0199</phone>
+      </contact>
+    </customer>
+    <vehicle>
+      <year>${lead.vehicle.split(" ")[0]}</year>
+      <make>${lead.vehicle.split(" ")[1] || "Ford"}</make>
+      <model>${lead.vehicle.split(" ").slice(2).join(" ") || "Explorer"}</model>
+      <trim>Demo</trim>
+    </vehicle>
+    <comments>Localhost Twilio trigger demo.</comments>
+  </prospect>
+</adf>`;
+    }
+
+    async function sendLeadToServer(source, lead) {
+      const base = serverUrlInput?.value?.trim() || "http://localhost:3030";
+      const payload = adfPayload?.value?.trim() || buildDemoAdf(source, lead);
+      try {
+        const res = await fetch(`${base}/lead`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ source, payload })
+        });
+        if (!res.ok) throw new Error("Lead POST failed");
+        setServerStatus(true, `Lead sent to ${base}/lead. Waiting for SMS dispatch.`);
+        logEvent(`Localhost trigger accepted (${source}).`);
+      } catch (err) {
+        setServerStatus(false, `Failed to reach ${base}/lead. Local demo running.`);
+        logEvent(`Localhost trigger failed for ${source}.`);
+      }
+    }
+
+    async function sendEscalationToServer(source) {
+      const base = serverUrlInput?.value?.trim() || "http://localhost:3030";
+      try {
+        const res = await fetch(`${base}/escalate`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            source,
+            message: `Rapid Response: Lead unclaimed after 120s (${source}). Manager attention needed.`
+          })
+        });
+        if (!res.ok) throw new Error("Escalation POST failed");
+        logEvent("Manager escalation dispatched.");
+      } catch (err) {
+        logEvent("Escalation failed to send.");
+      }
+    }
+
+    function startLead(source) {
+      if (!armed) {
+        logEvent("Range is safe. Toggle must be lifted before arming.");
+        return;
+      }
+      activeSource = source || activeSource;
+      const lead = leadBank[Math.floor(Math.random() * leadBank.length)];
+      const leadId = `lead_${Date.now()}`;
+      leadMeta.innerHTML = `
+        <div><strong>Active lead:</strong> ${lead.name} (${activeSource})</div>
+        <div><strong>Vehicle:</strong> ${lead.vehicle}</div>
+        <div><strong>Lead ID:</strong> ${leadId}</div>
+      `;
+      claimLine.textContent = "Lead claimed by —";
+      remaining = 120;
+      renderTimer();
+      logEvent(`Lead received from ${activeSource}.`);
+      logEvent("Lead dispatched to reps.");
+      if (serverReachable) sendLeadToServer(activeSource, lead);
+
+      if (timer) clearInterval(timer);
+      timer = setInterval(() => {
+        remaining -= 1;
+        renderTimer();
+        if (remaining <= 0) {
+          clearInterval(timer);
+          claimLine.textContent = "Escalation reached — manager alerted";
+          logEvent("Escalation window reached.");
+          if (serverReachable) sendEscalationToServer(activeSource);
+        }
+      }, 1000);
+    }
+
+    sourceButtons.forEach(btn => {
+      btn.addEventListener("click", () => startLead(btn.dataset.source));
     });
+
+    document.getElementById("simulateLead").addEventListener("click", () => startLead(activeSource));
+    document.getElementById("pingServer").addEventListener("click", pingServer);
+    document.getElementById("armServer").addEventListener("click", () => startLead(activeSource));
+
+    if (armToggle && armSwitch) {
+      armToggle.addEventListener("click", () => {
+        setArmedState(!armed);
+      });
+    }
+
+    if (serverUrlInput) {
+      serverUrlInput.addEventListener("change", () => {
+        if (serverUrlInput.value.trim()) localStorage.setItem("blinkreplyServer", serverUrlInput.value.trim());
+      });
+      const saved = localStorage.getItem("blinkreplyServer");
+      if (saved) serverUrlInput.value = saved;
+    }
+
+    pingServer();
+    renderTimer();
+    setArmedState(false);
   </script>
 </body>
 </html>

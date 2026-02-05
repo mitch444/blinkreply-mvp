@@ -3,6 +3,7 @@
 <head>
   <title>DealerSignal – Rapid Response MVP</title>
   <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="icon.png" />
 </head>
 <body>
 
@@ -127,6 +128,37 @@
             <div class="overlay-title">BlinkReply escalates before this moment.</div>
             <div class="overlay-sub">Because online guests deserve the same respect as in-store guests.</div>
           </div>
+        </div>
+        <div class="thought-line" id="thoughtLine">Did my message even go through?</div>
+        <div class="patience-block">
+          <div class="patience-label">Guest Attention Remaining</div>
+          <div class="patience-bar">
+            <div class="patience-fill" id="patienceFill"></div>
+          </div>
+          <div class="patience-copy" id="patienceCopy">Engaged. Expecting a response.</div>
+        </div>
+        <div class="attention-block">
+          <div class="attention-label">Where the guest’s attention may be drifting</div>
+          <div class="attention-row">
+            <div class="attention-name">Your Store</div>
+            <div class="attention-bar"><div class="attention-fill primary" id="attentionYour"></div></div>
+          </div>
+          <div class="attention-row">
+            <div class="attention-name">Birchwood Hyundai</div>
+            <div class="attention-bar"><div class="attention-fill" id="attentionBirchwood"></div></div>
+          </div>
+          <div class="attention-row">
+            <div class="attention-name">Focus Hyundai</div>
+            <div class="attention-bar"><div class="attention-fill" id="attentionFocus"></div></div>
+          </div>
+          <div class="attention-row">
+            <div class="attention-name">Murray Hyundai</div>
+            <div class="attention-bar"><div class="attention-fill" id="attentionMurray"></div></div>
+          </div>
+        </div>
+        <div class="reality-final" id="realityFinalOverlay" aria-hidden="true">
+          <div class="overlay-title">BlinkReply escalates before this moment.</div>
+          <div class="overlay-sub">Because online guests deserve the same respect as in-store guests.</div>
         </div>
       </div>
     </div>
@@ -267,6 +299,119 @@
       <div class="accordion-item">
         <button class="accordion-toggle">After-hours routing</button>
         <div class="accordion-content">After-hours routing is available but currently disabled in the Settings MVP.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="integrationStatus">
+    <div class="section-header">
+      <div>
+        <h2>DealerSocket Direct Post – Integration Status</h2>
+        <div class="subtext">Executive view of readiness for ADF/XML direct post ingestion (safe demo mode).</div>
+      </div>
+    </div>
+    <div class="integration-grid">
+      <div class="integration-card">
+        <div class="integration-header">
+          <div>Direct Post Account</div>
+          <span class="status-badge pending">Pending</span>
+        </div>
+        <div class="integration-row" title="DealerSocket requires the event type to correctly classify the lead.">
+          <span>Event Type</span>
+          <span>Sales</span>
+        </div>
+        <div class="integration-row" title="Direct Post ensures DealerSocket pushes the raw ADF/XML payload.">
+          <span>Account Type</span>
+          <span>Direct Post</span>
+        </div>
+        <div class="integration-row" title="Routing name maps the inbound payload to the correct bucket.">
+          <span>XML Routing Name</span>
+          <span>Phone Bucket</span>
+        </div>
+        <div class="integration-row" title="Text routing must follow the XML mapping rules for correct lead attribution.">
+          <span>Text Routing</span>
+          <span>Use XML Routing</span>
+        </div>
+      </div>
+
+      <div class="integration-card">
+        <div class="integration-header">
+          <div>Lead Forwarding</div>
+          <span class="status-badge warn">Pending</span>
+        </div>
+        <div class="integration-row" title="DealerSocket must enable XML forward to send each ADF/XML payload.">
+          <span>XML Forward Enabled</span>
+          <span>Pending</span>
+        </div>
+        <div class="integration-row" title="Target URL is the safe demo endpoint for inbound ADF/XML payloads.">
+          <span>Target URL</span>
+          <span>https://rapidresponse.example.com/ingest/dealersocket</span>
+        </div>
+        <div class="integration-row" title="DealerSocket identifiers ensure lead source attribution and dedupe.">
+          <span>DealerSocket Identifiers</span>
+          <span>ON</span>
+        </div>
+        <div class="integration-row" title="Forwarding must be live before payloads can be ingested.">
+          <span>Status</span>
+          <span>Pending / Live</span>
+        </div>
+      </div>
+
+      <div class="integration-card">
+        <div class="integration-header">
+          <div>Ingest Endpoint</div>
+          <span class="status-badge ok">OK</span>
+        </div>
+        <div class="integration-row" title="Health indicates whether the ingest endpoint is reachable.">
+          <span>Endpoint Health</span>
+          <span>Waiting</span>
+        </div>
+        <div class="integration-row" title="Shows the most recent payload timestamp once received.">
+          <span>Last Payload Received</span>
+          <span>None</span>
+        </div>
+        <div class="integration-row" title="Response code mirrors the HTTP status returned to DealerSocket.">
+          <span>Response Code</span>
+          <span>200 / 500</span>
+        </div>
+      </div>
+
+      <div class="integration-card">
+        <div class="integration-header">
+          <div>Raw Lead Storage</div>
+          <span class="status-badge ok">Ready</span>
+        </div>
+        <div class="integration-row" title="Raw payload logging preserves the original ADF/XML content.">
+          <span>XML Payload Logging</span>
+          <span>Enabled</span>
+        </div>
+        <div class="integration-row" title="Replay capability allows lead reprocessing and audits.">
+          <span>Replay Capability</span>
+          <span>Enabled</span>
+        </div>
+        <div class="integration-row" title="Storage target will be finalized with AWS S3 once ready.">
+          <span>Storage Target</span>
+          <span>S3 (planned)</span>
+        </div>
+      </div>
+
+      <div class="integration-card">
+        <div class="integration-header">
+          <div>Contest Engine (Disabled for MVP)</div>
+          <span class="status-badge muted">Off</span>
+        </div>
+        <div class="integration-row" title="Lead clock uses requestdate once live in production.">
+          <span>Lead Clock Source</span>
+          <span>requestdate</span>
+        </div>
+        <div class="integration-row" title="Contest logic is intentionally off for MVP readiness.">
+          <span>Contest Logic</span>
+          <span>OFF</span>
+        </div>
+        <div class="integration-row" title="Manager alerts are disabled until production readiness.">
+          <span>Manager Alerts</span>
+          <span>OFF</span>
+        </div>
       </div>
     </div>
   </section>
