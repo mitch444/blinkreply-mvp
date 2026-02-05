@@ -260,17 +260,7 @@ function updateUrgencyBar(elapsedMs, fill) {
   const pct = Math.min((capped / 180000) * 100, 100);
   fill.style.width = `${pct}%`;
 
-  if (elapsedMs < 45000) {
-    fill.style.background = "#26a269";
-  } else if (elapsedMs < 90000) {
-    fill.style.background = "#e07a2d";
-  } else if (elapsedMs < 135000) {
-    fill.style.background = "#d9a441";
-  } else if (elapsedMs < 180000) {
-    fill.style.background = "#c62828";
-  } else {
-    fill.style.background = "#8e1b1b";
-  }
+  fill.style.background = "#FACC15";
 
   if (elapsedMs >= 170000 && elapsedMs < 180000) {
     fill.classList.add("urgency-last");
@@ -788,8 +778,8 @@ function initRealityTimeline() {
 
     if (remaining === 0) {
       frozen = true;
-      title.innerText = "BlinkReply escalates before this moment.";
-      body.innerText = "Because online guests deserve the same respect as in-store guests.";
+      title.innerText = "Blink escalates before this moment.";
+      body.innerText = "Digital and in-store response standards are aligned.";
       meta.innerText = "Escalation / manager visibility";
       card.classList.add("escalated");
       if (finalOverlay) {
@@ -969,7 +959,19 @@ function initAccordion() {
   });
 }
 
+function initDsqPayoffs() {
+  const groups = document.querySelectorAll(".dsq-group");
+  groups.forEach(group => {
+    const toggle = group.querySelector(".dsq-toggle");
+    if (!toggle) return;
+    toggle.addEventListener("click", () => {
+      group.classList.toggle("open");
+    });
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initRealityTimeline();
   initAccordion();
+  initDsqPayoffs();
 });

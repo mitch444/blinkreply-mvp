@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>DealerSignal – Rapid Response MVP</title>
+  <title>Blink Response Engine – Rapid Response MVP</title>
   <link rel="stylesheet" href="styles.css" />
-  <link rel="icon" href="icon.png" />
+  <link rel="icon" href="ico.png" />
 </head>
 <body>
 
   <nav id="topNav">
     <div id="brandBlock">
-      <img src="logo2.png" alt="DealerSignal logo" id="logo" />
+      <img src="blink-logo-horizontal-dark.png" alt="Blink Response Engine logo" id="logo" />
       <div>
-        <div id="brandTitle">DealerSignal — BlinkReply Rapid Response (Local MVP)</div>
-        <div class="helper-line">Speed-to-lead routing that plugs into PrairieCRM and syncs to DealerSocket.</div>
+        <div id="brandTitle">Blink Response Engine — Rapid Response (Local MVP)</div>
+        <div class="helper-line">Operational lead routing with DealerSocket synchronization.</div>
       </div>
     </div>
     <div id="navActions">
@@ -25,12 +25,53 @@
   </nav>
 
   <section id="intro">
-    <h2>Imagine if speed was no longer a guessing game.</h2>
-    <p>Imagine if every internet lead was treated the same way your best managers wish they were treated.</p>
-    <p>No delays.<br />No “I thought someone else grabbed it.”<br />No quiet erosion between marketing spend and real results.</p>
-    <p>The moment a customer raises their hand, the clock starts — and the first professional to respond earns the conversation.</p>
-    <p>BlinkReply turns response time into a visible, fair, and competitive advantage. Not through assignments. Not through micromanagement. But by letting urgency and ownership do what they’re meant to do.</p>
-    <p>This isn’t about being faster for the sake of it. It’s about respecting intent, creating accountability, and winning more of the opportunities you already pay for.</p>
+    <h2>Speed is not a feature. It’s a system.</h2>
+    <p>Blink Response Engine turns every lead into a visible race — first response wins.</p>
+    <p>Awaiting response. Contest logic enforces ownership and accountability.</p>
+  </section>
+
+  <section id="outcomesOrbit">
+    <div class="section-header">
+      <div>
+        <h2>Employee Outcomes System</h2>
+        <div class="subtext">Operational discipline from first response to clean handoff.</div>
+      </div>
+    </div>
+    <div class="orbit-wrap">
+      <div class="orbit-core">
+        <div class="orbit-title">Blink Response Engine</div>
+        <div class="orbit-sub">Response Discipline Layer</div>
+      </div>
+      <div class="orbit-ring"></div>
+      <div class="orbit-node n1">
+        <div class="node-title">Lead Arrives</div>
+        <div class="node-sub">Website, OEM, Marketplace, Trade Tools</div>
+      </div>
+      <div class="orbit-node n2">
+        <div class="node-title">Immediate Visibility</div>
+        <div class="node-sub">Everyone sees it at the same moment</div>
+      </div>
+      <div class="orbit-node n3 action">
+        <div class="node-title">First Response Wins</div>
+        <div class="node-sub">Human response measured in seconds</div>
+      </div>
+      <div class="orbit-node n4">
+        <div class="node-title">Clean CRM Handoff</div>
+        <div class="node-sub">DealerSocket receives a clear owner</div>
+      </div>
+      <div class="orbit-node n5">
+        <div class="node-title">Live Manager Insight</div>
+        <div class="node-sub">Who reacted, who hesitated</div>
+      </div>
+      <div class="orbit-node n6">
+        <div class="node-title">Better Outcomes</div>
+        <div class="node-sub">Faster contact, higher show rate, more sold units</div>
+      </div>
+    </div>
+    <div class="orbit-caption">
+      When the first 30 seconds are disciplined, every system downstream performs better.
+      <span>Blink doesn’t replace DealerSocket. It makes it work the way you expect.</span>
+    </div>
   </section>
 
   <!-- TOP-OF-FUNNEL SOURCES -->
@@ -38,7 +79,7 @@
     <div class="section-header">
       <div>
         <h2>Top-of-Funnel Lead Sources</h2>
-        <div class="subtext">Click a source to simulate a real lead arrival. Great for training and manager demos.</div>
+    <div class="subtext">Click a source to simulate a lead arrival for training and demos.</div>
       </div>
       <div class="section-actions">
         <button class="primary" onclick="seedDemoLeads()">Run a Live Test</button>
@@ -80,7 +121,7 @@
         <div class="phone-shell">
           <div class="phone-notch"></div>
           <div class="phone-screen">
-            <div class="phone-status">BlinkReply Alerts</div>
+            <div class="phone-status">Blink Alerts</div>
             <div class="sms-card" id="smsCard">
               <div class="sms-title" id="smsTitle">⚡ New Lead (0s old)</div>
               <div class="sms-body" id="smsBody">Select a source to simulate an inbound lead.</div>
@@ -125,7 +166,7 @@
         <div class="showroom-scene" id="showroomScene">
           <div class="showroom-narration" id="showroomNarration">A guest just walked in.</div>
           <div class="showroom-overlay" id="showroomOverlay">
-            <div class="overlay-title">BlinkReply escalates before this moment.</div>
+            <div class="overlay-title">Blink escalates before this moment.</div>
             <div class="overlay-sub">Because online guests deserve the same respect as in-store guests.</div>
           </div>
         </div>
@@ -157,7 +198,7 @@
           </div>
         </div>
         <div class="reality-final" id="realityFinalOverlay" aria-hidden="true">
-          <div class="overlay-title">BlinkReply escalates before this moment.</div>
+          <div class="overlay-title">Blink escalates before this moment.</div>
           <div class="overlay-sub">Because online guests deserve the same respect as in-store guests.</div>
         </div>
       </div>
@@ -172,7 +213,7 @@
   <!-- LEAD INTAKE -->
   <section id="intake">
     <h2>ADF/XML Intake</h2>
-    <div class="subtext">Paste ADF/XML here to simulate real inbound emails. BlinkReply will parse, create a lead record, and start the contest timer.</div>
+    <div class="subtext">Paste ADF/XML here to simulate inbound emails. The system parses the payload and starts the timer.</div>
     <textarea id="adfInput" placeholder="Paste ADF/XML lead payload…"></textarea>
     <button onclick="ingestLead()">Ingest Lead</button>
     <div id="adfExperience">
@@ -210,7 +251,7 @@
   <!-- CONTEST DASHBOARD -->
   <section id="contest">
     <h2>Live Lead Contest</h2>
-    <div class="subtext">This is what managers watch. New leads appear here instantly. First rep to claim wins the lead.</div>
+    <div class="subtext">Operational view. New leads appear instantly. First rep to claim wins.</div>
     <div id="contestList"></div>
     <label id="soundToggleLabel">
       <input type="checkbox" id="soundToggle" />
@@ -273,32 +314,88 @@
   </section>
 
   <section id="dsFaq">
-    <h2>DealerSocket Integration — A+++ Accuracy</h2>
-    <div class="subtext">DealerSocket is the system of record. BlinkReply is the system of urgency.</div>
-    <div class="accordion">
-      <div class="accordion-item">
-        <button class="accordion-toggle">Does this replace DealerSocket?</button>
-        <div class="accordion-content">No. DealerSocket remains the source of truth. BlinkReply accelerates response and routes ownership without altering DealerSocket data integrity.</div>
+    <h2>DealerSocket Questions</h2>
+    <div class="subtext">Blink Response Engine sits upstream. DealerSocket stays the system of record.</div>
+    <div class="dsq-grid">
+      <div class="dsq-group">
+        <h3>Lead Intake Reality</h3>
+        <ul>
+          <li>Do all of your leads arrive through the same dsmessage ADF inbox?</li>
+          <li>Can you tell which leads were seen immediately versus buried in email noise?</li>
+          <li>When multiple leads arrive at once, who actually notices first?</li>
+          <li>Do you know how long a lead sat untouched before DealerSocket even logged activity?</li>
+          <li>Are reps reacting to alerts or stumbling onto leads later?</li>
+        </ul>
+        <button class="dsq-toggle" type="button">What Blink changes</button>
+        <div class="dsq-payoff">
+          <ul>
+            <li>Normalizes every source into one event stream regardless of ADF or email noise.</li>
+            <li>Creates an immediate seen moment with a shared clock for all reps.</li>
+            <li>Logs the exact arrival time and first human action outside the CRM.</li>
+            <li>Prevents silent lead burial by pushing the moment to the team, not an inbox.</li>
+            <li>Preserves source and requestdate so DealerSocket receives clean context.</li>
+          </ul>
+        </div>
       </div>
-      <div class="accordion-item">
-        <button class="accordion-toggle">How we preserve ADF/XML + field mapping</button>
-        <div class="accordion-content">ADF/XML is preserved as-is. We map fields directly without rewriting or truncating so DealerSocket receives the same payload.</div>
+      <div class="dsq-group">
+        <h3>Response Time Illusion</h3>
+        <ul>
+          <li>Does DealerSocket show when a human actually responded or just when a status changed?</li>
+          <li>Can you see who saw the lead first but didn’t act?</li>
+          <li>Do you know how many leads were claimed late but reported as on time?</li>
+          <li>Can you tell the difference between speed and compliance?</li>
+          <li>Are your fastest reps rewarded or are slow reps protected?</li>
+        </ul>
+        <button class="dsq-toggle" type="button">What Blink changes</button>
+        <div class="dsq-payoff">
+          <ul>
+            <li>Measures time to first human response, not time to status change.</li>
+            <li>Captures who saw it versus who acted for coaching clarity.</li>
+            <li>Produces a verifiable claim timestamp and response timestamp.</li>
+            <li>Makes compliance visible and speed visible in seconds.</li>
+            <li>Sends DealerSocket a lead that already has a clear owner and timeline.</li>
+          </ul>
+        </div>
       </div>
-      <div class="accordion-item">
-        <button class="accordion-toggle">Duplicate handling</button>
-        <div class="accordion-content">Potential duplicates are held for manager review before any push to DealerSocket.</div>
+      <div class="dsq-group">
+        <h3>Ownership and Behavior</h3>
+        <ul>
+          <li>Who really earns the lead, first response or first click?</li>
+          <li>Can two reps respond at the same time without clarity?</li>
+          <li>What happens when everyone assumes someone else is on it?</li>
+          <li>Do reps feel urgency or entitlement?</li>
+          <li>Is ownership clear in the first 30 seconds?</li>
+        </ul>
+        <button class="dsq-toggle" type="button">What Blink changes</button>
+        <div class="dsq-payoff">
+          <ul>
+            <li>Ownership is awarded by first response, not first click.</li>
+            <li>One lead, one winner. Everyone else sees closed instantly.</li>
+            <li>Removes ambiguity during bursts of inbound leads.</li>
+            <li>Rewards speed and execution consistently, reducing entitlement.</li>
+            <li>Creates a fair contest loop that drives repeatable habits.</li>
+          </ul>
+        </div>
       </div>
-      <div class="accordion-item">
-        <button class="accordion-toggle">Audit trail</button>
-        <div class="accordion-content">Every claim, escalation, and routing decision is timestamped for visibility and accountability.</div>
-      </div>
-      <div class="accordion-item">
-        <button class="accordion-toggle">Failure modes</button>
-        <div class="accordion-content">If delivery is delayed (Twilio), we retry and surface the event with clear visibility so nothing goes dark.</div>
-      </div>
-      <div class="accordion-item">
-        <button class="accordion-toggle">After-hours routing</button>
-        <div class="accordion-content">After-hours routing is available but currently disabled in the Settings MVP.</div>
+      <div class="dsq-group">
+        <h3>Manager Visibility Gap</h3>
+        <ul>
+          <li>Can you see response races happening in real time?</li>
+          <li>Do you know which leads triggered urgency and which didn’t?</li>
+          <li>Can you intervene while a lead is still alive?</li>
+          <li>Do you see missed opportunities or only bad outcomes later?</li>
+          <li>Are you coaching behavior or just reading reports after the fact?</li>
+        </ul>
+        <button class="dsq-toggle" type="button">What Blink changes</button>
+        <div class="dsq-payoff">
+          <ul>
+            <li>Shows live contests: unclaimed, claimed, escalated, duplicate risk.</li>
+            <li>Escalates exceptions before the guest is gone using time thresholds.</li>
+            <li>Surfaces patterns by shift: hesitators, missed contests, slow periods.</li>
+            <li>Gives managers a coaching window while the lead is still alive.</li>
+            <li>Keeps DealerSocket as the record while Blink exposes the first 30 seconds.</li>
+          </ul>
+        </div>
       </div>
     </div>
   </section>

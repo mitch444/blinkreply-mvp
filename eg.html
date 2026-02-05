@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DealerSignal Examples</title>
-  <link rel="icon" href="icon.png" />
+  <title>Blink Response Engine Examples</title>
+  <link rel="icon" href="ico.png" />
   <link rel="stylesheet" href="styles.css" />
   <style>
     #examples {
-      border: 1px solid #cfd6de;
+      border: 1px solid #1f2937;
       border-radius: 14px;
       padding: 16px;
-      background: #ffffff;
+      background: #111827;
     }
 
     #examples h1 {
@@ -23,12 +23,40 @@
       margin-bottom: 16px;
     }
 
+    .concept-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      margin: 10px 0 18px;
+    }
+
+    .concept-card {
+      border: 1px solid #1f2937;
+      background: #0b1220;
+      border-radius: 14px;
+      padding: 10px;
+    }
+
+    .concept-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      display: block;
+      cursor: zoom-in;
+    }
+
+    .concept-caption {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
     .carousel {
       position: relative;
-      border: 1px solid #e1e6eb;
+      border: 1px solid #1f2937;
       border-radius: 14px;
       padding: 12px;
-      background: #f9fbfc;
+      background: #0b1220;
     }
 
     .carousel-viewport {
@@ -56,7 +84,7 @@
     .carousel-caption {
       margin-top: 8px;
       font-size: 12px;
-      color: #5f6b76;
+      color: #94a3b8;
       text-align: left;
     }
 
@@ -68,15 +96,16 @@
     }
 
     .carousel-btn {
-      border: 1px solid #cfd6de;
-      background: #ffffff;
+      border: 1px solid #1f2937;
+      background: #0f1b2d;
+      color: #e5e7eb;
       padding: 8px 12px;
       border-radius: 8px;
       cursor: pointer;
     }
 
     .carousel-btn:hover {
-      background: #eef3f7;
+      background: #111827;
     }
 
     .carousel-dots {
@@ -88,17 +117,17 @@
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: #c6ced6;
+      background: #475569;
     }
 
     .dot.active {
-      background: #3a6ea5;
+      background: #facc15;
     }
 
     #lightbox {
       position: fixed;
       inset: 0;
-      background: rgba(10, 14, 20, 0.92);
+      background: rgba(2, 6, 23, 0.92);
       display: none;
       align-items: center;
       justify-content: center;
@@ -117,15 +146,35 @@
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
       cursor: zoom-out;
     }
+
+    .lightbox-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      border: 1px solid #1f2937;
+      background: rgba(15, 23, 42, 0.8);
+      color: #e5e7eb;
+      padding: 10px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .lightbox-btn:hover {
+      border-color: #facc15;
+    }
+
+    .lightbox-btn.prev { left: 20px; }
+    .lightbox-btn.next { right: 20px; }
   </style>
 </head>
 <body>
   <nav id="topNav">
     <div id="brandBlock">
-      <img src="logo2.png" alt="DealerSignal logo" id="logo" />
+      <img src="blink-logo-horizontal-dark.png" alt="Blink Response Engine logo" id="logo" />
       <div>
-        <div id="brandTitle">DealerSignal — BlinkReply Rapid Response (Local MVP)</div>
-        <div class="helper-line">Speed-to-lead routing that plugs into PrairieCRM and syncs to DealerSocket.</div>
+        <div id="brandTitle">Blink Response Engine — Rapid Response (Local MVP)</div>
+        <div class="helper-line">Operational lead routing with DealerSocket synchronization.</div>
       </div>
     </div>
     <div id="navActions">
@@ -139,7 +188,41 @@
 
   <section id="examples">
     <h1>Product Examples</h1>
-    <div class="subtext">Visual placeholders for how the tool can look in production. Replace these with real screenshots as they become available.</div>
+    <div class="subtext">Concept explorations and visual placeholders. Replace these with real screenshots as they become available.</div>
+    <div class="concept-grid">
+      <div class="concept-card">
+        <img class="lightboxable" src="concept_hero.png" alt="Concept hero layout" />
+        <div class="concept-caption">Concept Hero — system identity and rapid response framing.</div>
+      </div>
+      <div class="concept-card">
+        <img class="lightboxable" src="concept_core.png" alt="Concept core layout" />
+        <div class="concept-caption">Concept Core — lead orchestration and operator focus.</div>
+      </div>
+      <div class="concept-card">
+        <img class="lightboxable" src="concept_structure.png" alt="Concept structure layout" />
+        <div class="concept-caption">Concept Structure — dashboard and response hierarchy.</div>
+      </div>
+      <div class="concept-card">
+        <img class="lightboxable" src="concept_dash.png" alt="Concept dashboard layout" />
+        <div class="concept-caption">Concept Dashboard — performance visibility and ownership.</div>
+      </div>
+      <div class="concept-card">
+        <img class="lightboxable" src="concept_login.png" alt="Concept login layout" />
+        <div class="concept-caption">Concept Login — secure entry and operator context.</div>
+      </div>
+      <div class="concept-card">
+        <img class="lightboxable" src="concept_missionControl.png" alt="Concept mission control layout" />
+        <div class="concept-caption">Concept Mission Control — live response coordination.</div>
+      </div>
+      <div class="concept-card">
+        <img class="lightboxable" src="concept_invmatch.png" alt="Concept inventory match layout" />
+        <div class="concept-caption">Concept Inventory Match — lead to vehicle alignment.</div>
+      </div>
+      <div class="concept-card">
+        <img class="lightboxable" src="concept_invOpp.png" alt="Concept inventory opportunity layout" />
+        <div class="concept-caption">Concept Inventory Opportunity — coverage and gaps.</div>
+      </div>
+    </div>
     <div class="carousel">
       <div class="carousel-viewport" id="carouselViewport">
         <div class="carousel-slide active">
@@ -188,15 +271,21 @@
 
   <div id="lightbox" aria-hidden="true">
     <img src="" alt="Expanded view" />
+    <button class="lightbox-btn prev" type="button" aria-label="Previous image">←</button>
+    <button class="lightbox-btn next" type="button" aria-label="Next image">→</button>
   </div>
 
   <script>
     const lightbox = document.getElementById("lightbox");
     const lightboxImg = lightbox.querySelector("img");
+    const lightboxPrev = lightbox.querySelector(".lightbox-btn.prev");
+    const lightboxNext = lightbox.querySelector(".lightbox-btn.next");
 
     const slides = Array.from(document.querySelectorAll(".carousel-slide"));
     const dotsContainer = document.getElementById("carouselDots");
     let activeIndex = 0;
+    let gallery = [];
+    let galleryIndex = 0;
 
     function renderDots() {
       dotsContainer.innerHTML = "";
@@ -230,28 +319,65 @@
 
     renderDots();
 
-    document.querySelectorAll(".carousel-slide img").forEach(img => {
-      img.addEventListener("click", () => {
-        lightboxImg.src = img.src;
-        lightbox.classList.add("show");
-        lightbox.setAttribute("aria-hidden", "false");
-      });
-    });
+    function openLightbox(index) {
+      if (!gallery.length) return;
+      galleryIndex = (index + gallery.length) % gallery.length;
+      lightboxImg.src = gallery[galleryIndex].src;
+      lightbox.classList.add("show");
+      lightbox.setAttribute("aria-hidden", "false");
+    }
 
-    lightbox.addEventListener("click", () => {
+    function closeLightbox() {
       lightbox.classList.remove("show");
       lightbox.setAttribute("aria-hidden", "true");
       lightboxImg.src = "";
+    }
+
+    function moveLightbox(delta) {
+      if (!gallery.length) return;
+      openLightbox(galleryIndex + delta);
+    }
+
+    function buildGallery() {
+      gallery = Array.from(document.querySelectorAll(".lightboxable"));
+      gallery.forEach((img, idx) => {
+        img.addEventListener("click", () => openLightbox(idx));
+      });
+    }
+
+    buildGallery();
+
+    lightbox.addEventListener("click", () => {
+      closeLightbox();
+    });
+
+    lightboxImg.addEventListener("click", (e) => {
+      e.stopPropagation();
+      closeLightbox();
     });
 
     document.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowLeft") showSlide(activeIndex - 1);
-      if (e.key === "ArrowRight") showSlide(activeIndex + 1);
-      if (e.key === "Escape" && lightbox.classList.contains("show")) {
-        lightbox.classList.remove("show");
-        lightbox.setAttribute("aria-hidden", "true");
-        lightboxImg.src = "";
+      if (e.key === "ArrowLeft") {
+        if (lightbox.classList.contains("show")) moveLightbox(-1);
+        else showSlide(activeIndex - 1);
       }
+      if (e.key === "ArrowRight") {
+        if (lightbox.classList.contains("show")) moveLightbox(1);
+        else showSlide(activeIndex + 1);
+      }
+      if (e.key === "Escape" && lightbox.classList.contains("show")) {
+        closeLightbox();
+      }
+    });
+
+    lightboxPrev.addEventListener("click", (e) => {
+      e.stopPropagation();
+      moveLightbox(-1);
+    });
+
+    lightboxNext.addEventListener("click", (e) => {
+      e.stopPropagation();
+      moveLightbox(1);
     });
   </script>
 </body>

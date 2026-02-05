@@ -3,24 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DealerSignal Settings</title>
-  <link rel="icon" href="icon.png" />
+  <title>Blink Response Engine Settings</title>
+  <link rel="icon" href="ico.png" />
   <style>
     :root {
-      --bg: #f7f9fb;
-      --panel: #ffffff;
-      --border: #d7dde3;
-      --text: #1f2a37;
-      --muted: #6b7a89;
-      --accent: #3a6ea5;
-      --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      --bg: #0f172a;
+      --panel: #111827;
+      --border: #1f2937;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --accent: #facc15;
+      --shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
     }
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: "Inter", "Segoe UI", Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
     }
@@ -74,16 +74,16 @@
 
     .nav-link {
       font-size: 12px;
-      color: var(--accent);
+      color: var(--text);
       text-decoration: none;
       border: 1px solid var(--border);
       padding: 6px 10px;
       border-radius: 6px;
-      background: #f1f5f9;
+      background: var(--panel);
     }
 
     .nav-link:hover {
-      background: #e8edf3;
+      background: #0f1b2d;
     }
 
     h1 {
@@ -152,9 +152,10 @@
       display: inline-block;
       padding: 4px 8px;
       border-radius: 999px;
-      background: #e8edf3;
+      background: #0f1b2d;
       font-size: 12px;
-      color: #334155;
+      color: var(--text);
+      border: 1px solid var(--border);
     }
 
     .note {
@@ -182,7 +183,8 @@
       padding: 8px 10px;
       font-size: 13px;
       width: 100%;
-      background: #ffffff;
+      background: #0f1b2d;
+      color: var(--text);
     }
 
     textarea { min-height: 80px; }
@@ -192,15 +194,16 @@
       padding: 8px 12px;
       border-radius: 8px;
       border: 1px solid var(--border);
-      background: #f1f5f9;
+      background: #0f1b2d;
       font-size: 12px;
       cursor: pointer;
+      color: var(--text);
     }
 
     .btn.primary {
-      background: #0f4d7a;
-      color: #fff;
-      border-color: #0f4d7a;
+      background: var(--accent);
+      color: #111827;
+      border-color: #eab308;
     }
 
     .pill-group {
@@ -215,9 +218,10 @@
       gap: 6px;
       padding: 4px 8px;
       border-radius: 999px;
-      background: #e8edf3;
+      background: #0f1b2d;
       font-size: 12px;
-      color: #334155;
+      color: var(--text);
+      border: 1px solid var(--border);
     }
 
     .rep-table {
@@ -231,7 +235,7 @@
     .rep-table td {
       text-align: left;
       padding: 6px 4px;
-      border-bottom: 1px solid #eef2f6;
+      border-bottom: 1px solid var(--border);
     }
 
     .rep-table th {
@@ -246,24 +250,25 @@
       height: 8px;
       border-radius: 50%;
       display: inline-block;
-      background: #22c55e;
+      background: var(--accent);
     }
 
     .status-dot.off {
-      background: #ef4444;
+      background: var(--muted);
     }
 
     .visual-bar {
       height: 8px;
       border-radius: 999px;
-      background: #e8edf3;
+      background: #0f1b2d;
       overflow: hidden;
       margin-top: 6px;
+      border: 1px solid var(--border);
     }
 
     .visual-bar .fill {
       height: 100%;
-      background: linear-gradient(90deg, #2dd4bf, #3a6ea5);
+      background: var(--accent);
       width: 60%;
     }
 
@@ -277,7 +282,7 @@
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 10px;
-      background: #f8fafc;
+      background: #0f1b2d;
       font-size: 12px;
     }
 
@@ -295,10 +300,10 @@
   <div class="page">
     <nav id="topNav">
       <div id="brandBlock">
-        <img src="logo2.png" alt="DealerSignal logo" id="logo" />
+        <img src="blink-logo-horizontal-dark.png" alt="Blink Response Engine logo" id="logo" />
         <div>
-          <div id="brandTitle">DealerSignal — BlinkReply Rapid Response (Local MVP)</div>
-          <div class="helper-line">Speed-to-lead routing that plugs into PrairieCRM and syncs to DealerSocket.</div>
+          <div id="brandTitle">Blink Response Engine — Rapid Response (Local MVP)</div>
+          <div class="helper-line">Operational lead routing with DealerSocket synchronization.</div>
         </div>
       </div>
       <div id="navActions">
