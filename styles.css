@@ -19,6 +19,163 @@ body {
   color: var(--blink-text);
 }
 
+.home {
+  padding: 0;
+  background: #070c15;
+}
+
+.home #topNav {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  right: 16px;
+  margin: 0;
+  padding: 8px 12px;
+  opacity: 0.78;
+  background: rgba(15, 23, 42, 0.7);
+  border-color: rgba(31, 41, 55, 0.7);
+  backdrop-filter: blur(10px);
+  z-index: 5;
+}
+
+.home #brandTitle {
+  font-size: 16px;
+}
+
+.home .helper-line {
+  font-size: 11px;
+}
+
+.home #navActions {
+  gap: 8px;
+}
+
+.home .nav-link {
+  padding: 4px 8px;
+  font-size: 11px;
+}
+
+#hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 120px 10vw 80px;
+  background: #0b1220 url("hero-bg.jpg") center/cover no-repeat;
+  overflow: hidden;
+}
+
+#hero .hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.85));
+  z-index: 1;
+}
+
+#hero .hero-noise {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='120' height='120' filter='url(%23n)' opacity='0.12'/></svg>");
+  mix-blend-mode: soft-light;
+  opacity: 0.25;
+  z-index: 2;
+}
+
+#hero .hero-content {
+  position: relative;
+  z-index: 3;
+  max-width: 900px;
+  color: #f8fafc;
+}
+
+#hero h1 {
+  font-size: clamp(34px, 4.2vw, 64px);
+  line-height: 1.05;
+  margin: 0 0 16px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+#hero .hero-subhead {
+  font-size: clamp(18px, 2vw, 26px);
+  line-height: 1.5;
+  margin: 0 0 16px;
+  color: #e2e8f0;
+}
+
+#hero .hero-support {
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0 0 26px;
+  color: #94a3b8;
+}
+
+#hero .hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--blink-yellow);
+  color: #111827;
+  padding: 12px 22px;
+  border-radius: 999px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 10px 20px rgba(250, 204, 21, 0.2);
+  transition: transform 220ms ease, box-shadow 220ms ease, filter 220ms ease;
+}
+
+#hero .hero-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 30px rgba(250, 204, 21, 0.28);
+  filter: brightness(1.02);
+}
+
+#hero .hero-progress {
+  position: absolute;
+  left: 10vw;
+  right: 10vw;
+  bottom: 36px;
+  height: 2px;
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 999px;
+  overflow: hidden;
+  z-index: 2;
+}
+
+#hero .hero-progress-line {
+  height: 100%;
+  width: 18%;
+  background: linear-gradient(90deg, rgba(250, 204, 21, 0.1), rgba(250, 204, 21, 0.65));
+  box-shadow: 0 0 12px rgba(250, 204, 21, 0.4);
+  animation: raceLine 6s linear infinite;
+}
+
+@keyframes raceLine {
+  0% {
+    transform: translateX(-120%);
+    opacity: 0.4;
+  }
+  20% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateX(640%);
+    opacity: 0.5;
+  }
+}
+
+@media (max-width: 900px) {
+  #hero {
+    padding: 110px 7vw 70px;
+  }
+
+  #hero .hero-progress {
+    left: 7vw;
+    right: 7vw;
+  }
+}
+
 #topNav {
   display: flex;
   align-items: center;

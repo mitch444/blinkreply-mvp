@@ -88,7 +88,7 @@
       margin-top: 10px;
     }
 
-    .status-chip {
+    .status-pill {
       display: inline-flex;
       align-items: center;
       gap: 8px;
@@ -100,15 +100,51 @@
       border: 1px solid var(--border);
       background: #0f1b2d;
       color: var(--blink-gray);
+      transition: background 240ms ease, border-color 240ms ease, color 240ms ease, box-shadow 240ms ease, opacity 240ms ease;
     }
 
-    .chip-good,
-    .chip-warn,
-    .chip-info,
-    .chip-purple {
+    .status-row.safety-disabled .status-pill {
       background: #0f1b2d;
-      border-color: var(--border);
-      color: var(--blink-gray);
+      border-color: #233247;
+      color: #94a3b8;
+      opacity: 0.78;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    .status-row.safety-enabled .status-pill--active {
+      background: rgba(16, 185, 129, 0.16);
+      border-color: rgba(16, 185, 129, 0.45);
+      color: #a7f3d0;
+      box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.18), 0 0 10px rgba(16, 185, 129, 0.12);
+    }
+
+    .status-row.safety-enabled .status-pill--armed {
+      background: rgba(34, 211, 238, 0.16);
+      border-color: rgba(34, 211, 238, 0.45);
+      color: #a5f3fc;
+      box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.18), 0 0 10px rgba(34, 211, 238, 0.12);
+    }
+
+    .status-row.safety-enabled .status-pill--warning {
+      background: rgba(251, 191, 36, 0.16);
+      border-color: rgba(251, 191, 36, 0.5);
+      color: #fde68a;
+      box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.18), 0 0 10px rgba(251, 191, 36, 0.12);
+    }
+
+    .status-row.safety-enabled .status-pill--error {
+      background: rgba(239, 68, 68, 0.16);
+      border-color: rgba(239, 68, 68, 0.5);
+      color: #fecaca;
+      box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.18), 0 0 10px rgba(239, 68, 68, 0.12);
+    }
+
+    .status-row.safety-enabled .status-pill--inactive {
+      background: rgba(148, 163, 184, 0.12);
+      border-color: rgba(148, 163, 184, 0.35);
+      color: #cbd5f5;
+      box-shadow: none;
     }
 
     .server-note {
@@ -668,11 +704,11 @@
     <section class="panel">
       <h2>Blink Response Engine Mission Control</h2>
       <p class="subtext">Real-time lead response, visualized.</p>
-      <div class="status-row">
-        <span class="status-chip chip-good">SMS Engine: Active</span>
-        <span class="status-chip chip-info">Contest Engine: Armed</span>
-        <span class="status-chip chip-warn">Escalation Logic: Standing By</span>
-        <span class="status-chip chip-purple" id="serverStatus">Server: Ready to Arm</span>
+      <div class="status-row safety-disabled" id="statusRow">
+        <span class="status-pill status-pill--active">SMS Engine: Active</span>
+        <span class="status-pill status-pill--armed">Contest Engine: Armed</span>
+        <span class="status-pill status-pill--warning">Escalation Logic: Standing By</span>
+        <span class="status-pill status-pill--inactive" id="serverStatus">Server: Ready to Arm</span>
       </div>
       <div class="arm-panel">
         <label class="arm-toggle" id="armToggle">
@@ -865,6 +901,8 @@
     const armState = document.getElementById("armState");
     const rangeAlert = document.getElementById("rangeAlert");
     const rangeFlash = document.getElementById("rangeFlash");
+    const statusRow = document.getElementById("statusRow");
+    const statusPills = document.querySelectorAll(".status-pill");
 
     const leadBank = [
       { name: "Ava T.", vehicle: "2023 Ford Explorer XLT" },
@@ -879,6 +917,21 @@
     let activeSource = "CarGurus";
     let serverReachable = false;
     let armed = false;
+    let isSafetyInterlockEnabled = false;
+
+    function updateStatusPills() {
+      if (statusRow) {
+        statusRow.classList.toggle("safety-enabled", isSafetyInterlockEnabled);
+        statusRow.classList.toggle("safety-disabled", !isSafetyInterlockEnabled);
+      }
+      statusPills.forEach(pill => {
+        if (!isSafetyInterlockEnabled) {
+          pill.setAttribute("title", "Enable Safety Interlock to activate systems");
+        } else {
+          pill.removeAttribute("title");
+        }
+      });
+    }
 
     function renderTimer() {
       const minutes = String(Math.floor(remaining / 60)).padStart(2, "0");
@@ -903,12 +956,12 @@
     function setServerStatus(ok, note) {
       serverReachable = ok;
       if (!serverStatus) return;
-      serverStatus.classList.remove("chip-good", "chip-warn", "chip-info", "chip-purple");
+      serverStatus.classList.remove("status-pill--active", "status-pill--armed", "status-pill--warning", "status-pill--error", "status-pill--inactive");
       if (ok) {
-        serverStatus.classList.add("chip-good");
+        serverStatus.classList.add("status-pill--inactive");
         serverStatus.textContent = "Server: Connected";
       } else {
-        serverStatus.classList.add("chip-warn");
+        serverStatus.classList.add("status-pill--error");
         serverStatus.textContent = "Server: Offline";
       }
       if (serverNote) serverNote.textContent = note;
@@ -916,6 +969,8 @@
 
     function setArmedState(next) {
       armed = next;
+      isSafetyInterlockEnabled = next;
+      updateStatusPills();
       if (armToggle) armToggle.classList.toggle("active", armed);
       if (armSwitch) armSwitch.checked = armed;
       if (armState) armState.textContent = armed ? "Armed • Live Alerts Enabled" : "Safe • Systems Locked";
