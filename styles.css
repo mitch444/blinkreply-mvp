@@ -70,6 +70,12 @@ body {
   background: #141f33;
 }
 
+.nav-link.active {
+  background: var(--blink-yellow);
+  border-color: #eab308;
+  color: #111827;
+}
+
 #logo {
   width: 200px;
   height: auto;

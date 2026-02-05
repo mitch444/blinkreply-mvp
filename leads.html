@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blink Response Engine — Leads</title>
+  <link rel="icon" href="ico.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .page {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .lead-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin: 12px 0 16px;
+    }
+
+    .lead-header h1 {
+      margin: 0 0 6px;
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    .lead-header .subtext {
+      margin: 0;
+      font-size: 13px;
+      color: var(--blink-soft);
+    }
+
+    .control-bar {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .control-bar input,
+    .control-bar select {
+      background: #0f1b2d;
+      border: 1px solid var(--blink-border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      color: var(--blink-gray);
+      font-size: 13px;
+    }
+
+    .actions-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .action-btn {
+      border: 1px solid var(--blink-border);
+      background: #0f1b2d;
+      color: var(--blink-gray);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .action-btn.primary {
+      background: var(--blink-yellow);
+      color: #111827;
+      border-color: #eab308;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .summary-card {
+      border: 1px solid var(--blink-border);
+      border-radius: 12px;
+      background: #0f1b2d;
+      padding: 12px;
+    }
+
+    .summary-card .label {
+      font-size: 11px;
+      color: var(--blink-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+
+    .summary-card .value {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .lead-layout {
+      display: grid;
+      grid-template-columns: 2.2fr 1fr;
+      gap: 16px;
+    }
+
+    .lead-table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid var(--blink-border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #0f1b2d;
+    }
+
+    .lead-table th,
+    .lead-table td {
+      padding: 10px 12px;
+      font-size: 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--blink-border);
+    }
+
+    .lead-table th {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--blink-soft);
+      background: #0b1220;
+    }
+
+    .lead-table tr:hover td {
+      background: rgba(15, 23, 42, 0.6);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 10px;
+      border: 1px solid var(--blink-border);
+      color: var(--blink-gray);
+      background: #0b1220;
+    }
+
+    .badge.action {
+      border-color: #eab308;
+      color: #111827;
+      background: var(--blink-yellow);
+    }
+
+    .call-panel {
+      border: 1px solid var(--blink-border);
+      border-radius: 12px;
+      background: #0f1b2d;
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+
+    .call-panel h2 {
+      margin: 0;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .call-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .call-item {
+      border: 1px solid var(--blink-border);
+      border-radius: 10px;
+      padding: 10px;
+      background: #0b1220;
+      font-size: 12px;
+      color: var(--blink-gray);
+    }
+
+    .call-item .name {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .call-item .meta {
+      color: var(--blink-soft);
+      font-size: 11px;
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--blink-soft);
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 1100px) {
+      .lead-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .control-bar {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <nav id="topNav">
+      <div id="brandBlock">
+        <img src="blink-logo-horizontal-dark.png" alt="Blink Response Engine logo" id="logo" />
+        <div>
+          <div id="brandTitle">Blink Response Engine — Leads</div>
+          <div class="helper-line">Operational view of inbound leads and ownership.</div>
+        </div>
+      </div>
+      <div id="navActions">
+        <a href="index.html" class="nav-link">Rapid Response</a>
+        <a href="dash.html" class="nav-link">Dashboard</a>
+        <a href="leads.html" class="nav-link active">Leads</a>
+        <a href="eg.html" class="nav-link">Examples</a>
+        <a href="walk.html" class="nav-link">Walkthrough</a>
+        <a href="settings.html" class="nav-link">Settings</a>
+      </div>
+    </nav>
+
+    <div class="lead-header">
+      <div>
+        <h1>Lead Database</h1>
+        <p class="subtext">Seeded from DealerSocket export. Use controls to build a manager call list.</p>
+      </div>
+    </div>
+
+    <div class="control-bar">
+      <input id="searchInput" type="text" placeholder="Search name, email, phone, VIN" />
+      <select id="sourceFilter">
+        <option value="">All sources</option>
+      </select>
+      <select id="typeFilter">
+        <option value="">All types</option>
+        <option value="new">New</option>
+        <option value="used">Used</option>
+      </select>
+      <select id="statusFilter">
+        <option value="">All status</option>
+        <option value="open">Open</option>
+        <option value="duplicate">Duplicate</option>
+      </select>
+      <select id="sortSelect">
+        <option value="received_desc">Newest first</option>
+        <option value="received_asc">Oldest first</option>
+        <option value="priority">Priority score</option>
+        <option value="source">Source</option>
+      </select>
+    </div>
+
+    <div class="actions-row">
+      <button class="action-btn primary" id="callListBtn">Generate Call List</button>
+      <button class="action-btn" id="prioritizeBtn">Prioritize Oldest Leads</button>
+      <button class="action-btn" id="addLeadBtn">Add Test Lead</button>
+      <label class="toggle-row"><input type="checkbox" id="hideDuplicates" /> Hide duplicates</label>
+    </div>
+
+    <div class="summary-grid" id="summaryGrid"></div>
+
+    <div class="lead-layout">
+      <div>
+        <table class="lead-table">
+          <thead>
+            <tr>
+              <th>Received</th>
+              <th>Lead</th>
+              <th>Source</th>
+              <th>Vehicle</th>
+              <th>Type</th>
+              <th>Priority</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="leadTableBody"></tbody>
+        </table>
+      </div>
+      <aside class="call-panel">
+        <h2>Manager Call List</h2>
+        <div class="subtext">Auto-ranked by age, priority, and missing owner.</div>
+        <div class="call-list" id="callList"></div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    const leads = [];
+    let filteredLeads = [];
+    let prioritizeOldest = false;
+    const seedCsv = `Lead Id,Routing Name,Role,Date Received,Lead Source,First Name,Last Name,Email Address,Day Phone,Evening Phone,Address,City,State,Zip/Post Code,Country Code,Priority,Lead To,Lead From,Lead From_Name,Subject,Make,Model,Year,VIN,Stock No,Body Style,MSRP,Odometer,Trim,Interior,Exterior,Trans,Engine Size,Type,Purchase Type,Comments,Expected Close,Lead Date,Lead Source,Marketing Source,Full Lead Text,Assigned To,Event Id
+67152,w96gluu,Sales Person,2/4/2026 10:12:34 PM,CarGurus,Gloria,Moffat,cz9hhw7477@privaterelay.appleid.com,(204) 345-4324,(204) 345-4324,,East Selkirk,MB,R0E 1A0,CA,0,webleads@winnipeghyundai.dsmessage.com,dealer-leads@messages.cargurus.com,CarGurus Customer Lead,Lead Submission from CarGurus,Hyundai,Santa Fe,2023,5NMS5DAL6PH537119,88977,,31949,80926,ULTIMATE CALLIGRAPHY,,,,,used,Financing,,,2/4/2026 9:06:51 PM,CarGurus,CarGurus,View Lead 67152,w96gluu,281070
+67151,w96gluu,Sales Person,2/4/2026 8:56:16 PM,Unhaggle / CanadianBlackBook,Lara,Hunter,larajaynehunter@gmail.com,(204) 218-5719,(204) 218-5719,,Winnipeg,MB,R2M2R2,CA,0,webleads@winnipeghyundai.dsmessage.com,canadianblackbook@unhaggle.com,Canadian Black Book,Unhaggle - New Lead,Hyundai,Kona,2024,,,,,,n/a,,,,,new,buy,,,2/4/2026 7:52:43 PM,Unhaggle / CanadianBlackBook,New Car Leads,View Lead 67151,w96gluu,281069
+67141,w96gluu,Sales Person,2/3/2026 4:11:26 PM,CarCostCanada,Azhar,Laldin,laldin1@hotmail.com,(204) 298-9776,(204) 298-9776,,Winnipeg,MB,R3P 1T4,CA,0,webleads@winnipeghyundai.dsmessage.com,rrdealers@carcostcanada.com,,CarCostCanada.com,Hyundai,Tucson Hybrid,2026,,,,49949,,Ultimate,,,,,new,buy,,,2/3/2026 3:07:35 PM,CarCostCanada,New Car Pricing Website,View Lead 67141,w96gluu,280993
+67140,w96gluu,Sales Person,2/3/2026 2:21:25 PM,Optimy.ai,Vlad,,vladyslavmoshkov@gmail.com,,,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,leads@em302.sg.optimy.ai,,Optimy ADF Lead,,,,,,,,,,,,,,new,buy,,,2/3/2026 1:21:18 PM,Optimy.ai,Converting browsers into buyers,View Lead 67140,w96gluu,280992
+67139,w96gluu,Sales Person,2/3/2026 2:21:24 PM,Optimy.ai,Joelle,Paillé,,(204) 799-4906,(204) 799-4906,,"Portage la Prairie, MB",,,CA,0,webleads@winnipeghyundai.dsmessage.com,leads@em302.sg.optimy.ai,,Optimy ADF Lead,,,,,,,,,,,,,,new,buy,,,2/3/2026 1:21:15 PM,Optimy.ai,Converting browsers into buyers,View Lead 67139,w96gluu,280991
+67135,w96gluu,Sales Person,2/3/2026 10:15:54 AM,CarGurus,Derek,Lachaine,derek_lachaine@transx.com,(204) 227-5510,(204) 227-5510,,East St Paul,MB,R2E 0M7,CA,0,webleads@winnipeghyundai.dsmessage.com,dealer-leads@messages.cargurus.com,CarGurus Customer Lead,Lead Submission from CarGurus,Kia,Sportage,2022,KNDPNCAC4N7973231,89015,,25999,60899,EX PREMIUM S,,,,,used,Financing,,,2/3/2026 9:14:16 AM,CarGurus,CarGurus,View Lead 67135,w96gluu,280986
+67134,w96gluu,Sales Person,2/3/2026 10:06:55 AM,Optimy.ai,Optimy,Lead,dharwood@optimy.ai,,,,"Iowa City, IA, United States",,,CA,0,webleads@winnipeghyundai.dsmessage.com,leads@em302.sg.optimy.ai,,Optimy ADF Lead,,,,,,,,,,,,,,new,buy,,,2/3/2026 9:05:07 AM,Optimy.ai,Converting browsers into buyers,View Lead 67134,w96gluu,280985
+67133,w96gluu,Sales Person,2/3/2026 9:17:30 AM,CarGurus,Kacy,-,no-reply+2049794238@cargurus.com,(204) 979-4238,(204) 979-4238,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,dealer-leads@messages.cargurus.com,CarGurus Customer Lead,Lead Submission from CarGurus,Ford,Explorer,2018,1FM5K8DHXJGC35542,5942A,,21999,108172,XLT,,,,,used,Financing,,,2/3/2026 8:13:45 AM,CarGurus,CarGurus,View Lead 67133,w96gluu,280983
+67132,w96gluu,Sales Person,2/3/2026 6:47:04 AM,Email,,,rccunningham@shaw.ca,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,rccunningham@shaw.ca,Clark Cunningham,Re: Inquiry Regarding 2023 ...,,,0,,,,0,0,,,,,,New,,,,2/3/2026 5:43:36 AM,Email,,View Lead 67132,w96gluu,280910
+67131,w96gluu,Sales Person,2/2/2026 9:45:54 PM,Optimy.ai,Karlie,,Karliefri@gmail.com,,,,winnipeg,MB,,CA,0,webleads@winnipeghyundai.dsmessage.com,leads@em302.sg.optimy.ai,,Optimy ADF Lead,,,,,,,,,,,,,,new,buy,,,2/2/2026 8:42:06 PM,Optimy.ai,Converting browsers into buyers,View Lead 67131,w96gluu,280929
+67127,w96gluu,Sales Person,2/2/2026 2:16:44 PM,CarGurus,heather,brown,countrycritters9@yahoo.ca,,,,Winnipeg,MB,R3K 0Z8,CA,0,webleads@winnipeghyundai.dsmessage.com,dealer-leads@messages.cargurus.com,CarGurus Customer Lead,Lead Submission from CarGurus,Hyundai,Santa Fe Hybrid,2026,KM8P3DG11TU178939,OO-6389,,51579,10,Preferred AWD w-Trend Pkg,,,,,new,Financing,,,2/2/2026 1:13:32 PM,CarGurus,CarGurus,View Lead 67127,Duplicate,280212
+67126,w96gluu,Sales Person,2/2/2026 1:47:31 PM,DrivingIt,Jeffrey,Sinclair,,(204) 960-0341,(204) 960-0341,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,no-reply@drivingit.com,DrivingIt,ADF Lead from drivingit.com,Ford,Explorer,2018,,5942A,,,,,,,,,used,buy,,,2/2/2026 12:43:03 PM,DrivingIt,,View Lead 67126,w96gluu,280923
+67125,w96gluu,Sales Person,2/2/2026 1:27:17 PM,Optimy.ai,crystal,,,(204) 461-0367,(204) 461-0367,,"Winkler, MB",,,CA,0,webleads@winnipeghyundai.dsmessage.com,leads@em302.sg.optimy.ai,,Optimy ADF Lead,,,,,,,,,,,,,,new,buy,,,2/2/2026 12:25:52 PM,Optimy.ai,Converting browsers into buyers,View Lead 67125,w96gluu,280922
+67122,w96gluu,Sales Person,2/2/2026 1:02:00 PM,Email,,,rccunningham@shaw.ca,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,rccunningham@shaw.ca,Clark Cunningham,Re: Inquiry Regarding 2023 ...,,,0,,,,0,0,,,,,,New,,,,2/2/2026 11:58:54 AM,Email,,View Lead 67122,w96gluu,280910
+67121,w96gluu,Sales Person,2/2/2026 10:27:03 AM,CarCostCanada,Elisabeth,Lantz,elisabethlantz36@gmail.com,(204) 228-0071,(204) 228-0071,,Winnipeg,MB,R3A 1S1,CA,0,webleads@winnipeghyundai.dsmessage.com,rrdealers@carcostcanada.com,,CarCostCanada.com,Hyundai,Palisade Hybrid,2026,,,,67899,,Ultimate Calligraphy,,,,,new,buy,,,2/2/2026 9:23:09 AM,CarCostCanada,New Car Pricing Website,View Lead 67121,w96gluu,280918
+67120,w96gluu,Sales Person,2/2/2026 8:57:15 AM,DrivingIt,Lindsay,Craig,,(204) 998-9700,(204) 998-9700,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,no-reply@drivingit.com,DrivingIt,ADF Lead from drivingit.com,Mazda,CX-5,2022,,88968,,,,,,,,,used,buy,,,2/2/2026 7:54:31 AM,DrivingIt,,View Lead 67120,Duplicate,280915
+67119,w96gluu,Sales Person,2/2/2026 8:57:14 AM,DrivingIt,Lindsay,Craig,,(204) 998-9700,(204) 998-9700,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,no-reply@drivingit.com,DrivingIt,ADF Lead from drivingit.com,Mazda,CX-5,2022,,88968,,,,,,,,,used,buy,,,2/2/2026 7:54:29 AM,DrivingIt,,View Lead 67119,w96gluu,280915
+67116,w96gluu,Sales Person,2/1/2026 10:33:02 PM,Optimy.ai,Ghirmay,JML,,(204) 914-9012,(204) 914-9012,,"Winnipeg, MB",ON,,CA,0,webleads@winnipeghyundai.dsmessage.com,leads@em302.sg.optimy.ai,,Optimy ADF Lead,,,,,,,,,,,,,,new,buy,,,2/1/2026 9:31:17 PM,Optimy.ai,Converting browsers into buyers,View Lead 67116,w96gluu,280914
+67115,w96gluu,Sales Person,2/1/2026 4:42:43 PM,TAdvantage - Job Application,sidra,Afzal,sidraafzal25@yahoo.com,(306) 714-0375,(306) 714-0375,,,,R4A 0G1,CA,0,webleads@winnipeghyundai.dsmessage.com,no-reply@tadvantage.ca,Winnipeg Hyundai,TAdvantage - Job Application,,,,,,,,,,,,,,new,finance,,,2/1/2026 3:37:15 PM,TAdvantage - Job Application,Winnipeg Hyundai Website,View Lead 67115,Duplicate,280913
+67110,w96gluu,Sales Person,2/1/2026 10:41:08 AM,CarGurus,Clark,Cunningham,rccunningham@shaw.ca,,,,Winnipeg,MB,R2M 3H6,CA,0,webleads@winnipeghyundai.dsmessage.com,dealer-leads@messages.cargurus.com,CarGurus Customer Lead,Lead Submission from CarGurus,Hyundai,Santa Fe,2023,5NMS5DAL6PH537119,88977,,31949,80926,ULTIMATE CALLIGRAPHY,,,,,used,Financing,,,2/1/2026 9:37:59 AM,CarGurus,CarGurus,View Lead 67110,w96gluu,280910
+67108,w96gluu,Sales Person,2/1/2026 8:57:50 AM,Email,,,adeoye_on@yahoo.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,adeoye_on@yahoo.com,olabanji segun,Re: Inquiry Regarding 2021 ...,,,0,,,,0,0,,,,,,New,,,,2/1/2026 7:52:09 AM,Email,,View Lead 67108,w96gluu,280773
+67103,w96gluu,Sales Person,2/1/2026 6:31:58 AM,CarGurus Reengagement,Jill,Neufeld,jillian.neufeld@gmail.com,,,,Winnipeg,MB,R3N 0X4,CA,0,webleads@winnipeghyundai.dsmessage.com,dealer-leads@messages.cargurus.com,CarGurus Customer Lead,Lead Reengagement from CarG...,Subaru,WRX,2023,JF1VBAA67P9811637,88916,,29498,20497,BASE,,,,,used,Financing,,,2/1/2026 5:29:06 AM,CarGurus Reengagement,CarGurus Reengagement,View Lead 67103,Duplicate,280638
+67102,w96gluu,Sales Person,2/1/2026 6:31:57 AM,CarGurus Reengagement,Chris,Coughlin,chriscoughlin629@gmail.com,(204) 205-0655,(204) 205-0655,,Winnipeg,MB,R3K 2G8,CA,0,webleads@winnipeghyundai.dsmessage.com,dealer-leads@messages.cargurus.com,CarGurus Customer Lead,Lead Reengagement from CarG...,Nissan,Murano,2020,5N1AZ2CS7LN162388,5611A,,24500,57417,SL,,,,,used,Financing,,,2/1/2026 5:29:06 AM,CarGurus Reengagement,CarGurus Reengagement,View Lead 67102,Duplicate,280683
+67101,w96gluu,Sales Person,2/1/2026 1:32:10 AM,AutoTrader.ca Digital Retail:,Lawrence,Narvaez,Lanarvaez@yahoo.com,(431) 279-2503,(431) 279-2503,,,,R2R2G1,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,Deal Builder Lead,Subaru,WRX,2023,JF1VBAA67P9811637,88916,,29498,20497,BASE,Black,Grey,,,Used,finance,,,2/1/2026 12:24:12 AM,AutoTrader.ca Digital Retail:,Trade-In request,View Lead 67101,w96gluu,280880
+67100,w96gluu,Sales Person,1/31/2026 4:51:15 PM,DrivingIt,Brenda,Lynn,,,,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,no-reply@drivingit.com,DrivingIt,ADF Lead from drivingit.com,Hyundai,Elantra,2021,,89087,,,,,,,,,used,buy,,,1/31/2026 3:50:50 PM,DrivingIt,,View Lead 67100,w96gluu,280877
+67098,w96gluu,Sales Person,1/31/2026 1:42:36 PM,Auto Trader Text,do,vehicle,,(204) 299-9824,(204) 299-9824,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,autoTRADER Lead,Hyundai,Santa Fe,2024,5NMP5DGL7RH021707,6192A,,51500,,ULTIMATE CALLIGRAPHY,,,,,Used,finance,,,1/31/2026 12:39:38 PM,Auto Trader Text,,View Lead 67098,w96gluu,280875
+67097,w96gluu,Sales Person,1/31/2026 1:26:53 PM,Optimy.ai,Matt,,,(204) 915-7448,(204) 915-7448,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,leads@em302.sg.optimy.ai,,Optimy ADF Lead,,,,,,,,,,,,,,new,buy,,,1/31/2026 12:25:27 PM,Optimy.ai,Converting browsers into buyers,View Lead 67097,w96gluu,280874
+67096,w96gluu,Sales Person,1/31/2026 12:12:47 PM,Auto Trader Text,Andrea,Auch,,(204) 451-2050,(204) 451-2050,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,autoTRADER Lead,Hyundai,Elantra,2024,KMHLM4DG9RU729387,6264A,,24785,,PREFERRED,,,,,Used,finance,,,1/31/2026 11:07:38 AM,Auto Trader Text,,View Lead 67096,w96gluu,280870
+67095,w96gluu,Sales Person,1/31/2026 9:21:29 AM,DrivingIt,CarpetOne,Home,rav101@me.com,(204) 396-2577,(204) 396-2577,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,no-reply@drivingit.com,DrivingIt,ADF Lead from drivingit.com,Ram,1500,2025,,88876,,,,,,,,,used,buy,,,1/31/2026 8:20:03 AM,DrivingIt,,View Lead 67095,Duplicate,280865
+67094,w96gluu,Sales Person,1/31/2026 9:21:28 AM,DrivingIt,CarpetOne,Home,rav101@me.com,(204) 396-2577,(204) 396-2577,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,no-reply@drivingit.com,DrivingIt,ADF Lead from drivingit.com,Ram,1500,2025,,88876,,,,,,,,,used,buy,,,1/31/2026 8:19:45 AM,DrivingIt,,View Lead 67094,w96gluu,280865
+67093,w96gluu,Sales Person,1/31/2026 6:33:03 AM,CarGurus Reengagement,Shadi,Shohoudifar,shohoudifarS@gmail.com,(204) 260-9161,(204) 260-9161,,Winnipeg,MB,R2M 1G3,CA,0,webleads@winnipeghyundai.dsmessage.com,dealer-leads@messages.cargurus.com,CarGurus Customer Lead,Lead Reengagement from CarG...,Mazda,CX-5,2022,JM3KFBCM3N0636055,88968,,28987,61124,GS COMFORT | AWD | Leather | Sunroof | Htd Seats,,,,,used,Financing,,,1/31/2026 5:27:57 AM,CarGurus Reengagement,CarGurus Reengagement,View Lead 67093,Duplicate,280467
+67092,w96gluu,Sales Person,1/31/2026 12:47:17 AM,CarGurus,Banji,Adeoye,adeoye_on@yahoo.com,(204) 596-5524,(204) 596-5524,,Brandon,MB,R7C 0E5,CA,0,webleads@winnipeghyundai.dsmessage.com,dealer-leads@messages.cargurus.com,CarGurus Customer Lead,Lead Submission from CarGurus,Kia,Telluride,2021,5XYP5DHC6MG162138,6191A,,39000,58152,SX - AWD | Leather | SafetyTech | Sunroof,,,,,used,Financing,,,1/30/2026 11:46:27 PM,CarGurus,CarGurus,View Lead 67092,w96gluu,280773
+67091,w96gluu,Sales Person,1/30/2026 9:22:58 PM,AutoTrader.ca Digital Retail:,Abby,Wilson,Abigailfw2004@gmail.com,(204) 915-7390,(204) 915-7390,,,,R3N0X4,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,Deal Builder Lead,Hyundai,Kona,2026,KM8HACA30TU352319,6017,,40629,30,N LINE,Black,Grey,,,New,finance,,,1/30/2026 8:22:25 PM,AutoTrader.ca Digital Retail:,Trade-In request,View Lead 67091,w96gluu,280772
+67090,w96gluu,Sales Person,1/30/2026 9:07:16 PM,CarGurus,Brianne,Lough,briannerempel@gmail.com,(204) 612-1650,(204) 612-1650,,Winnipeg,MB,R3R 1T2,CA,0,webleads@winnipeghyundai.dsmessage.com,dealer-leads@messages.cargurus.com,CarGurus Customer Lead,Lead Submission from CarGurus,Hyundai,Palisade,2021,KM8R3DHE7MU255020,89085,,31449,94648,LUXURY | AWD | Leather | Sunroof | Htd Seats,,,,,used,Financing,,,1/30/2026 8:07:14 PM,CarGurus,CarGurus,View Lead 67090,w96gluu,280771
+67088,w96gluu,Sales Person,1/30/2026 4:30:57 PM,CarGurus,Wendy,Plouffe,wendylplouffe@gmail.com,(431) 338-0127,(431) 338-0127,,Winnipeg,MB,R2K 1Y1,CA,0,webleads@winnipeghyundai.dsmessage.com,dealer-leads@messages.cargurus.com,CarGurus Customer Lead,Lead Submission from CarGurus,Hyundai,Tucson,2021,KM8J3CAL6MU382843,5379A,,21199,133558,PREFERRED - AWD | Heated Seatsandamp; Wheel | CarPlay,,,,,used,Financing,,,1/30/2026 3:26:36 PM,CarGurus,CarGurus,View Lead 67088,Duplicate,280768
+67087,w96gluu,Sales Person,1/30/2026 4:26:28 PM,CarGurus,Wendy,Plouffe,wendylplouffe@gmail.com,(431) 338-0127,(431) 338-0127,,Winnipeg,MB,R2K 1Y1,CA,0,webleads@winnipeghyundai.dsmessage.com,dealer-leads@messages.cargurus.com,CarGurus Customer Lead,Lead Submission from CarGurus,Hyundai,Tucson,2021,KM8J3CAL6MU382843,5379A,,21199,133558,PREFERRED - AWD | Heated Seatsandamp; Wheel | CarPlay,,,,,used,Financing,,,1/30/2026 3:26:13 PM,CarGurus,CarGurus,View Lead 67087,w96gluu,280768
+67086,w96gluu,Sales Person,1/30/2026 3:57:16 PM,Auto Trader Email - ICO - Trade-In,Katie,Moniot,Katiem99@mymts.net,(204) 797-0617,(204) 797-0617,,,,R3X1G5,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,Auto Trader Email - ICO - T...,Hyundai,Kona,2024,KM8HBCAB2RU149011,89100,,27799,40943,PREFERRED,Black,Black,,,Used,finance,,,1/30/2026 2:55:52 PM,Auto Trader Email - ICO - Trade-In,Trader - Estimated Trade-in,View Lead 67086,w96gluu,280766
+67085,w96gluu,Sales Person,1/30/2026 3:52:46 PM,CarGurus,Name,Unknown,,(204) 333-7273,(204) 333-7273,,,MB,,CA,0,webleads@winnipeghyundai.dsmessage.com,dealer-leads@messages.cargurus.com,CarGurus Customer Lead,Phone Lead from CarGurus,Ford,Escape Hybrid,2021,1FMCU9DZ1MUA74763,88951,,,,TITANIUM HYBRID,,,,,used,Financing,,,1/30/2026 2:47:14 PM,CarGurus,CarGurus - phone,View Lead 67085,w96gluu,280765
+67083,w96gluu,Sales Person,1/30/2026 3:32:34 PM,Auto Trader Text,Jeremy,Unknown,,(204) 384-1418,(204) 384-1418,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,autoTRADER Lead,Ford,Escape,2020,1FMCU9G6XLUA13086,5775A,,18699,,SE,,,,,Used,finance,,,1/30/2026 2:29:23 PM,Auto Trader Text,,View Lead 67083,w96gluu,280762
+67079,w96gluu,Sales Person,1/30/2026 11:21:04 AM,CarGurus,Asther,Cayabyab,Cayabyabasther@gmail.com,(204) 291-0536,(204) 291-0536,,Winnipeg,MB,R3G 2L3,CA,0,webleads@winnipeghyundai.dsmessage.com,dealer-leads@messages.cargurus.com,CarGurus Customer Lead,Lead Submission from CarGurus,Ford,Explorer,2018,1FM5K8DHXJGC35542,5942A,,21999,56028,XLT,,,,,used,Financing,,,1/30/2026 10:16:35 AM,CarGurus,CarGurus,View Lead 67079,w96gluu,280754
+67077,w96gluu,Sales Person,1/30/2026 10:36:10 AM,CarGurus,Shadi,Shohoudifar,shohoudifarS@gmail.com,(204) 260-9161,(204) 260-9161,,Winnipeg,MB,R2M 1G3,CA,0,webleads@winnipeghyundai.dsmessage.com,dealer-leads@messages.cargurus.com,CarGurus Customer Lead,Lead Submission from CarGurus,Mazda,CX-5,2022,JM3KFBCM3N0636055,88968,,28987,61124,GS COMFORT | AWD | Leather | Sunroof | Htd Seats,,,,,used,Financing,,,1/30/2026 9:35:40 AM,CarGurus,CarGurus,View Lead 67077,Duplicate,280467
+67074,w96gluu,Sales Person,1/30/2026 10:01:58 AM,CarGurus,Steven,Gilkes,sgilkes@mts.net,(204) 914-6101,(204) 914-6101,,Winnipeg,MB,R3E 3G5,CA,0,webleads@winnipeghyundai.dsmessage.com,dealer-leads@messages.cargurus.com,CarGurus Customer Lead,Lead Submission from CarGurus,Ford,Explorer,2018,1FM5K8DHXJGC35542,5942A,,21999,56028,XLT,,,,,used,Financing,,,1/30/2026 8:59:02 AM,CarGurus,CarGurus,View Lead 67074,w96gluu,280750
+67073,w96gluu,Sales Person,1/30/2026 9:41:44 AM,CarGurus,Name,Unknown,,(204) 961-1717,(204) 961-1717,,,MB,,CA,0,webleads@winnipeghyundai.dsmessage.com,dealer-leads@messages.cargurus.com,CarGurus Customer Lead,Phone Lead from CarGurus,Subaru,WRX,2023,JF1VBAA67P9811637,88916,,,,BASE · Manual | Turbo | AWD | CarPlay,,,,,used,Financing,,,1/30/2026 8:37:54 AM,CarGurus,CarGurus - phone,View Lead 67073,w96gluu,280749
+67069,w96gluu,Sales Person,1/29/2026 10:21:22 PM,CarGurus,Ty,Y,Tiffy_yach@hotmail.com,(204) 688-1581,(204) 688-1581,,Winnipeg,MB,R3Y 2A8,CA,0,webleads@winnipeghyundai.dsmessage.com,dealer-leads@messages.cargurus.com,CarGurus Customer Lead,Lead Submission from CarGurus,Ford,Escape,2020,1FMCU9G6XLUA13086,5775A,,18699,92329,SE,,,,,used,Financing,,,1/29/2026 9:19:34 PM,CarGurus,CarGurus,View Lead 67069,w96gluu,280693
+67065,w96gluu,Sales Person,1/29/2026 5:42:56 PM,Email,,,isabelledion2023@gmail.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,isabelledion2023@gmail.com,Isabelle,Re: Re: New Inventory and I...,,,0,,,,0,0,,,,,,New,,,,1/29/2026 4:39:18 PM,Email,,View Lead 67065,w96gluu,279683
+67064,w96gluu,Sales Person,1/29/2026 5:15:59 PM,CarGurus,Name,Unknown,,(204) 590-8668,(204) 590-8668,,,Manitoba,,CA,0,webleads@winnipeghyundai.dsmessage.com,dealer-leads@messages.cargurus.com,CarGurus Customer Lead,Phone Lead from CarGurus,Hyundai,Santa Fe,2024,5NMP5DGL2RH024630,89049,,,,ULTIMATE CALLIGRAPHY,,,,,used,Financing,,,1/29/2026 4:14:41 PM,CarGurus,CarGurus - phone,View Lead 67064,w96gluu,280687
+67061,w96gluu,Sales Person,1/29/2026 2:02:53 PM,CarGurus,Chris,Coughlin,chriscoughlin629@gmail.com,(204) 205-0655,(204) 205-0655,,Winnipeg,MB,R3K 2G8,CA,0,webleads@winnipeghyundai.dsmessage.com,dealer-leads@messages.cargurus.com,CarGurus Customer Lead,Lead Submission from CarGurus,Nissan,Murano,2020,5N1AZ2CS7LN162388,5611A,,24500,57417,SL,,,,,used,Financing,,,1/29/2026 1:02:32 PM,CarGurus,CarGurus,View Lead 67061,w96gluu,280683
+67060,w96gluu,Sales Person,1/29/2026 2:02:53 PM,DrivingIt,Marla,Teves,marla.teves5@gmail.com,(204) 558-6346,(204) 558-6346,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,no-reply@drivingit.com,DrivingIt,ADF Lead from drivingit.com,Hyundai,Elantra GL,2017,,6129A,,,,,,,,,used,buy,,,1/29/2026 12:57:20 PM,DrivingIt,,View Lead 67060,w96gluu,280682
+67059,w96gluu,Sales Person,1/29/2026 10:36:18 AM,Email,,,webleads@winnipeghyundai.dsmessage.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,webleads@winnipeghyundai.dsmessage.com,GIA LUU,RE: RE: Re: Inquiry Regardi...,,,0,,,,0,0,,,,,,New,,,,1/29/2026 9:34:58 AM,Email,,View Lead 67059,w96gluu,280575
+67055,w96gluu,Sales Person,1/28/2026 7:57:52 PM,CarGurus,Jill,Neufeld,jillian.neufeld@gmail.com,,,,Winnipeg,MB,R3N 0X4,CA,0,webleads@winnipeghyundai.dsmessage.com,dealer-leads@messages.cargurus.com,CarGurus Customer Lead,Lead Submission from CarGurus,Subaru,WRX,2023,JF1VBAA67P9811637,88916,,29498,20497,BASEand#183; Manual | Turbo | AWD | CarPlay,,,,,used,Financing,,,1/28/2026 6:51:48 PM,CarGurus,CarGurus,View Lead 67055,w96gluu,280638
+67054,w96gluu,Sales Person,1/28/2026 5:40:53 PM,Auto Trader Email - Price Drop,unknown,unknown,natdecorate@yahoo.com,,,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,autoTRADER Lead,Hyundai,Tucson Hybrid,2025,KM8JCDD12SU285412,6234U,,41799,,N-LINE,,,,,Used,finance,,,1/28/2026 4:40:30 PM,Auto Trader Email - Price Drop,,View Lead 67054,w96gluu,280637
+67053,w96gluu,Sales Person,1/28/2026 4:51:29 PM,Optimy.ai,Brett,,,(204) 793-5552,(204) 793-5552,,"Winnipeg, MB",,,CA,0,webleads@winnipeghyundai.dsmessage.com,leads@em302.sg.optimy.ai,,Optimy ADF Lead,,,,,,,,,,,,,,new,buy,,,1/28/2026 3:47:12 PM,Optimy.ai,Converting browsers into buyers,View Lead 67053,w96gluu,280636
+67050,w96gluu,Sales Person,1/28/2026 3:57:38 PM,Auto Trader Email,Moises,unknown,moises.oshikava@gmail.com,(204) 599-2713,(204) 599-2713,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,autoTRADER Lead,Hyundai,Elantra GT,2020,KMHH35LE6LU135264,5923A,,17299,,PREFERRED,,,,,Used,finance,,,1/28/2026 2:56:38 PM,Auto Trader Email,,View Lead 67050,w96gluu,280634
+67049,w96gluu,Sales Person,1/28/2026 3:26:10 PM,Auto Trader Text,Di,Huang,,(204) 228-4225,(204) 228-4225,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,autoTRADER Lead,Mazda,CX-5,2025,JM3KFBCL1S0557616,88925,,33000,,GS AWD,,,,,Used,finance,,,1/28/2026 2:21:10 PM,Auto Trader Text,,View Lead 67049,w96gluu,280633
+67044,w96gluu,Sales Person,1/28/2026 1:27:09 PM,CarGurus,Name,Unknown,,(431) 337-1900,(431) 337-1900,,,MB,,CA,0,webleads@winnipeghyundai.dsmessage.com,dealer-leads@messages.cargurus.com,CarGurus Customer Lead,Phone Lead from CarGurus,,,,,,,,,,,,,,new,Financing,,,1/28/2026 12:23:10 PM,CarGurus,CarGurus - phone,View Lead 67044,w96gluu,280629
+67042,w96gluu,Sales Person,1/28/2026 9:13:00 AM,Optimy.ai,n/a,,hotroddy.m@hotmail.com,,,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,leads@em302.sg.optimy.ai,,Optimy ADF Lead,,,,,,,,,,,,,,new,buy,,,1/28/2026 8:12:08 AM,Optimy.ai,Converting browsers into buyers,View Lead 67042,w96gluu,280625
+67041,w96gluu,Sales Person,1/27/2026 6:26:03 PM,TAdvantage - Job Application,Biren,Patel,birenp76@gmail.com,(416) 670-7330,(416) 670-7330,,,,R8N 0Z6,CA,0,webleads@winnipeghyundai.dsmessage.com,no-reply@tadvantage.ca,Winnipeg Hyundai,TAdvantage - Job Application,,,,,,,,,,,,,,new,finance,,,1/27/2026 5:25:53 PM,TAdvantage - Job Application,Winnipeg Hyundai Website,View Lead 67041,Duplicate,280584
+67039,w96gluu,Sales Person,1/27/2026 6:12:35 PM,Email,,,webleads@winnipeghyundai.dsmessage.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,webleads@winnipeghyundai.dsmessage.com,GIA LUU,RE: RE: Re: Inquiry Regardi...,,,0,,,,0,0,,,,,,New,,,,1/27/2026 5:12:21 PM,Email,,View Lead 67039,w96gluu,280485
+67038,w96gluu,Sales Person,1/27/2026 3:37:39 PM,Email,,,johnearlm8888@gmail.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,johnearlm8888@gmail.com,john earl manalaotao,Re: Inquiry Regarding Hyund...,,,0,,,,0,0,,,,,,New,,,,1/27/2026 2:32:31 PM,Email,,View Lead 67038,w96gluu,280575
+67036,w96gluu,Sales Person,1/27/2026 2:28:03 PM,Unhaggle / CanadianBlackBook,Ian,Phillips,Ian.phillips86@gmail.com,(204) 930-0706,(204) 930-0706,,Winnipeg,MB,R3R3L2,CA,0,webleads@winnipeghyundai.dsmessage.com,canadianblackbook@unhaggle.com,Canadian Black Book,Unhaggle - New Lead,Hyundai,Palisade,2026,,,,,,n/a,,,,,new,buy,,,1/27/2026 1:25:28 PM,Unhaggle / CanadianBlackBook,New Car Leads,View Lead 67036,w96gluu,280579
+67035,w96gluu,Sales Person,1/27/2026 12:31:16 PM,Email,,,johnearlm8888@gmail.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,johnearlm8888@gmail.com,john earl manalaotao,Re: Inquiry Regarding Hyund...,,,0,,,,0,0,,,,,,New,,,,1/27/2026 11:30:19 AM,Email,,View Lead 67035,w96gluu,280575
+67025,w96gluu,Sales Person,1/26/2026 6:37:30 PM,CarGurus,John,Fehr,j.fehr1970@hotmail.com,,,,Winkler,MB,R6W 0H9,CA,0,webleads@winnipeghyundai.dsmessage.com,dealer-leads@messages.cargurus.com,CarGurus Customer Lead,Lead Submission from CarGurus,Ford,Explorer,2018,1FM5K8DHXJGC35542,5942A,,21999,108178,XLT,,,,,used,Financing,,,1/26/2026 5:36:42 PM,CarGurus,CarGurus,View Lead 67025,w96gluu,280496
+67024,w96gluu,Sales Person,1/26/2026 5:27:54 PM,Email,,,countrycritters9@yahoo.ca,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,countrycritters9@yahoo.ca,countrycritters9,RE: Inquiry Regarding Hyund...,,,0,,,,0,0,,,,,,New,,,,1/26/2026 4:23:33 PM,Email,,View Lead 67024,w96gluu,280212
+67020,w96gluu,Sales Person,1/26/2026 2:46:14 PM,Email,,,noelsiy@yahoo.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,noelsiy@yahoo.com,Noel Siy,Re: Inquiry Regarding 2025 ...,,,0,,,,0,0,,,,,,New,,,,1/26/2026 1:44:57 PM,Email,,View Lead 67020,w96gluu,280485
+67019,w96gluu,Sales Person,1/26/2026 1:56:47 PM,AutoTrader.ca Digital Retail:,Cody,Renz,kb-acres@outlook.com,(204) 851-7070,(204) 851-7070,,,,R0M2C0,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,Deal Builder Lead,Hyundai,Palisade,2025,KM8R3DGE8SU940027,6073A,,54799,7400,URBAN CPO | AWD | Leather | Htd Seats | 360Cam,Black,White,,,Used,finance,,,1/26/2026 12:53:42 PM,AutoTrader.ca Digital Retail:,Trade-In request,View Lead 67019,w96gluu,280486
+67018,w96gluu,Sales Person,1/26/2026 1:47:46 PM,CarGurus,noel,Siy,noelsiy@yahoo.com,,,,Winnipeg,MB,R3R 1X4,CA,0,webleads@winnipeghyundai.dsmessage.com,dealer-leads@messages.cargurus.com,CarGurus Customer Lead,Lead Submission from CarGurus,Mazda,CX-5,2025,JM3KFBCL1S0557616,88925,,33000,33485,GS AWD,,,,,used,Financing,,,1/26/2026 12:41:57 PM,CarGurus,CarGurus,View Lead 67018,w96gluu,280485
+67016,w96gluu,Sales Person,1/26/2026 1:02:51 PM,TAdvantage - Job Application,Anukaran,kaur,anuguraya41@gmail.com,(705) 905-7058,(705) 905-7058,,,,R2K 2T2,CA,0,webleads@winnipeghyundai.dsmessage.com,no-reply@tadvantage.ca,Winnipeg Hyundai,TAdvantage - Job Application,,,,,,,,,,,,,,new,finance,,,1/26/2026 11:59:58 AM,TAdvantage - Job Application,Winnipeg Hyundai Website,View Lead 67016,Duplicate,280483
+67014,w96gluu,Sales Person,1/26/2026 12:42:39 PM,Unhaggle / CanadianBlackBook,Ryan,Whitman,ryanwhitman10@gmail.com,(204) 384-8690,(204) 384-8690,,Carman,MB,R0G0J0,CA,0,webleads@winnipeghyundai.dsmessage.com,canadianblackbook@unhaggle.com,Canadian Black Book,Unhaggle - New Lead,Hyundai,Santa Fe,2024,,,,,,n/a,,,,,new,buy,,,1/26/2026 11:40:53 AM,Unhaggle / CanadianBlackBook,New Car Leads,View Lead 67014,w96gluu,280482
+67013,w96gluu,Sales Person,1/26/2026 11:26:18 AM,CarGurus,Olufunsho,Rominiyi,olufunshorominiyi@gmail.com,(204) 574-8597,(204) 574-8597,,Brandon,MB,R7A 3R8,CA,0,webleads@winnipeghyundai.dsmessage.com,dealer-leads@messages.cargurus.com,CarGurus Customer Lead,Lead Submission from CarGurus,Ford,Explorer,2018,1FM5K8DHXJGC35542,5942A,,21999,108178,XLT,,,,,used,Financing,,,1/26/2026 10:25:06 AM,CarGurus,CarGurus,View Lead 67013,w96gluu,280481
+67012,w96gluu,Sales Person,1/26/2026 9:42:41 AM,Optimy.ai,NA,,fabioramaldes@hotmail.com,,,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,leads@em302.sg.optimy.ai,,Optimy ADF Lead,,,,,,,,,,,,,,new,buy,,,1/26/2026 8:39:47 AM,Optimy.ai,Converting browsers into buyers,View Lead 67012,w96gluu,280480
+67009,w96gluu,Sales Person,1/25/2026 10:12:53 PM,Auto Trader Email,Bob,unknown,kullmana@mymts.net,(204) 918-9900,(204) 918-9900,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,autoTRADER Lead,Mazda,CX-5,2022,JM3KFBCM3N0636055,88968,,28987,,GS COMFORT | AWD | Leather | Sunroof | Htd Seats,,,,,Used,finance,,,1/25/2026 9:09:08 PM,Auto Trader Email,,View Lead 67009,Duplicate,280468
+67008,w96gluu,Sales Person,1/25/2026 8:31:46 PM,Auto Trader Text,Bob,unknown,,(204) 918-9900,(204) 918-9900,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,autoTRADER Lead,Mazda,CX-5,2022,JM3KFBCM3N0636055,88968,,28987,,GS COMFORT | AWD | Leather | Sunroof | Htd Seats,,,,,Used,finance,,,1/25/2026 7:29:37 PM,Auto Trader Text,,View Lead 67008,w96gluu,280468
+67007,w96gluu,Sales Person,1/25/2026 5:20:52 PM,CarGurus,Shadi,Shohoudifar,shohoudifarS@gmail.com,(204) 260-9161,(204) 260-9161,,Winnipeg,MB,R3Y 1G5,CA,0,webleads@winnipeghyundai.dsmessage.com,dealer-leads@messages.cargurus.com,CarGurus Customer Lead,Lead Submission from CarGurus,Mazda,CX-5,2022,JM3KFBCM3N0636055,88968,,28987,61124,GS COMFORT | AWD | Leather | Sunroof | Htd Seats,,,,,used,Financing,,,1/25/2026 4:17:22 PM,CarGurus,CarGurus,View Lead 67007,w96gluu,280467
+67004,w96gluu,Sales Person,1/24/2026 11:12:43 AM,Email,,,cgillispalka@gmail.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,cgillispalka@gmail.com,,Re: Inquiry with Winnipeg H...,,,0,,,,0,0,,,,,,New,,,,1/24/2026 10:11:01 AM,Email,,View Lead 67004,w96gluu,280361
+67003,w96gluu,Sales Person,1/24/2026 11:12:43 AM,Auto Trader Email - Price Drop,unknown,unknown,alinanisinkala@gmail.com,,,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,autoTRADER Lead,Nissan,Murano,2020,5N1AZ2CS7LN162388,5611A,,24500,,SL,,,,,Used,finance,,,1/24/2026 10:10:35 AM,Auto Trader Email - Price Drop,,View Lead 67003,w96gluu,280443
+67002,w96gluu,Sales Person,1/24/2026 11:12:43 AM,Auto Trader Email - Price Drop,unknown,unknown,darrenbailey1029@gmail.com,,,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,autoTRADER Lead,Nissan,Murano,2020,5N1AZ2CS7LN162388,5611A,,24500,,SL,,,,,Used,finance,,,1/24/2026 10:10:34 AM,Auto Trader Email - Price Drop,,View Lead 67002,w96gluu,280442
+67001,w96gluu,Sales Person,1/24/2026 11:01:58 AM,Auto Trader Email - Price Drop,unknown,unknown,crichard79@hotmail.com,,,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,autoTRADER Lead,Mazda,CX-5,2022,JM3KFBCM3N0636055,88968,,28987,,GS COMFORT | AWD | Leather | Sunroof | Htd Seats,,,,,Used,finance,,,1/24/2026 10:00:22 AM,Auto Trader Email - Price Drop,,View Lead 67001,w96gluu,280441
+67000,w96gluu,Sales Person,1/24/2026 11:01:58 AM,Auto Trader Email - Price Drop,unknown,unknown,bharat.11303521@gmail.com,,,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,autoTRADER Lead,Mazda,CX-5,2022,JM3KFBCM3N0636055,88968,,28987,,GS COMFORT | AWD | Leather | Sunroof | Htd Seats,,,,,Used,finance,,,1/24/2026 10:00:19 AM,Auto Trader Email - Price Drop,,View Lead 67000,w96gluu,280440
+66999,w96gluu,Sales Person,1/24/2026 10:36:46 AM,Auto Trader Email - Price Drop,unknown,unknown,moneyasreagan@gmail.com,,,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,autoTRADER Lead,Hyundai,Elantra,2017,KMHD84LF6HU418273,6129A,,15000,,GL - Heated Seats | Backup Cam | Cruise,,,,,Used,finance,,,1/24/2026 9:35:00 AM,Auto Trader Email - Price Drop,,View Lead 66999,w96gluu,280437
+66998,w96gluu,Sales Person,1/24/2026 10:12:04 AM,Auto Trader Email - Price Drop,unknown,unknown,abayomisojirin1@gmail.com,,,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,autoTRADER Lead,Hyundai,Santa Fe Sport,2017,5XYZUDLA1HG471586,6155A,,17499,,LIMITED,,,,,Used,finance,,,1/24/2026 9:11:01 AM,Auto Trader Email - Price Drop,,View Lead 66998,Duplicate,279899
+66997,w96gluu,Sales Person,1/24/2026 10:12:04 AM,Auto Trader Email - Price Drop,unknown,unknown,coledepape@gmail.com,,,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,autoTRADER Lead,Ford,Explorer,2018,1FM5K8DHXJGC35542,5942A,,21999,,XLT,,,,,Used,finance,,,1/24/2026 9:10:49 AM,Auto Trader Email - Price Drop,,View Lead 66997,w96gluu,280436
+66996,w96gluu,Sales Person,1/24/2026 10:07:35 AM,Optimy.ai,n.a,,,(204) 995-3987,(204) 995-3987,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,leads@em302.sg.optimy.ai,,Optimy ADF Lead,,,,,,,,,,,,,,new,buy,,,1/24/2026 9:02:01 AM,Optimy.ai,Converting browsers into buyers,View Lead 66996,w96gluu,280435
+66995,w96gluu,Sales Person,1/24/2026 10:00:51 AM,Auto Trader Email - Price Drop,unknown,unknown,ivan_garciagalvis1203@hotmail.com,,,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,autoTRADER Lead,Hyundai,Tucson,2022,KM8JB3AE0NU150325,89067,,25799,,PREFERRED | Heated Seatsandamp; Wheel | CarPlay | BSM,,,,,Used,finance,,,1/24/2026 9:00:23 AM,Auto Trader Email - Price Drop,,View Lead 66995,w96gluu,280434
+66994,w96gluu,Sales Person,1/24/2026 9:37:59 AM,Optimy.ai,Lisa,,hjm@mymts.net,,,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,leads@em302.sg.optimy.ai,,Optimy ADF Lead,,,,,,,,,,,,,,new,buy,,,1/24/2026 8:31:16 AM,Optimy.ai,Converting browsers into buyers,View Lead 66994,w96gluu,280433
+66991,w96gluu,Sales Person,1/23/2026 10:37:49 PM,Email,,,leann.nickle@gmail.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,leann.nickle@gmail.com,Leann Nickle,Re: Inquiry Regarding 2024 ...,,,0,,,,0,0,,,,,,New,,,,1/23/2026 9:36:12 PM,Email,,View Lead 66991,w96gluu,280106
+66990,w96gluu,Sales Person,1/23/2026 10:10:52 PM,Optimy.ai,Customer,Anthony,,(437) 972-8320,(437) 972-8320,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,leads@em302.sg.optimy.ai,,Optimy ADF Lead,,,,,,,,,,,,,,new,buy,,,1/23/2026 9:09:32 PM,Optimy.ai,Converting browsers into buyers,View Lead 66990,w96gluu,280363
+66987,w96gluu,Sales Person,1/23/2026 8:56:46 PM,CarGurus,Jacqueline,Palaganas,jacquipalaganas@gmail.com,(204) 297-6396,(204) 297-6396,,Winnipeg,MB,R2X 0C9,CA,0,webleads@winnipeghyundai.dsmessage.com,dealer-leads@messages.cargurus.com,CarGurus Customer Lead,Lead Submission from CarGurus,Kia,Sportage,2022,KNDPNCAC4N7973231,89015,,25999,60898,EX PREMIUM S,,,,,used,Financing,,,1/23/2026 7:54:05 PM,CarGurus,CarGurus,View Lead 66987,Duplicate,280213
+66982,w96gluu,Sales Person,1/23/2026 5:52:37 PM,Email,,,webleads@winnipeghyundai.dsmessage.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,webleads@winnipeghyundai.dsmessage.com,GIA LUU,RE: RE: Re: Inquiry Regardi...,,,0,,,,0,0,,,,,,New,,,,1/23/2026 4:48:34 PM,Email,,View Lead 66982,w96gluu,280106
+66981,w96gluu,Sales Person,1/23/2026 3:26:27 PM,Email,,,leann.nickle@gmail.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,leann.nickle@gmail.com,Leann Nickle,Re: Inquiry Regarding 2024 ...,,,0,,,,0,0,,,,,,New,,,,1/23/2026 2:20:54 PM,Email,,View Lead 66981,w96gluu,280106
+66980,w96gluu,Sales Person,1/23/2026 3:12:57 PM,Email,,,leann.nickle@gmail.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,leann.nickle@gmail.com,Leann Nickle,Re: Inquiry Regarding 2024 ...,,,0,,,,0,0,,,,,,New,,,,1/23/2026 2:11:22 PM,Email,,View Lead 66980,w96gluu,280106
+66979,w96gluu,Sales Person,1/23/2026 2:57:14 PM,Email,,,leann.nickle@gmail.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,leann.nickle@gmail.com,Leann Nickle,Re: Inquiry Regarding 2024 ...,,,0,,,,0,0,,,,,,New,,,,1/23/2026 1:55:24 PM,Email,,View Lead 66979,w96gluu,280106
+66978,w96gluu,Sales Person,1/23/2026 11:05:56 AM,Email,,,leann.nickle@gmail.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,leann.nickle@gmail.com,Leann Nickle,Re: Inquiry Regarding 2024 ...,,,0,,,,0,0,,,,,,New,,,,1/23/2026 10:05:35 AM,Email,,View Lead 66978,w96gluu,280106
+66975,w96gluu,Sales Person,1/21/2026 6:22:34 PM,Unhaggle / CanadianBlackBook,Ed,Forytarz,edfory@hotmail.com,(204) 781-0719,(204) 781-0719,,Sprague,MB,R0A,CA,0,webleads@winnipeghyundai.dsmessage.com,canadianblackbook@unhaggle.com,Canadian Black Book,Unhaggle - New Lead,Hyundai,Tucson,2026,,,,,,n/a,,,,,new,buy,,,1/21/2026 5:21:22 PM,Unhaggle / CanadianBlackBook,New Car Leads,View Lead 66975,w96gluu,280263
+66974,w96gluu,Sales Person,1/21/2026 5:37:48 PM,Optimy.ai,Cindy,Tinkler,adreana@tutanota.com,(204) 651-1435,(204) 651-1435,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,leads@em302.sg.optimy.ai,,Optimy ADF Lead,,,,,,,,,,,,,,new,buy,,,1/21/2026 4:34:11 PM,Optimy.ai,Converting browsers into buyers,View Lead 66974,w96gluu,280261
+66972,w96gluu,Sales Person,1/21/2026 2:47:00 PM,AutoTrader.ca Digital Retail:,nathan,weichel,nathanweichel@gmail.com,(204) 999-7947,(204) 999-7947,,,,R2N1B3,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,Deal Builder Lead,Hyundai,Palisade Hybrid,2026,KM8RKESA6TU028317,6105,,65029,104,LUXURY,,Black,,,New,finance,,,1/21/2026 1:45:29 PM,AutoTrader.ca Digital Retail:,Trade-In request,View Lead 66972,w96gluu,280259
+66970,w96gluu,Sales Person,1/21/2026 8:52:00 AM,Email,,,leann.nickle@gmail.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,leann.nickle@gmail.com,Leann Nickle,Re: Inquiry Regarding 2024 ...,,,0,,,,0,0,,,,,,New,,,,1/21/2026 7:49:37 AM,Email,,View Lead 66970,w96gluu,280106
+66965,w96gluu,Sales Person,1/20/2026 3:32:10 PM,CarGurus,heather,brown,countrycritters9@yahoo.ca,,,,Anola,MB,R5L 0E8,CA,0,webleads@winnipeghyundai.dsmessage.com,dealer-leads@messages.cargurus.com,CarGurus Customer Lead,Lead Submission from CarGurus,Hyundai,Santa Fe Hybrid,2026,KM8P3DG16TU169122,OO-6287,,51579,10,PREFERRED HYBRID W/TREND PKG,,,,,new,Financing,,,1/20/2026 2:29:50 PM,CarGurus,CarGurus,View Lead 66965,w96gluu,280212
+66960,w96gluu,Sales Person,1/19/2026 9:42:54 PM,CarGurus,Urvashi,Noulia,akbhasin@gmail.com,(204) 294-7567,(204) 294-7567,,Winnipeg,MB,R3X 0M8,CA,0,webleads@winnipeghyundai.dsmessage.com,dealer-leads@messages.cargurus.com,CarGurus Customer Lead,Lead Submission from CarGurus,Hyundai,Kona,2026,KM8HACAB4TU375013,6081,,31233,4373,ESSENTIAL,,,,,used,Financing,,,1/19/2026 8:39:34 PM,CarGurus,CarGurus,View Lead 66960,Duplicate,276957
+66959,w96gluu,Sales Person,1/19/2026 9:11:28 PM,Email,,,leann.nickle@gmail.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,leann.nickle@gmail.com,Leann Nickle,Re: Inquiry Regarding 2024 ...,,,0,,,,0,0,,,,,,New,,,,1/19/2026 8:07:53 PM,Email,,View Lead 66959,w96gluu,280106
+66958,w96gluu,Sales Person,1/19/2026 4:06:05 PM,Email,,,leann.nickle@gmail.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,leann.nickle@gmail.com,Leann Nickle,Re: Inquiry Regarding 2024 ...,,,0,,,,0,0,,,,,,New,,,,1/19/2026 3:02:27 PM,Email,,View Lead 66958,w96gluu,280106
+66957,w96gluu,Sales Person,1/19/2026 4:06:05 PM,Email,,,leann.nickle@gmail.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,leann.nickle@gmail.com,Leann Nickle,Re: Inquiry Regarding 2024 ...,,,0,,,,0,0,,,,,,New,,,,1/19/2026 3:02:27 PM,Email,,View Lead 66957,w96gluu,280106
+66956,w96gluu,Sales Person,1/19/2026 3:41:23 PM,Email,,,leann.nickle@gmail.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,leann.nickle@gmail.com,Leann Nickle,Re: Inquiry Regarding 2024 ...,,,0,,,,0,0,,,,,,New,,,,1/19/2026 2:40:22 PM,Email,,View Lead 66956,w96gluu,280106
+66955,w96gluu,Sales Person,1/19/2026 2:51:58 PM,Email,,,leann.nickle@gmail.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,leann.nickle@gmail.com,Leann Nickle,Re: Inquiry Regarding 2024 ...,,,0,,,,0,0,,,,,,New,,,,1/19/2026 1:50:41 PM,Email,,View Lead 66955,w96gluu,280106
+66953,w96gluu,Sales Person,1/19/2026 8:16:39 AM,Email,,,leann.nickle@gmail.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,leann.nickle@gmail.com,Leann Nickle,Re: Inquiry Regarding 2024 ...,,,0,,,,0,0,,,,,,New,,,,1/19/2026 7:15:53 AM,Email,,View Lead 66953,w96gluu,280106
+66948,w96gluu,Sales Person,1/18/2026 7:32:43 PM,Email,,,leann.nickle@gmail.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,leann.nickle@gmail.com,Leann Nickle,Re: Inquiry Regarding 2024 ...,,,0,,,,0,0,,,,,,New,,,,1/18/2026 6:22:43 PM,Email,,View Lead 66948,w96gluu,280106
+66944,w96gluu,Sales Person,1/17/2026 7:32:56 PM,Auto Trader Text,Ghirmay,Unknown,,(204) 914-9012,(204) 914-9012,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,autoTRADER Lead,Hyundai,Santa Fe Hybrid,2021,KM8S5DA12MU005204,88807A,,31500,,LUXURY,,,,,Used,finance,,,1/17/2026 6:28:58 PM,Auto Trader Text,,View Lead 66944,w96gluu,280137
+66943,w96gluu,Sales Person,1/17/2026 5:02:17 PM,Email,,,leann.nickle@gmail.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,leann.nickle@gmail.com,Leann Nickle,Re: Inquiry Regarding 2024 ...,,,0,,,,0,0,,,,,,New,,,,1/17/2026 3:58:51 PM,Email,,View Lead 66943,w96gluu,280106
+66942,w96gluu,Sales Person,1/17/2026 4:01:39 PM,Email,,,leann.nickle@gmail.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,leann.nickle@gmail.com,Leann Nickle,Re: Inquiry Regarding 2024 ...,,,0,,,,0,0,,,,,,New,,,,1/17/2026 3:00:34 PM,Email,,View Lead 66942,w96gluu,280106
+66939,w96gluu,Sales Person,1/17/2026 2:47:26 PM,Optimy.ai,Deep,,,(647) 989-4174,(647) 989-4174,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,leads@em302.sg.optimy.ai,,Optimy ADF Lead,,,,,,,,,,,,,,new,buy,,,1/17/2026 1:43:47 PM,Optimy.ai,Converting browsers into buyers,View Lead 66939,w96gluu,280132
+66938,w96gluu,Sales Person,1/17/2026 1:46:49 PM,Email,,,leann.nickle@gmail.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,leann.nickle@gmail.com,Leann Nickle,Re: Inquiry Regarding 2024 ...,,,0,,,,0,0,,,,,,New,,,,1/17/2026 12:45:22 PM,Email,,View Lead 66938,w96gluu,280106
+66937,w96gluu,Sales Person,1/17/2026 12:37:12 PM,Email,,,leann.nickle@gmail.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,leann.nickle@gmail.com,Leann Nickle,Re: Inquiry Regarding 2024 ...,,,0,,,,0,0,,,,,,New,,,,1/17/2026 11:35:26 AM,Email,,View Lead 66937,w96gluu,280106
+66936,w96gluu,Sales Person,1/17/2026 12:37:12 PM,Email,,,leann.nickle@gmail.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,leann.nickle@gmail.com,Leann Nickle,Re: Inquiry Regarding 2024 ...,,,0,,,,0,0,,,,,,New,,,,1/17/2026 11:35:13 AM,Email,,View Lead 66936,w96gluu,280106
+66935,w96gluu,Sales Person,1/17/2026 12:21:30 PM,Auto Trader Text,Derrick,Nyamori,,(204) 890-5999,(204) 890-5999,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,autoTRADER Lead,Hyundai,Elantra,2019,KMHD84LF8KU741229,6052A,,15000,,PREFERRED,,,,,Used,finance,,,1/17/2026 11:17:51 AM,Auto Trader Text,,View Lead 66935,w96gluu,280131
+66929,w96gluu,Sales Person,1/15/2026 8:41:11 PM,DrivingIt,Charls,Arguelles,,(204) 891-7134,(204) 891-7134,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,no-reply@drivingit.com,DrivingIt,ADF Lead from drivingit.com,Hyundai,Tucson Hybrid,2026,,6114,,,,,,,,,used,buy,,,1/15/2026 7:38:38 PM,DrivingIt,,View Lead 66929,w96gluu,280061
+66928,w96gluu,Sales Person,1/15/2026 4:43:11 PM,Auto Trader Text,Levish,unknown,,(204) 698-3292,(204) 698-3292,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,autoTRADER Lead,Mazda,CX-5,2022,JM3KFBCM3N0636055,88968,,29700,,GS COMFORT | AWD | Leather | Sunroof | Htd Seats,,,,,Used,finance,,,1/15/2026 3:42:03 PM,Auto Trader Text,,View Lead 66928,w96gluu,280060
+66926,w96gluu,Sales Person,1/15/2026 4:02:37 PM,CarGurus,AB,Verify,abare@cargurus.com,(800) 227-4878,(800) 227-4878,,,,12345,CA,0,webleads@winnipeghyundai.dsmessage.com,dealer-leads@messages.cargurus.com,CarGurus Customer Lead,Lead Submission from CarGurus,Nissan,Murano,2020,5N1AZ2CS7LN162388,5611A,,25642,57417,SL,,,,,used,Financing,,,1/15/2026 2:56:18 PM,CarGurus,CarGurus,View Lead 66926,Duplicate,280058
+66925,w96gluu,Sales Person,1/15/2026 3:55:54 PM,CarGurus,AB,Verify,abare@cargurus.com,,,,,,123,CA,0,webleads@winnipeghyundai.dsmessage.com,dealer-leads@messages.cargurus.com,CarGurus Customer Lead,Lead Submission from CarGurus,Nissan,Murano,2020,5N1AZ2CS7LN162388,5611A,,25642,57417,SL,,,,,used,Financing,,,1/15/2026 2:55:43 PM,CarGurus,CarGurus,View Lead 66925,w96gluu,280058
+66922,w96gluu,Sales Person,1/15/2026 2:33:07 PM,DrivingIt,Morgan,Cowie,Morgan.cowie@icloud.com,(807) 728-3709,(807) 728-3709,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,no-reply@drivingit.com,DrivingIt,ADF Lead from drivingit.com,Mazda,CX-5,2022,,88968,,,,,,,,,used,buy,,,1/15/2026 1:30:08 PM,DrivingIt,,View Lead 66922,Duplicate,279957
+66921,w96gluu,Sales Person,1/15/2026 10:47:22 AM,CarCostCanada,CarCostCanada,Kapal,kapalkaur09@gmail.com,(437) 221-8551,(437) 221-8551,,,MB,R3K 0Z8,CA,0,webleads@winnipeghyundai.dsmessage.com,rrdealers@carcostcanada.com,,CarCostCanada.com,Hyundai,Elantra N,2026,,,,42949,,,,,,,new,buy,,,1/15/2026 9:45:07 AM,CarCostCanada,New Car Pricing Website,View Lead 66921,w96gluu,280053
+66918,w96gluu,Sales Person,1/14/2026 4:37:09 PM,Optimy.ai,Optimy,Lead,dharwood@optimy.ai,,,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,leads@em302.sg.optimy.ai,,Optimy ADF Lead,,,,,,,,,,,,,,new,buy,,,1/14/2026 3:33:47 PM,Optimy.ai,Converting browsers into buyers,View Lead 66918,w96gluu,280022
+66914,w96gluu,Sales Person,1/14/2026 11:31:43 AM,CarCostCanada,david,glaister,jamisene@hotmail.com,(204) 885-1072,(204) 885-1072,,Winnipeg,MB,R3J 2G7,CA,0,webleads@winnipeghyundai.dsmessage.com,rrdealers@carcostcanada.com,,CarCostCanada.com,Hyundai,Palisade Hybrid,2026,,,,62699,,Luxury,,,,,new,buy,,,1/14/2026 10:29:37 AM,CarCostCanada,New Car Pricing Website,View Lead 66914,w96gluu,280019
+66891,w96gluu,Sales Person,1/12/2026 6:51:48 PM,Auto Trader Text New Car,Sahil,Pawar,,(431) 877-1758,(431) 877-1758,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,autoTRADER Lead,Hyundai,Kona,2026,KM8HACA38TU352021,6016,,39426,,N LINE,,,,,New,finance,,,1/12/2026 5:50:06 PM,Auto Trader Text New Car,,View Lead 66891,Duplicate,279916
+66890,w96gluu,Sales Person,1/12/2026 6:51:47 PM,Auto Trader Mobile New Car,Sahil,Pawar,sahilpawar786.sp98@gmail.com,(431) 877-1758,(431) 877-1758,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,autoTRADER Lead,Hyundai,Kona,2026,KM8HACA38TU352021,6016,,39426,,N LINE,,,,,New,finance,,,1/12/2026 5:49:57 PM,Auto Trader Mobile New Car,,View Lead 66890,w96gluu,279916
+66879,w96gluu,Sales Person,1/11/2026 2:46:21 AM,Auto Trader Mobile,Jesse,Brar,brarjesse@hotmail.com,(204) 230-2281,(204) 230-2281,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,autoTRADER Lead,Mazda,CX-5,2025,JM3KFBCL2S0557446,88875,,32958,,GS COMFORT | AWD | Leather | Sunroof | CarPlay,,,,,Used,finance,,,1/11/2026 1:43:30 AM,Auto Trader Mobile,,View Lead 66879,Duplicate,279901
+66878,w96gluu,Sales Person,1/11/2026 2:32:51 AM,AutoTrader.ca Digital Retail:,Jess,Btar,Brarjesse@hotmail.com,(204) 230-2281,(204) 230-2281,,,,R2H1B8,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,autoTRADER Lead,Mazda,CX-5,2025,JM3KFBCL2S0557446,88875,,32958,24562,GS COMFORT | AWD | Leather | Sunroof | CarPlay,Black,White,,,Used,finance,,,1/11/2026 1:24:47 AM,AutoTrader.ca Digital Retail:,Trade-In request,View Lead 66878,w96gluu,279901
+66876,w96gluu,Sales Person,1/10/2026 6:07:17 PM,Auto Trader Email - Price Drop,unknown,unknown,abayomisojirin1@gmail.com,,,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,autoTRADER Lead,Hyundai,Santa Fe Sport,2017,5XYZUDLA1HG471586,6155A,,18479,,LIMITED | AWD | Leather | Sunroof | Htd Seats,,,,,Used,finance,,,1/10/2026 5:06:07 PM,Auto Trader Email - Price Drop,,View Lead 66876,w96gluu,279899
+66873,w96gluu,Sales Person,1/10/2026 2:22:43 PM,Email,,,miche.curry@gmail.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,miche.curry@gmail.com,Michelle Lang,Re: Re: Direct Manager Access,,,0,,,,0,0,,,,,,New,,,,1/10/2026 1:19:00 PM,Email,,View Lead 66873,w96gluu,279396
+66869,w96gluu,Sales Person,1/10/2026 10:31:24 AM,Auto Trader Text,Chris,unknown,,(204) 771-8084,(204) 771-8084,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,autoTRADER Lead,Hyundai,Kona,2018,KM8K6CAA1JU139754,89093,,17999,,LUXURY,,,,,Used,finance,,,1/10/2026 9:27:28 AM,Auto Trader Text,,View Lead 66869,w96gluu,279892
+66862,w96gluu,Sales Person,1/9/2026 4:51:02 PM,Auto Trader Email - Price Drop,unknown,unknown,agron_caraku@hotmail.com,,,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,autoTRADER Lead,Hyundai,Kona,2023,KM8K22AB6PU031847,6053A,,22499,,PREFERRED,,,,,Used,finance,,,1/9/2026 3:50:57 PM,Auto Trader Email - Price Drop,,View Lead 66862,w96gluu,279853
+66861,w96gluu,Sales Person,1/9/2026 4:42:04 PM,Auto Trader Email - Price Drop,unknown,unknown,jacksonkirby@live.ca,,,,,,,CA,0,webleads@winnipeghyundai.dsmessage.com,1-Source@dealerleads.trader.ca,,autoTRADER Lead,Mazda,CX-5,2025,JM3KFBCL2S0557446,88875,,32958,,GS,,,,,Used,finance,,,1/9/2026 3:40:37 PM,Auto Trader Email - Price Drop,,View Lead 66861,w96gluu,279852
+66860,w96gluu,Sales Person,1/9/2026 4:06:08 PM,Email,,,tianxiangqiuhk@hotmail.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,tianxiangqiuhk@hotmail.com,tianxiang qiu,Re: Appointment Confirmatio...,,,0,,,,0,0,,,,,,New,,,,1/9/2026 3:03:46 PM,Email,,View Lead 66860,w96gluu,278874
+66857,w96gluu,Sales Person,1/9/2026 10:56:13 AM,Email,,,farhadakbar@gmail.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,farhadakbar@gmail.com,Farhad Akbar,Re: Quote from Winnipeg Hyu...,,,0,,,,0,0,,,,,,New,,,,1/9/2026 9:54:04 AM,Email,,View Lead 66857,w96gluu,279227
+66840,w96gluu,Sales Person,1/6/2026 9:31:11 PM,Email,,,morris.elfr@gmail.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,morris.elfr@gmail.com,Elaine Morris,Re: Re: Inquiry Regarding H...,,,0,,,,0,0,,,,,,New,,,,1/6/2026 8:28:46 PM,Email,,View Lead 66840,w96gluu,279485
+66838,w96gluu,Sales Person,1/6/2026 7:27:41 PM,Email,,,farhadakbar@gmail.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,farhadakbar@gmail.com,Farhad Akbar,Re: Re: Re: Direct Manager ...,,,0,,,,0,0,,,,,,New,,,,1/6/2026 6:22:03 PM,Email,,View Lead 66838,w96gluu,279227
+66837,w96gluu,Sales Person,1/6/2026 5:32:40 PM,Email,,,tianxiangqiuhk@hotmail.com,,,,,,,CA,,webleads@winnipeghyundai.dsmessage.com,tianxiangqiuhk@hotmail.com,tianxiang qiu,Inquiry Regarding 2023 Hyun...,,,0,,,,0,0,,,,,,New,,,,1/6/2026 4:29:57 PM,Email,,View Lead 66837,w96gluu,278874`;
+
+    const sourceFilter = document.getElementById("sourceFilter");
+    const typeFilter = document.getElementById("typeFilter");
+    const statusFilter = document.getElementById("statusFilter");
+    const sortSelect = document.getElementById("sortSelect");
+    const searchInput = document.getElementById("searchInput");
+    const hideDuplicates = document.getElementById("hideDuplicates");
+
+    function parseCsv(text) {
+      const rows = [];
+      let current = [];
+      let value = "";
+      let inQuotes = false;
+
+      for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        const next = text[i + 1];
+
+        if (char === '"') {
+          if (inQuotes && next === '"') {
+            value += '"';
+            i++;
+          } else {
+            inQuotes = !inQuotes;
+          }
+        } else if (char === "," && !inQuotes) {
+          current.push(value);
+          value = "";
+        } else if (char === "\n" && !inQuotes) {
+          current.push(value);
+          rows.push(current);
+          current = [];
+          value = "";
+        } else if (char !== "\r") {
+          value += char;
+        }
+      }
+
+      if (value.length || current.length) {
+        current.push(value);
+        rows.push(current);
+      }
+
+      return rows;
+    }
+
+    function normalizeLead(row, headers) {
+      const data = {};
+      headers.forEach((header, idx) => {
+        data[header] = row[idx] || "";
+      });
+
+      const received = data["Date Received"] || data["Lead Date"];
+      const receivedAt = received ? new Date(received) : new Date();
+      const name = `${data["First Name"] || ""} ${data["Last Name"] || ""}`.trim() || "Unknown";
+      const leadType = (data["Type"] || "").toLowerCase();
+      const assigned = (data["Assigned To"] || "").toLowerCase();
+      const status = assigned.includes("duplicate") ? "Duplicate" : "Open";
+      const priority = Number(data["Priority"] || 0);
+      const phone = data["Day Phone"] || data["Evening Phone"] || "";
+      const vehicle = [data["Year"], data["Make"], data["Model"]].filter(Boolean).join(" ") || "—";
+      const source = data["Lead Source"] || "Unknown";
+      return {
+        id: data["Lead Id"],
+        receivedAt,
+        name,
+        email: data["Email Address"],
+        phone,
+        source,
+        vehicle,
+        type: leadType || "unknown",
+        priority,
+        status,
+        raw: data
+      };
+    }
+
+    function renderSummary(list) {
+      const summary = document.getElementById("summaryGrid");
+      summary.innerHTML = "";
+      const total = list.length;
+      const duplicates = list.filter(l => l.status === "Duplicate").length;
+      const open = total - duplicates;
+      const newCount = list.filter(l => l.type === "new").length;
+      const usedCount = list.filter(l => l.type === "used").length;
+
+      const cards = [
+        { label: "Total Leads", value: total },
+        { label: "Open", value: open },
+        { label: "Duplicates", value: duplicates },
+        { label: "New", value: newCount },
+        { label: "Used", value: usedCount }
+      ];
+
+      cards.forEach(card => {
+        const el = document.createElement("div");
+        el.className = "summary-card";
+        el.innerHTML = `<div class="label">${card.label}</div><div class="value">${card.value}</div>`;
+        summary.appendChild(el);
+      });
+    }
+
+    function sortLeads(list) {
+      const sorted = [...list];
+      switch (sortSelect.value) {
+        case "received_asc":
+          sorted.sort((a, b) => a.receivedAt - b.receivedAt);
+          break;
+        case "priority":
+          sorted.sort((a, b) => (b.priority || 0) - (a.priority || 0));
+          break;
+        case "source":
+          sorted.sort((a, b) => a.source.localeCompare(b.source));
+          break;
+        default:
+          sorted.sort((a, b) => b.receivedAt - a.receivedAt);
+      }
+      if (prioritizeOldest) sorted.sort((a, b) => a.receivedAt - b.receivedAt);
+      return sorted;
+    }
+
+    function applyFilters() {
+      const query = searchInput.value.toLowerCase();
+      filteredLeads = leads.filter(lead => {
+        if (hideDuplicates.checked && lead.status === "Duplicate") return false;
+        if (sourceFilter.value && lead.source !== sourceFilter.value) return false;
+        if (typeFilter.value && lead.type !== typeFilter.value) return false;
+        if (statusFilter.value && lead.status.toLowerCase() !== statusFilter.value) return false;
+        if (query) {
+          const haystack = `${lead.name} ${lead.email} ${lead.phone} ${lead.vehicle} ${lead.source}`.toLowerCase();
+          if (!haystack.includes(query)) return false;
+        }
+        return true;
+      });
+      renderSummary(filteredLeads);
+      renderTable(sortLeads(filteredLeads));
+    }
+
+    function renderTable(list) {
+      const tbody = document.getElementById("leadTableBody");
+      tbody.innerHTML = "";
+      list.forEach(lead => {
+        const tr = document.createElement("tr");
+        const received = lead.receivedAt.toLocaleString();
+        const priorityScore = lead.priority ? `${lead.priority}` : "—";
+        const statusBadge = lead.status === "Duplicate" ? "Duplicate" : "Open";
+        tr.innerHTML = `
+          <td>${received}</td>
+          <td><div>${lead.name}</div><div class="subtext">${lead.phone || "No phone"}</div></td>
+          <td>${lead.source}</td>
+          <td>${lead.vehicle}</td>
+          <td>${lead.type}</td>
+          <td>${priorityScore}</td>
+          <td><span class="badge${lead.status === "Duplicate" ? "" : " action"}">${statusBadge}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function buildSources() {
+      const sources = [...new Set(leads.map(l => l.source))].sort();
+      sources.forEach(source => {
+        const option = document.createElement("option");
+        option.value = source;
+        option.textContent = source;
+        sourceFilter.appendChild(option);
+      });
+    }
+
+    function generateCallList() {
+      const list = sortLeads(filteredLeads).filter(l => l.status === "Open");
+      const now = new Date();
+      const ranked = list.map(lead => {
+        const ageHours = Math.max(1, (now - lead.receivedAt) / 3600000);
+        const score = (lead.priority || 1) * 2 + ageHours;
+        return { lead, score };
+      }).sort((a, b) => b.score - a.score).slice(0, 8);
+
+      const panel = document.getElementById("callList");
+      panel.innerHTML = "";
+      ranked.forEach(item => {
+        const el = document.createElement("div");
+        el.className = "call-item";
+        el.innerHTML = `
+          <div class="name">${item.lead.name}</div>
+          <div class="meta">${item.lead.source} • ${item.lead.vehicle}</div>
+          <div class="meta">${item.lead.phone || "No phone"} • ${item.lead.receivedAt.toLocaleString()}</div>
+        `;
+        panel.appendChild(el);
+      });
+    }
+
+    function addTestLead() {
+      const fake = {
+        "Lead Id": `demo_${Date.now()}`,
+        "Date Received": new Date().toLocaleString(),
+        "Lead Source": "Website",
+        "First Name": "Test",
+        "Last Name": "Lead",
+        "Email Address": "test@example.com",
+        "Day Phone": "(204) 555-0100",
+        "Make": "Hyundai",
+        "Model": "Elantra",
+        "Year": "2026",
+        "Type": "new",
+        "Priority": "1",
+        "Assigned To": ""
+      };
+      const lead = normalizeLead(Object.values(fake), Object.keys(fake));
+      leads.unshift(lead);
+      buildSources();
+      applyFilters();
+    }
+    const rows = parseCsv(seedCsv);
+    let headers = rows.shift();
+    if (headers && headers.length === 1 && !headers[0]) {
+      headers = rows.shift();
+    }
+    rows.forEach(row => {
+      if (!row.length) return;
+      leads.push(normalizeLead(row, headers));
+    });
+    buildSources();
+    applyFilters();
+    generateCallList();
+
+    [sourceFilter, typeFilter, statusFilter, sortSelect, searchInput, hideDuplicates].forEach(el => {
+      el.addEventListener("input", applyFilters);
+    });
+
+    document.getElementById("callListBtn").addEventListener("click", generateCallList);
+    document.getElementById("prioritizeBtn").addEventListener("click", () => {
+      prioritizeOldest = !prioritizeOldest;
+      applyFilters();
+    });
+    document.getElementById("addLeadBtn").addEventListener("click", addTestLead);
+  </script>
+</body>
+</html>
