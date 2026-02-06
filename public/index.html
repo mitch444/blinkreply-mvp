@@ -2,14 +2,14 @@
 <html>
 <head>
   <title>Blink Response Engine – Rapid Response MVP</title>
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="icon" href="ico.png" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="icon" href="assets/icons/ico.png" />
 </head>
 <body class="home">
 
   <nav id="topNav">
     <div id="brandBlock">
-      <img src="blink-logo-horizontal-dark.png" alt="Blink Response Engine logo" id="logo" />
+      <img src="assets/images/blink-logo-horizontal-dark.png" alt="Blink Response Engine logo" id="logo" />
       <div>
         <div id="brandTitle">Blink Response Engine — Rapid Response (Local MVP)</div>
         <div class="helper-line">Operational lead routing with DealerSocket synchronization.</div>
@@ -18,6 +18,8 @@
     <div id="navActions">
       <a href="index.html" class="nav-link">Rapid Response</a>
       <a href="dash.html" class="nav-link">Dashboard</a>
+      <a href="leads.html" class="nav-link">Leads</a>
+      <a href="vidping.html" class="nav-link">VidPing</a>
       <a href="eg.html" class="nav-link">Examples</a>
       <a href="walk.html" class="nav-link">Walkthrough</a>
       <a href="settings.html" class="nav-link">Settings</a>
@@ -80,75 +82,7 @@
       When the first 30 seconds are disciplined, every system downstream performs better.
       <span>Blink doesn’t replace DealerSocket. It makes it work the way you expect.</span>
     </div>
-  </section>
-
-  <!-- TOP-OF-FUNNEL SOURCES -->
-  <section id="sources">
-    <div class="section-header">
-      <div>
-        <h2>Top-of-Funnel Lead Sources</h2>
-    <div class="subtext">Click a source to simulate a lead arrival for training and demos.</div>
-      </div>
-      <div class="section-actions">
-        <button class="primary" onclick="seedDemoLeads()">Run a Live Test</button>
-      </div>
-    </div>
-    <div id="sourcesGrid">
-      <div>
-        <div class="source-tools">
-          <div class="source-helper">Click a source to simulate a real lead arrival. Great for training and manager demos.</div>
-          <div class="source-meta">Live preview updates in real time.</div>
-        </div>
-        <div id="sourceTiles">
-        <button class="source-tile" onclick="ingestLeadFromSource('AutoTrader')">
-          <div class="source-name">AutoTrader</div>
-          <div class="source-cta">Click to ingest lead → notify reps → start claim timer.</div>
-        </button>
-        <button class="source-tile" onclick="ingestLeadFromSource('Website')">
-          <div class="source-name">Website</div>
-          <div class="source-cta">Click to ingest lead → notify reps → start claim timer.</div>
-        </button>
-        <button class="source-tile" onclick="ingestLeadFromSource('Optimy')">
-          <div class="source-name">Optimy</div>
-          <div class="source-cta">Click to ingest lead → notify reps → start claim timer.</div>
-        </button>
-        <button class="source-tile" onclick="ingestLeadFromSource('DrivingIt')">
-          <div class="source-name">DrivingIt</div>
-          <div class="source-cta">Click to ingest lead → notify reps → start claim timer.</div>
-        </button>
-        <button class="source-tile" onclick="ingestLeadFromSource('CarGurus')">
-          <div class="source-name">CarGurus</div>
-          <div class="source-cta">Click to ingest lead → notify reps → start claim timer.</div>
-        </button>
-        </div>
-        <div class="examples-link">
-          Examples page: <a href="eg.html">View example screens</a>
-        </div>
-      </div>
-      <div id="phoneMock">
-        <div class="phone-shell">
-          <div class="phone-notch"></div>
-          <div class="phone-screen">
-            <div class="phone-status">Blink Alerts</div>
-            <div class="sms-card" id="smsCard">
-              <div class="sms-title" id="smsTitle">⚡ New Lead (0s old)</div>
-              <div class="sms-body" id="smsBody">Select a source to simulate an inbound lead.</div>
-              <div class="sms-meta" id="smsMeta">Ready to notify reps.</div>
-            </div>
-            <div class="sms-card claimed" id="smsClaimed" style="display:none;">
-              <div class="sms-title">Lead Claimed</div>
-              <div class="sms-body" id="smsClaimedBody">Claimed by —</div>
-              <div class="sms-meta">Timer stopped</div>
-            </div>
-            <div class="sms-stack" id="smsStack"></div>
-          </div>
-        </div>
-        <div class="subtext">Live notification preview (auto-updates during demo).</div>
-      </div>
-    </div>
-  </section>
-
-  <section id="reality">
+  </section><section id="reality">
     <div class="section-header">
       <div>
         <h2>The 120-Second Reality</h2>
@@ -256,6 +190,75 @@
     </div>
   </section>
 
+  <!-- TOP-OF-FUNNEL SOURCES -->
+  <section id="sources">
+    <div class="section-header">
+      <div>
+        <h2>Top-of-Funnel Lead Sources</h2>
+    <div class="subtext">Click a source to simulate a lead arrival for training and demos.</div>
+      </div>
+      <div class="section-actions">
+        <button class="primary" onclick="seedDemoLeads()">Run a Live Test</button>
+      </div>
+    </div>
+    <div id="sourcesGrid">
+      <div>
+        <div class="source-tools">
+          <div class="source-helper">Click a source to simulate a real lead arrival. Great for training and manager demos.</div>
+          <div class="source-meta">Live preview updates in real time.</div>
+        </div>
+        <div id="sourceTiles">
+        <button class="source-tile" onclick="ingestLeadFromSource('AutoTrader')">
+          <div class="source-name">AutoTrader</div>
+          <div class="source-cta">Click to ingest lead → notify reps → start claim timer.</div>
+        </button>
+        <button class="source-tile" onclick="ingestLeadFromSource('Website')">
+          <div class="source-name">Website</div>
+          <div class="source-cta">Click to ingest lead → notify reps → start claim timer.</div>
+        </button>
+        <button class="source-tile" onclick="ingestLeadFromSource('Optimy')">
+          <div class="source-name">Optimy</div>
+          <div class="source-cta">Click to ingest lead → notify reps → start claim timer.</div>
+        </button>
+        <button class="source-tile" onclick="ingestLeadFromSource('DrivingIt')">
+          <div class="source-name">DrivingIt</div>
+          <div class="source-cta">Click to ingest lead → notify reps → start claim timer.</div>
+        </button>
+        <button class="source-tile" onclick="ingestLeadFromSource('CarGurus')">
+          <div class="source-name">CarGurus</div>
+          <div class="source-cta">Click to ingest lead → notify reps → start claim timer.</div>
+        </button>
+        </div>
+        <div class="examples-link">
+          Examples page: <a href="eg.html">View example screens</a>
+        </div>
+      </div>
+      <div id="phoneMock">
+        <div class="phone-shell">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="phone-status">Blink Alerts</div>
+            <div class="sms-card" id="smsCard">
+              <div class="sms-title" id="smsTitle">⚡ New Lead (0s old)</div>
+              <div class="sms-body" id="smsBody">Select a source to simulate an inbound lead.</div>
+              <div class="sms-meta" id="smsMeta">Ready to notify reps.</div>
+            </div>
+            <div class="sms-card claimed" id="smsClaimed" style="display:none;">
+              <div class="sms-title">Lead Claimed</div>
+              <div class="sms-body" id="smsClaimedBody">Claimed by —</div>
+              <div class="sms-meta">Timer stopped</div>
+            </div>
+            <div class="sms-stack" id="smsStack"></div>
+          </div>
+        </div>
+        <div class="subtext">Live notification preview (auto-updates during demo).</div>
+      </div>
+    </div>
+  </section>
+
+  
+
+
   <!-- CONTEST DASHBOARD -->
   <section id="contest">
     <h2>Live Lead Contest</h2>
@@ -298,6 +301,16 @@
         <div class="stat-helper">Speed-to-lead indicator</div>
         <div class="stat-value" id="statAvgClaim">—</div>
       </div>
+      <div class="stat">
+        <div class="stat-label">VidPings Sent</div>
+        <div class="stat-helper">Total vids delivered</div>
+        <div class="stat-value" id="statVidSent">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Avg Time to VidPing</div>
+        <div class="stat-helper">From lead arrival</div>
+        <div class="stat-value" id="statAvgVid">—</div>
+      </div>
     </div>
   </section>
 
@@ -306,6 +319,16 @@
     <h2>Manager Alerts</h2>
     <div class="subtext">Only shows exceptions: unclaimed leads, duplicates, routing failures, or slow response behavior.</div>
     <div id="managerStatus" class="muted">No alerts — all clear. Leads are being claimed on time.</div>
+    <div class="vidping-metrics">
+      <div class="vidping-metric">
+        <div class="metric-title">VidPing by Rep</div>
+        <div id="vidpingByRep" class="metric-list"></div>
+      </div>
+      <div class="vidping-metric">
+        <div class="metric-title">VidPing by Source</div>
+        <div id="vidpingBySource" class="metric-list"></div>
+      </div>
+    </div>
     <div id="managerLogList" aria-live="polite"></div>
     <div class="muted sample-alerts">
       Escalation: Lead unclaimed after 180s. Manager action recommended.<br />
@@ -523,6 +546,6 @@
 
   <div id="toast" role="status" aria-live="polite"></div>
 
-  <script src="app.js"></script>
+  <script src="assets/js/app.js"></script>
 </body>
 </html>

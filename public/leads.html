@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Blink Response Engine — Leads</title>
-  <link rel="icon" href="ico.png" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="assets/icons/ico.png" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
   <style>
     .page {
       max-width: 1400px;
@@ -218,7 +218,7 @@
   <div class="page">
     <nav id="topNav">
       <div id="brandBlock">
-        <img src="blink-logo-horizontal-dark.png" alt="Blink Response Engine logo" id="logo" />
+        <img src="assets/images/blink-logo-horizontal-dark.png" alt="Blink Response Engine logo" id="logo" />
         <div>
           <div id="brandTitle">Blink Response Engine — Leads</div>
           <div class="helper-line">Operational view of inbound leads and ownership.</div>
@@ -228,6 +228,7 @@
         <a href="index.html" class="nav-link">Rapid Response</a>
         <a href="dash.html" class="nav-link">Dashboard</a>
         <a href="leads.html" class="nav-link active">Leads</a>
+        <a href="vidping.html" class="nav-link">VidPing</a>
         <a href="eg.html" class="nav-link">Examples</a>
         <a href="walk.html" class="nav-link">Walkthrough</a>
         <a href="settings.html" class="nav-link">Settings</a>
@@ -584,9 +585,10 @@
         const received = lead.receivedAt.toLocaleString();
         const priorityScore = lead.priority ? `${lead.priority}` : "—";
         const statusBadge = lead.status === "Duplicate" ? "Duplicate" : "Open";
+        const phoneDisplay = redactPhone(lead.phone);
         tr.innerHTML = `
           <td>${received}</td>
-          <td><div>${lead.name}</div><div class="subtext">${lead.phone || "No phone"}</div></td>
+          <td><div>${lead.name}</div><div class="subtext">${phoneDisplay || "No phone"}</div></td>
           <td>${lead.source}</td>
           <td>${lead.vehicle}</td>
           <td>${lead.type}</td>
@@ -621,13 +623,42 @@
       ranked.forEach(item => {
         const el = document.createElement("div");
         el.className = "call-item";
+        const phoneDisplay = redactPhone(item.lead.phone);
         el.innerHTML = `
           <div class="name">${item.lead.name}</div>
           <div class="meta">${item.lead.source} • ${item.lead.vehicle}</div>
-          <div class="meta">${item.lead.phone || "No phone"} • ${item.lead.receivedAt.toLocaleString()}</div>
+          <div class="meta">${phoneDisplay || "No phone"} • ${item.lead.receivedAt.toLocaleString()}</div>
         `;
         panel.appendChild(el);
       });
+    }
+
+    function redactPhone(phone) {
+      if (!phone) return "";
+      const digits = phone.replace(/\D/g, "");
+      if (!digits || digits.length <= 2) return phone;
+      const maskedDigits = `${"•".repeat(digits.length - 2)}${digits.slice(-2)}`;
+      let idx = 0;
+      return phone.replace(/\d/g, () => maskedDigits[idx++] || "•");
+    }
+
+    function redactEmail(email) {
+      if (!email) return "";
+      const [user, domain] = email.split("@");
+      if (!domain) return email;
+      const userSafe = user.length <= 2 ? `${user[0] || ""}•` : `${user.slice(0, 2)}•••`;
+      const domainParts = domain.split(".");
+      const host = domainParts[0] || "";
+      const tld = domainParts.slice(1).join(".") || "";
+      const hostSafe = host.length <= 2 ? `${host[0] || ""}•` : `${host.slice(0, 2)}•••`;
+      return `${userSafe}@${hostSafe}${tld ? `.${tld}` : ""}`;
+    }
+
+    function redactId(value) {
+      if (!value) return "";
+      const str = String(value);
+      if (str.length <= 4) return `${str[0] || ""}••`;
+      return `${str.slice(0, 2)}••••${str.slice(-2)}`;
     }
 
     function addTestLead() {

@@ -24,6 +24,8 @@ let phoneActive = false;
 let realityTimer = null;
 let phoneHistory = [];
 let adfParseTimer = null;
+const VIDPING_WAIT_MS = 2 * 60 * 1000;
+const VIDPING_STORAGE_KEY = "blink_vidping_leads";
 
 function ingestLead() {
   const xml = document.getElementById("adfInput").value;
@@ -89,12 +91,20 @@ function createLead(source) {
     escalatedAt: null,
     escalatedEver: false,
     claimedAt: null,
-    winningRep: null
+    winningRep: null,
+    vidPingSent: false,
+    vidPingSentAt: null,
+    vidPingStatus: "NONE",
+    vidPingDeadlineAt: null,
+    vidPingEscalated: false,
+    vidPingRepId: null,
+    vidPingRepName: null
   };
 }
 
 function trackLead(lead) {
   leads.push(lead);
+  persistVidPingLead(lead);
 }
 
 function startContest(lead) {
@@ -151,6 +161,7 @@ function tickContests() {
   refreshRelativeTimes();
   updateStats();
   updateCustomerMessage();
+  checkVidPingEscalations(now);
 
   if (!hasActive) {
     clearInterval(contestTickInterval);
@@ -186,6 +197,7 @@ function claimLead(contestId, repId) {
   updateCustomerMessage();
   updateStats();
   markPhoneClaimed(rep.name);
+  startVidPingTimer(lead, rep, contest);
 }
 
 function renderContests() {
@@ -215,6 +227,9 @@ function renderContests() {
     const elapsedSeconds = Math.max(0, Math.floor(elapsedMs / 1000));
     const statusLabel = contest.state === "ESCALATED" ? "Escalated" : contest.state === "CLAIMED" ? "Claimed" : "Open";
     meta.innerText = `Status: ${statusLabel} • Elapsed: ${elapsedSeconds}s`;
+    const vidMeta = document.createElement("div");
+    vidMeta.className = "contest-meta";
+    vidMeta.innerText = `Vid: ${getVidPingLabel(lead, contest)}`;
 
     const bar = document.createElement("div");
     bar.className = "urgency-bar";
@@ -243,7 +258,11 @@ function renderContests() {
 
     const jumpBtn = document.createElement("button");
     jumpBtn.innerText = "Jump to 109s (Test)";
-    jumpBtn.onclick = () => jumpToEscalation(contest.id);
+    jumpBtn.onclick = () => jumpToSeconds(contest.id, 109);
+
+    const jumpBtnAlt = document.createElement("button");
+    jumpBtnAlt.innerText = "Jump to 100s (Test)";
+    jumpBtnAlt.onclick = () => jumpToSeconds(contest.id, 100);
 
     card.appendChild(header);
     card.appendChild(meta);
@@ -251,6 +270,8 @@ function renderContests() {
     card.appendChild(winner);
     card.appendChild(repList);
     card.appendChild(jumpBtn);
+    card.appendChild(jumpBtnAlt);
+    card.appendChild(vidMeta);
     list.appendChild(card);
   });
 }
@@ -299,6 +320,14 @@ function notifyManagerResolved(contest, rep) {
   setLeadAlert(lead, "CLAIMED", rep);
 }
 
+function notifyManagerVidPingMissing(lead) {
+  if (!lead) return;
+  const repName = lead.vidPingRepName || lead.winningRep?.name || "Rep";
+  const message = `No Vid Sent — Escalation Armed. ${repName} did not send VidPing within ${Math.round(VIDPING_WAIT_MS / 60000)}m.`;
+  lead.managerAlert = message;
+  lead.managerAlertState = "VIDPING";
+}
+
 function setLeadAlert(lead, state, rep) {
   if (!lead) return;
   if (state === "ESCALATED") {
@@ -312,7 +341,86 @@ function setLeadAlert(lead, state, rep) {
   }
 }
 
-function jumpToEscalation(contestId) {
+function startVidPingTimer(lead, rep, contest) {
+  if (!lead || !rep) return;
+  lead.vidPingStatus = "PENDING";
+  lead.vidPingSent = false;
+  lead.vidPingSentAt = null;
+  lead.vidPingRepId = rep.id;
+  lead.vidPingRepName = rep.name;
+  lead.vidPingDeadlineAt = Date.now() + VIDPING_WAIT_MS;
+  lead.vidPingEscalated = false;
+  persistVidPingLead(lead);
+  promptVidPing(lead, rep, contest);
+}
+
+function promptVidPing(lead, rep, contest) {
+  const confirmSend = window.confirm("Send a VidPing now?");
+  if (!confirmSend) return;
+  const payload = {
+    leadId: lead.id,
+    customer: lead.customer,
+    vehicle: lead.vehicle,
+    source: lead.source,
+    repId: rep.id,
+    repName: rep.name,
+    startTime: contest?.startTime || Date.now(),
+    receivedAt: lead.receivedAt
+  };
+  localStorage.setItem("vidping_context", JSON.stringify(payload));
+  window.location.href = `vidping.html?leadId=${lead.id}`;
+}
+
+function checkVidPingEscalations(now) {
+  leads.forEach(lead => {
+    if (lead.state !== "CLAIMED") return;
+    if (lead.vidPingSent) return;
+    if (!lead.vidPingDeadlineAt) return;
+    if (lead.vidPingEscalated) return;
+    if (now >= lead.vidPingDeadlineAt) {
+      lead.vidPingStatus = "NO_VID";
+      lead.vidPingEscalated = true;
+      notifyManagerVidPingMissing(lead);
+      persistVidPingLead(lead);
+    }
+  });
+}
+
+function getVidPingLabel(lead, contest) {
+  if (!lead || contest?.state !== "CLAIMED") return "Awaiting Claim";
+  if (lead.vidPingSent) return "Vid Sent";
+  if (lead.vidPingStatus === "NO_VID") return "No Vid Sent — Escalation Armed";
+  return "Awaiting Vid";
+}
+
+function persistVidPingLead(lead) {
+  if (!lead || !localStorage) return;
+  let stored = {};
+  try {
+    stored = JSON.parse(localStorage.getItem(VIDPING_STORAGE_KEY)) || {};
+  } catch (err) {
+    stored = {};
+  }
+  const record = stored[lead.id] || {};
+  stored[lead.id] = {
+    ...record,
+    leadId: lead.id,
+    source: lead.source,
+    customer: lead.customer,
+    vehicle: lead.vehicle,
+    receivedAt: lead.receivedAt,
+    claimedAt: lead.claimedAt,
+    vidPingSent: lead.vidPingSent,
+    vidPingSentAt: lead.vidPingSentAt,
+    vidPingStatus: lead.vidPingStatus,
+    vidPingDeadlineAt: lead.vidPingDeadlineAt,
+    vidPingRepId: lead.vidPingRepId,
+    vidPingRepName: lead.vidPingRepName
+  };
+  localStorage.setItem(VIDPING_STORAGE_KEY, JSON.stringify(stored));
+}
+
+function jumpToSeconds(contestId, seconds) {
   let contest = null;
   if (contestId) {
     contest = contests.find(c => c.id === contestId && c.state !== "CLAIMED");
@@ -320,7 +428,8 @@ function jumpToEscalation(contestId) {
     contest = contests.find(c => c.state !== "CLAIMED");
   }
   if (!contest) return alert("No open contest found.");
-  contest.startTime = Date.now() - 11000;
+  const safeSeconds = Math.max(0, Number(seconds) || 0);
+  contest.startTime = Date.now() - safeSeconds * 1000;
   renderContests();
 }
 
@@ -829,6 +938,13 @@ function renderLeadPreviews() {
     meta.dataset.status = state;
     meta.dataset.escalated = lead.escalatedEver ? "true" : "false";
     meta.innerText = `Received ${formatRelative(receivedAt)} • Status: ${state}${lead.escalatedEver ? " • Escalated" : ""}`;
+    if (lead.vidPingSent) {
+      meta.innerText += " • Vid Sent";
+    } else if (lead.vidPingStatus === "NO_VID") {
+      meta.innerText += " • No Vid Sent";
+    } else if (lead.state === "CLAIMED") {
+      meta.innerText += " • Vid Pending";
+    }
 
     const body = document.createElement("div");
     body.className = "lead-body";
@@ -876,11 +992,22 @@ function buildLeadNarrative(lead) {
   }
   const item4 = document.createElement("li");
   item4.innerText = "From there, normal DealerSocket workflows apply (tasks, follow-up, templates, reporting).";
+  const itemVid = document.createElement("li");
+  if (lead.state === "CLAIMED") {
+    if (lead.vidPingSent && lead.vidPingSentAt) {
+      itemVid.innerText = `VidPing sent at ${new Date(lead.vidPingSentAt).toLocaleTimeString()}.`;
+    } else if (lead.vidPingStatus === "NO_VID") {
+      itemVid.innerText = "No Vid Sent — escalation armed for manager visibility.";
+    } else {
+      itemVid.innerText = "VidPing pending — prompt the rep to send a video follow-up.";
+    }
+  }
 
   list.appendChild(item1);
   list.appendChild(item2);
   list.appendChild(item3);
   if (itemEscalation.innerText) list.appendChild(itemEscalation);
+  if (itemVid.innerText) list.appendChild(itemVid);
   list.appendChild(item4);
 
   wrapper.appendChild(title);
@@ -889,11 +1016,16 @@ function buildLeadNarrative(lead) {
 }
 
 function updateStats() {
+  syncVidPingFromStorage();
   const total = leads.length;
   let open = 0;
   let escalated = 0;
   let claimed = 0;
   let claimTimes = [];
+  let vidSentCount = 0;
+  let vidTimes = [];
+  const repStats = {};
+  const sourceStats = {};
 
   leads.forEach(lead => {
     if (lead.escalatedEver || lead.state === "ESCALATED") escalated++;
@@ -904,10 +1036,34 @@ function updateStats() {
       const diff = new Date(lead.claimedAt).getTime() - new Date(lead.receivedAt).getTime();
       if (diff >= 0) claimTimes.push(diff);
     }
+
+    if (lead.vidPingSent) {
+      vidSentCount++;
+      if (lead.vidPingSentAt && lead.receivedAt) {
+        const vidDiff = new Date(lead.vidPingSentAt).getTime() - new Date(lead.receivedAt).getTime();
+        if (vidDiff >= 0) vidTimes.push(vidDiff);
+      }
+    }
+
+    if (lead.winningRep) {
+      const repKey = lead.winningRep.name;
+      if (!repStats[repKey]) repStats[repKey] = { total: 0, sent: 0 };
+      repStats[repKey].total += 1;
+      if (lead.vidPingSent) repStats[repKey].sent += 1;
+    }
+
+    if (lead.source) {
+      if (!sourceStats[lead.source]) sourceStats[lead.source] = { total: 0, sent: 0 };
+      sourceStats[lead.source].total += 1;
+      if (lead.vidPingSent) sourceStats[lead.source].sent += 1;
+    }
   });
 
   const avg = claimTimes.length
     ? Math.round(claimTimes.reduce((a, b) => a + b, 0) / claimTimes.length / 1000)
+    : null;
+  const avgVid = vidTimes.length
+    ? Math.round(vidTimes.reduce((a, b) => a + b, 0) / vidTimes.length / 1000)
     : null;
 
   const totalEl = document.getElementById("statTotal");
@@ -915,12 +1071,70 @@ function updateStats() {
   const escalatedEl = document.getElementById("statEscalated");
   const claimedEl = document.getElementById("statClaimed");
   const avgEl = document.getElementById("statAvgClaim");
+  const vidSentEl = document.getElementById("statVidSent");
+  const avgVidEl = document.getElementById("statAvgVid");
 
   if (totalEl) totalEl.innerText = total;
   if (openEl) openEl.innerText = open;
   if (escalatedEl) escalatedEl.innerText = escalated;
   if (claimedEl) claimedEl.innerText = claimed;
   if (avgEl) avgEl.innerText = avg ? `${avg}s` : "—";
+  if (vidSentEl) vidSentEl.innerText = vidSentCount;
+  if (avgVidEl) avgVidEl.innerText = avgVid ? `${avgVid}s` : "—";
+
+  const vidRepEl = document.getElementById("vidpingByRep");
+  const vidSourceEl = document.getElementById("vidpingBySource");
+  if (vidRepEl) {
+    vidRepEl.innerHTML = "";
+    const entries = Object.entries(repStats);
+    if (!entries.length) {
+      vidRepEl.innerHTML = "<div class=\"metric-row\"><span>—</span><span>—</span></div>";
+    } else {
+      entries.forEach(([name, stats]) => {
+        const pct = stats.total ? Math.round((stats.sent / stats.total) * 100) : 0;
+        const row = document.createElement("div");
+        row.className = "metric-row";
+        row.innerHTML = `<span>${name}</span><span>${pct}% (${stats.sent}/${stats.total})</span>`;
+        vidRepEl.appendChild(row);
+      });
+    }
+  }
+
+  if (vidSourceEl) {
+    vidSourceEl.innerHTML = "";
+    const entries = Object.entries(sourceStats);
+    if (!entries.length) {
+      vidSourceEl.innerHTML = "<div class=\"metric-row\"><span>—</span><span>—</span></div>";
+    } else {
+      entries.forEach(([source, stats]) => {
+        const pct = stats.total ? Math.round((stats.sent / stats.total) * 100) : 0;
+        const row = document.createElement("div");
+        row.className = "metric-row";
+        row.innerHTML = `<span>${source}</span><span>${pct}% (${stats.sent}/${stats.total})</span>`;
+        vidSourceEl.appendChild(row);
+      });
+    }
+  }
+}
+
+function syncVidPingFromStorage() {
+  if (!localStorage) return;
+  let stored = {};
+  try {
+    stored = JSON.parse(localStorage.getItem(VIDPING_STORAGE_KEY)) || {};
+  } catch (err) {
+    stored = {};
+  }
+  leads.forEach(lead => {
+    const record = stored[lead.id];
+    if (!record) return;
+    lead.vidPingSent = Boolean(record.vidPingSent);
+    lead.vidPingSentAt = record.vidPingSentAt || lead.vidPingSentAt;
+    lead.vidPingStatus = record.vidPingStatus || lead.vidPingStatus;
+    lead.vidPingDeadlineAt = record.vidPingDeadlineAt || lead.vidPingDeadlineAt;
+    lead.vidPingRepId = record.vidPingRepId || lead.vidPingRepId;
+    lead.vidPingRepName = record.vidPingRepName || lead.vidPingRepName;
+  });
 }
 
 function isValidXmlPayload(xml) {

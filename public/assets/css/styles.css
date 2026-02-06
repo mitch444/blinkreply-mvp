@@ -62,7 +62,7 @@ body {
   align-items: center;
   justify-content: flex-start;
   padding: 120px 10vw 80px;
-  background: #0b1220 url("hero-bg.jpg") center/cover no-repeat;
+  background: #0b1220 url("../images/hero-bg.jpg") center/cover no-repeat;
   overflow: hidden;
 }
 
@@ -781,6 +781,191 @@ button.primary {
   gap: 10px;
 }
 
+.vidping-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.vidping-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  margin: 6px 0 18px;
+}
+
+.vidping-header h1 {
+  margin: 0 0 6px;
+  font-size: 26px;
+}
+
+.vidping-subtitle {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.vidping-explainer {
+  margin: 0;
+  color: var(--blink-soft);
+  font-size: 13px;
+}
+
+.vidping-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 16px;
+}
+
+.vidping-context,
+.vidping-capture {
+  border: 1px solid var(--blink-border);
+  border-radius: 14px;
+  background: var(--blink-panel);
+  padding: 16px;
+}
+
+.panel-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--blink-soft);
+  margin-bottom: 12px;
+}
+
+.context-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+.context-row span {
+  color: var(--blink-soft);
+}
+
+.context-note {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--blink-soft);
+}
+
+.urgency-track {
+  margin-top: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #0f1b2d;
+  border: 1px solid var(--blink-border);
+  overflow: hidden;
+}
+
+.urgency-track-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--blink-yellow);
+  transition: width 0.4s ease;
+}
+
+.camera-shell {
+  border: 1px solid var(--blink-border);
+  border-radius: 16px;
+  background: #0b1220;
+  position: relative;
+  overflow: hidden;
+  min-height: 260px;
+  display: grid;
+  place-items: center;
+}
+
+#vpPreview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.camera-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  color: var(--blink-soft);
+  background: rgba(8, 12, 20, 0.4);
+}
+
+.capture-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 12px 0 16px;
+}
+
+.delivery-panel {
+  border: 1px solid var(--blink-border);
+  border-radius: 12px;
+  background: var(--blink-panel-2);
+  padding: 12px;
+}
+
+.delivery-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.delivery-row span {
+  color: var(--blink-soft);
+}
+
+.delivery-note {
+  font-size: 11px;
+  color: var(--blink-soft);
+  margin-top: 8px;
+}
+
+.vidping-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+  margin: 10px 0 4px;
+}
+
+.vidping-metric {
+  border: 1px solid var(--blink-border);
+  border-radius: 10px;
+  padding: 10px;
+  background: var(--blink-panel-2);
+}
+
+.metric-title {
+  font-size: 11px;
+  color: var(--blink-soft);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.metric-list {
+  display: grid;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.metric-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+@media (max-width: 900px) {
+  .vidping-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .source-tile {
   border: 1px solid var(--blink-border);
   background: var(--blink-panel-2);
@@ -808,17 +993,19 @@ button.primary {
 
 #phoneMock {
   border: 1px solid var(--blink-border);
-  border-radius: 14px;
-  padding: 12px;
+  border-radius: 12px;
+  padding: 8px;
   background: var(--blink-panel-2);
   display: grid;
   gap: 10px;
+  max-width: 320px;
+  justify-self: end;
 }
 
 .phone-shell {
   border: 1px solid var(--blink-border);
-  border-radius: 24px;
-  padding: 16px;
+  border-radius: 20px;
+  padding: 12px;
   background: #0f1b2d;
   position: relative;
 }
@@ -834,8 +1021,8 @@ button.primary {
 .phone-screen {
   background: #0b1220;
   border-radius: 18px;
-  padding: 12px;
-  min-height: 220px;
+  padding: 10px;
+  min-height: 190px;
   box-shadow: inset 0 0 0 1px var(--blink-border);
 }
 

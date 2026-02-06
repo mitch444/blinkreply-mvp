@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VidPing — Blink Response Engine</title>
+  <link rel="icon" href="assets/icons/ico.png" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <nav id="topNav">
+    <div id="brandBlock">
+      <img src="assets/images/blink-logo-horizontal-dark.png" alt="Blink Response Engine logo" id="logo" />
+      <div>
+        <div id="brandTitle">Blink Response Engine — Rapid Response (Local MVP)</div>
+        <div class="helper-line">Operational lead routing with DealerSocket synchronization.</div>
+      </div>
+    </div>
+    <div id="navActions">
+      <a href="index.html" class="nav-link">Rapid Response</a>
+      <a href="dash.html" class="nav-link">Dashboard</a>
+      <a href="leads.html" class="nav-link">Leads</a>
+      <a href="vidping.html" class="nav-link active">VidPing</a>
+      <a href="eg.html" class="nav-link">Examples</a>
+      <a href="walk.html" class="nav-link">Walkthrough</a>
+      <a href="settings.html" class="nav-link">Settings</a>
+    </div>
+  </nav>
+
+  <main class="vidping-page">
+    <header class="vidping-header">
+      <div>
+        <h1>VidPing</h1>
+        <div class="vidping-subtitle">Did you send a vid?</div>
+        <p class="vidping-explainer">VidPing lets reps send fast, personal video messages the moment a lead is claimed.</p>
+      </div>
+    </header>
+
+    <section class="vidping-grid">
+      <div class="vidping-context">
+        <div class="panel-title">Lead Context</div>
+        <div class="context-row"><span>Customer</span><strong id="vpCustomer">—</strong></div>
+        <div class="context-row"><span>Vehicle</span><strong id="vpVehicle">—</strong></div>
+        <div class="context-row"><span>Lead Source</span><strong id="vpSource">—</strong></div>
+        <div class="context-row"><span>Assigned Rep</span><strong id="vpRep">—</strong></div>
+        <div class="context-row"><span>Time Since Arrival</span><strong id="vpSince">—</strong></div>
+        <div class="context-row"><span>Urgency Countdown</span><strong id="vpCountdown">—</strong></div>
+        <div class="urgency-track">
+          <div class="urgency-track-fill" id="vpUrgencyFill"></div>
+        </div>
+        <div class="context-note" id="vpContextNote">Launch VidPing from a claimed lead to auto-fill this panel.</div>
+      </div>
+
+      <div class="vidping-capture">
+        <div class="panel-title">Video Capture</div>
+        <div class="camera-shell">
+          <video id="vpPreview" autoplay muted playsinline></video>
+          <div class="camera-overlay" id="vpCameraOverlay">Camera ready</div>
+        </div>
+        <div class="capture-controls">
+          <button id="vpRecord" class="primary">Record</button>
+          <button id="vpStop" class="ghost">Stop</button>
+          <button id="vpRetake" class="ghost">Retake</button>
+          <button id="vpSend" class="primary">Send VidPing</button>
+        </div>
+        <div class="delivery-panel">
+          <div class="panel-title">Message Delivery</div>
+          <div class="delivery-row"><span>SMS</span><strong id="vpSmsStatus">Pending</strong></div>
+          <div class="delivery-row"><span>Email</span><strong id="vpEmailStatus">Pending</strong></div>
+          <div class="delivery-row"><span>Secure Link</span><strong id="vpLink">—</strong></div>
+          <div class="delivery-note">Twilio-ready and CRM-friendly. Links are time-stamped and private.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="vidping-hero">
+      <div class="vidping-hero__overlay" aria-hidden="true"></div>
+      <div class="vidping-hero__content">
+        <div class="vidping-hero__copy">
+          <div class="vidping-hero__eyebrow">Built for real conversations, not perfect videos</div>
+          <h2 class="vidping-hero__title">Send a quick hello. Close more deals.</h2>
+          <p class="vidping-hero__subhead">VidPing makes it easy to send a short, personal video the moment you claim a lead — with customer details pulled directly from DealerSocket.</p>
+          <ul class="vidping-hero__bullets">
+            <li>No setup. No editing. Just hit record.</li>
+            <li>Customer and vehicle info auto-filled automatically.</li>
+            <li>Shoot and send from your phone in seconds.</li>
+            <li>Customers respond better when they see a real person.</li>
+          </ul>
+          <div class="vidping-hero__micro">Nothing to configure. Nothing to mess up.</div>
+          <div class="vidping-hero__cta-block">
+            <button class="vidping-hero__cta" type="button">Record a quick hello</button>
+            <div class="vidping-hero__cta-note">Takes about 15 seconds. No pressure.</div>
+          </div>
+          <div class="vidping-hero__integration">Powered by Blink. Synced with DealerSocket.</div>
+          <div class="vidping-hero__integration-note">Customer details stay accurate and up to date.</div>
+        </div>
+        <div class="vidping-hero__visual" aria-hidden="true">
+          <div class="vidping-hero__frame">
+            <div class="vidping-hero__frame-title">Lead claimed</div>
+            <div class="vidping-hero__frame-row">Customer details auto-filled</div>
+            <div class="vidping-hero__frame-row">Tap once to record</div>
+            <div class="vidping-hero__frame-row">Tap once to send</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const VIDPING_CONFIG = {
+      s3UploadUrl: "",
+      cloudfrontBaseUrl: "",
+      twilioWebhookUrl: "",
+      crmWebhookUrl: "",
+      secureLinkTtlHours: 72
+    };
+
+    const preview = document.getElementById("vpPreview");
+    const recordBtn = document.getElementById("vpRecord");
+    const stopBtn = document.getElementById("vpStop");
+    const retakeBtn = document.getElementById("vpRetake");
+    const sendBtn = document.getElementById("vpSend");
+    const cameraOverlay = document.getElementById("vpCameraOverlay");
+    const smsStatus = document.getElementById("vpSmsStatus");
+    const emailStatus = document.getElementById("vpEmailStatus");
+    const linkEl = document.getElementById("vpLink");
+
+    const contextNote = document.getElementById("vpContextNote");
+    const customerEl = document.getElementById("vpCustomer");
+    const vehicleEl = document.getElementById("vpVehicle");
+    const sourceEl = document.getElementById("vpSource");
+    const repEl = document.getElementById("vpRep");
+    const sinceEl = document.getElementById("vpSince");
+    const countdownEl = document.getElementById("vpCountdown");
+    const urgencyFill = document.getElementById("vpUrgencyFill");
+
+    let mediaStream = null;
+    let mediaRecorder = null;
+    let recordedChunks = [];
+    let currentLead = null;
+    let countdownTimer = null;
+
+    function loadContext() {
+      const params = new URLSearchParams(window.location.search);
+      const leadId = params.get("leadId");
+      const stored = localStorage.getItem("vidping_context");
+      if (stored) {
+        try {
+          const ctx = JSON.parse(stored);
+          if (!leadId || ctx.leadId === Number(leadId) || ctx.leadId === leadId) {
+            currentLead = ctx;
+          }
+        } catch (err) {
+          currentLead = null;
+        }
+      }
+
+      if (currentLead) {
+        contextNote.style.display = "none";
+        customerEl.textContent = currentLead.customer || "—";
+        vehicleEl.textContent = currentLead.vehicle || "—";
+        sourceEl.textContent = currentLead.source || "—";
+        repEl.textContent = currentLead.repName || "—";
+        updateCountdown();
+        if (countdownTimer) clearInterval(countdownTimer);
+        countdownTimer = setInterval(updateCountdown, 1000);
+      }
+    }
+
+    function updateCountdown() {
+      if (!currentLead) return;
+      const start = Number(currentLead.startTime) || Date.now();
+      const total = 180;
+      const elapsed = Math.max(0, Math.floor((Date.now() - start) / 1000));
+      const remaining = Math.max(0, total - elapsed);
+      sinceEl.textContent = `${elapsed}s`;
+      countdownEl.textContent = remaining === 0 ? "Escalation reached" : `${remaining}s`;
+      const pct = Math.min(100, (elapsed / total) * 100);
+      urgencyFill.style.width = `${pct}%`;
+    }
+
+    async function initCamera() {
+      try {
+        mediaStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        preview.srcObject = mediaStream;
+        cameraOverlay.textContent = "Camera ready";
+      } catch (err) {
+        cameraOverlay.textContent = "Camera access blocked";
+      }
+    }
+
+    function setControls(state) {
+      recordBtn.disabled = state !== "ready";
+      stopBtn.disabled = state !== "recording";
+      retakeBtn.disabled = state === "recording";
+      sendBtn.disabled = state !== "recorded";
+    }
+
+    function startRecording() {
+      if (!mediaStream) return;
+      recordedChunks = [];
+      mediaRecorder = new MediaRecorder(mediaStream, { mimeType: "video/webm" });
+      mediaRecorder.ondataavailable = event => {
+        if (event.data.size > 0) recordedChunks.push(event.data);
+      };
+      mediaRecorder.onstop = () => {
+        cameraOverlay.textContent = "Recording captured";
+        setControls("recorded");
+      };
+      mediaRecorder.start();
+      cameraOverlay.textContent = "Recording...";
+      setControls("recording");
+    }
+
+    function stopRecording() {
+      if (mediaRecorder && mediaRecorder.state === "recording") {
+        mediaRecorder.stop();
+      }
+    }
+
+    function retakeRecording() {
+      recordedChunks = [];
+      cameraOverlay.textContent = "Camera ready";
+      setControls("ready");
+    }
+
+    function buildSecureLink() {
+      const ts = new Date().toISOString().replace(/[:.]/g, "");
+      const leadId = currentLead?.leadId || "lead";
+      return `https://vidping.local/${leadId}/${ts}`;
+    }
+
+    function logVidPingEvent(link) {
+      if (!currentLead) return;
+      const stored = localStorage.getItem("blink_vidping_leads");
+      let data = {};
+      if (stored) {
+        try { data = JSON.parse(stored); } catch (err) { data = {}; }
+      }
+      const leadRecord = data[currentLead.leadId] || {};
+      leadRecord.vidPingSent = true;
+      leadRecord.vidPingSentAt = new Date().toISOString();
+      leadRecord.vidPingStatus = "SENT";
+      leadRecord.vidPingLink = link;
+      leadRecord.vidPingRepId = currentLead.repId;
+      leadRecord.vidPingRepName = currentLead.repName;
+      data[currentLead.leadId] = leadRecord;
+      localStorage.setItem("blink_vidping_leads", JSON.stringify(data));
+      localStorage.setItem("vidping_last_sent", JSON.stringify({ leadId: currentLead.leadId, link }));
+    }
+
+    function sendVidPing() {
+      if (!recordedChunks.length) return;
+      const link = buildSecureLink();
+      smsStatus.textContent = "Queued";
+      emailStatus.textContent = "Queued";
+      linkEl.textContent = link;
+      logVidPingEvent(link);
+      cameraOverlay.textContent = "VidPing sent";
+      setControls("ready");
+    }
+
+    recordBtn.addEventListener("click", startRecording);
+    stopBtn.addEventListener("click", stopRecording);
+    retakeBtn.addEventListener("click", retakeRecording);
+    sendBtn.addEventListener("click", sendVidPing);
+
+    setControls("ready");
+    initCamera();
+    loadContext();
+  </script>
+
+  <style>
+    .vidping-hero {
+      position: relative;
+      min-height: 100vh;
+      margin: 24px 0 0;
+      border-radius: 0;
+      overflow: hidden;
+      background: url("assets/images/vidhero.png") center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      padding: 48px 6vw;
+      width: 100vw;
+      margin-left: calc(50% - 50vw);
+    }
+
+    .vidping-hero__overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(110deg, rgba(8, 12, 20, 0.82), rgba(8, 12, 20, 0.55));
+      z-index: 1;
+    }
+
+    .vidping-hero__content {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: minmax(280px, 1.2fr) minmax(240px, 1fr);
+      gap: 48px;
+      align-items: center;
+      width: 100%;
+    }
+
+    .vidping-hero__copy {
+      max-width: 720px;
+      color: var(--blink-text);
+    }
+
+    .vidping-hero__eyebrow {
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--blink-soft);
+      margin-bottom: 12px;
+    }
+
+    .vidping-hero__title {
+      font-size: clamp(32px, 4vw, 54px);
+      line-height: 1.08;
+      margin: 0 0 16px;
+      color: var(--blink-white);
+    }
+
+    .vidping-hero__subhead {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #d3dde8;
+      margin: 0 0 20px;
+    }
+
+    .vidping-hero__bullets {
+      margin: 0 0 12px;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 8px;
+      color: var(--blink-text);
+      font-size: 14px;
+    }
+
+    .vidping-hero__bullets li {
+      position: relative;
+      padding-left: 18px;
+    }
+
+    .vidping-hero__bullets li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 7px;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(250, 204, 21, 0.6);
+    }
+
+    .vidping-hero__micro {
+      font-size: 12px;
+      color: var(--blink-soft);
+      margin-bottom: 20px;
+    }
+
+    .vidping-hero__cta-block {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+
+    .vidping-hero__cta {
+      border: none;
+      background: var(--blink-yellow);
+      color: #111827;
+      border-radius: 999px;
+      padding: 12px 22px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: box-shadow 200ms ease, transform 200ms ease;
+    }
+
+    .vidping-hero__cta:hover {
+      box-shadow: 0 8px 20px rgba(250, 204, 21, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .vidping-hero__cta-note {
+      font-size: 12px;
+      color: var(--blink-soft);
+    }
+
+    .vidping-hero__integration {
+      font-size: 13px;
+      color: var(--blink-gray);
+      margin-bottom: 4px;
+    }
+
+    .vidping-hero__integration-note {
+      font-size: 12px;
+      color: var(--blink-soft);
+    }
+
+    .vidping-hero__visual {
+      display: flex;
+      justify-content: center;
+    }
+
+    .vidping-hero__frame {
+      width: min(360px, 100%);
+      border-radius: 24px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(10, 15, 24, 0.55);
+      padding: 22px;
+      display: grid;
+      gap: 10px;
+      color: var(--blink-text);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    .vidping-hero__frame-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .vidping-hero__frame-row {
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      font-size: 12px;
+      color: var(--blink-soft);
+    }
+
+    @media (max-width: 900px) {
+      .vidping-hero {
+        padding: 36px 6vw;
+      }
+
+      .vidping-hero__content {
+        grid-template-columns: 1fr;
+      }
+
+      .vidping-hero__visual {
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</body>
+</html>
