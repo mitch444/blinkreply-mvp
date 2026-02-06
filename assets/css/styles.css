@@ -569,11 +569,24 @@ button.primary {
 }
 
 .urgency-fill.urgency-last {
-  animation: urgencyPulse 0.6s ease-in-out infinite;
+  background: linear-gradient(90deg, rgba(250, 204, 21, 0.9), rgba(248, 113, 113, 0.95));
+  animation: urgencyCliff 0.35s ease-in-out infinite;
+  box-shadow: 0 0 16px rgba(248, 113, 113, 0.45);
 }
 
 .urgency-fill.urgency-past {
   animation: none;
+  background: linear-gradient(90deg, rgba(15, 23, 42, 0.98) 0%, rgba(2, 6, 23, 0.98) 60%, rgba(2, 6, 23, 0.98) 100%);
+  box-shadow: none;
+  position: relative;
+}
+
+.urgency-fill.urgency-past::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 45%, rgba(239, 68, 68, 0.85) 46%, rgba(239, 68, 68, 0.85) 54%, transparent 55%);
+  opacity: 0.9;
 }
 
 #statsGrid {
@@ -727,189 +740,56 @@ button.primary {
 
 #goalLightReality {
   margin-top: 24px;
-  border: 1px solid var(--blink-border);
-  border-radius: 16px;
-  background: var(--blink-panel);
-  padding: 20px;
+  border: none;
+  border-radius: 20px;
+  background: radial-gradient(circle at 15% 20%, rgba(30, 41, 59, 0.6), rgba(8, 12, 20, 0.98) 70%);
+  padding: 70px 6vw 60px;
 }
 
-#goalLightReality .section-header.center {
-  text-align: center;
-  margin-bottom: 16px;
+.hero-line {
+  margin: 0 0 14px;
+  font-size: clamp(30px, 3.6vw, 46px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 
-.goal-light-demo {
-  display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 16px;
-  align-items: center;
-}
-
-.goal-light-wrap {
-  display: grid;
-  place-items: center;
-  padding: 16px;
-  background: var(--blink-panel-2);
-  border-radius: 16px;
-  border: 1px solid var(--blink-border);
-}
-
-.goal-light {
-  width: 220px;
-  display: grid;
-  place-items: center;
-  gap: 12px;
-}
-
-.light-outer {
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #1f2937 0%, #0b1220 55%, #05070f 100%);
-  border: 2px solid #1f2937;
-  position: relative;
-  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8);
-}
-
-.light-inner {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.08), rgba(15, 23, 42, 0.9));
-  border: 1px solid #111827;
-  margin-top: -150px;
-  z-index: 2;
-  box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.7);
-}
-
-.light-base {
-  font-size: 11px;
-  letter-spacing: 0.2em;
+.hero-subline {
+  margin: 0 0 26px;
   color: var(--blink-soft);
-  text-transform: uppercase;
-  border: 1px solid var(--blink-border);
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: #0b1220;
-}
-
-.goal-light-controls {
-  border: 1px solid var(--blink-border);
-  border-radius: 16px;
-  background: var(--blink-panel-2);
-  padding: 16px;
-}
-
-.control-title {
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--blink-soft);
-  margin-bottom: 10px;
-}
-
-.control-buttons {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.control-btn {
-  border: 1px solid var(--blink-border);
-  background: #0f1b2d;
-  color: var(--blink-gray);
-  padding: 8px 10px;
-  border-radius: 10px;
-  font-size: 12px;
-  cursor: pointer;
-}
-
-.truth-rules {
-  margin-bottom: 12px;
-}
-
-.truth-title {
-  font-size: 12px;
-  color: var(--blink-soft);
-  margin-bottom: 6px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.truth-rules ul {
-  margin: 0;
-  padding-left: 16px;
-  color: var(--blink-soft);
-  font-size: 12px;
+  font-size: 16px;
   line-height: 1.6;
+  max-width: 760px;
 }
 
-.state-copy h4 {
-  margin: 10px 0 6px;
-  font-size: 14px;
+.goal-light-layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.8fr) minmax(320px, 1fr);
+  gap: 48px;
+  align-items: start;
 }
 
-.state-copy p {
-  margin: 0 0 6px;
+.goal-light-visual img {
+  width: min(300px, 100%);
+  display: block;
+}
+
+.visual-caption {
+  display: block;
+  margin-top: 12px;
   font-size: 12px;
   color: var(--blink-soft);
 }
 
-.goal-light.light--blue .light-outer,
-.goal-light.light--blue .light-inner {
-  background: radial-gradient(circle at 30% 30%, rgba(59, 130, 246, 0.9), rgba(30, 58, 138, 0.9));
-  box-shadow: 0 0 24px rgba(59, 130, 246, 0.45);
+.goal-light-copy h3 {
+  margin: 0 0 10px;
+  font-size: 22px;
 }
 
-.goal-light.light--amber .light-outer,
-.goal-light.light--amber .light-inner {
-  background: radial-gradient(circle at 30% 30%, rgba(245, 158, 11, 0.9), rgba(120, 53, 15, 0.9));
-  box-shadow: 0 0 24px rgba(245, 158, 11, 0.45);
-}
-
-.goal-light.light--green .light-outer,
-.goal-light.light--green .light-inner {
-  background: radial-gradient(circle at 30% 30%, rgba(34, 197, 94, 0.9), rgba(20, 83, 45, 0.9));
-  box-shadow: 0 0 24px rgba(34, 197, 94, 0.45);
-}
-
-.goal-light.light--red-soft .light-outer,
-.goal-light.light--red-soft .light-inner {
-  background: radial-gradient(circle at 30% 30%, rgba(248, 113, 113, 0.9), rgba(127, 29, 29, 0.9));
-  box-shadow: 0 0 24px rgba(248, 113, 113, 0.4);
-}
-
-.goal-light.light--race .light-outer,
-.goal-light.light--race .light-inner {
-  animation: racePulse 1.2s ease-in-out infinite;
-}
-
-.goal-light.light--pulse .light-outer,
-.goal-light.light--pulse .light-inner {
-  animation: slowPulse 2.2s ease-in-out infinite;
-}
-
-.goal-light.light--goal .light-outer,
-.goal-light.light--goal .light-inner {
-  animation: goalStrobe 0.4s ease-in-out 4;
-}
-
-@keyframes slowPulse {
-  0%, 100% { opacity: 0.7; box-shadow: 0 0 18px rgba(59, 130, 246, 0.25); }
-  50% { opacity: 1; box-shadow: 0 0 28px rgba(59, 130, 246, 0.45); }
-}
-
-@keyframes racePulse {
-  0% { background: radial-gradient(circle at 30% 30%, rgba(59, 130, 246, 0.9), rgba(30, 58, 138, 0.9)); box-shadow: 0 0 24px rgba(59, 130, 246, 0.45); }
-  50% { background: radial-gradient(circle at 30% 30%, rgba(245, 158, 11, 0.9), rgba(120, 53, 15, 0.9)); box-shadow: 0 0 24px rgba(245, 158, 11, 0.45); }
-  100% { background: radial-gradient(circle at 30% 30%, rgba(59, 130, 246, 0.9), rgba(30, 58, 138, 0.9)); box-shadow: 0 0 24px rgba(59, 130, 246, 0.45); }
-}
-
-@keyframes goalStrobe {
-  0% { opacity: 1; }
-  50% { opacity: 0.4; }
-  100% { opacity: 1; }
+.goal-light-copy p {
+  margin: 0 0 12px;
+  color: var(--blink-gray);
+  font-size: 14px;
+  line-height: 1.7;
 }
 
 .goal-light-install {
@@ -1010,15 +890,134 @@ button.primary {
   color: var(--blink-soft);
 }
 
+#towerLightReality {
+  margin-top: 24px;
+  padding: 90px 8vw 80px;
+  border: none;
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(5, 8, 14, 0.65), rgba(5, 8, 14, 0.9)), url("../images/system_signal_flow_bg.png") center/cover no-repeat;
+  position: relative;
+  overflow: hidden;
+}
+
+.tower-light-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.tower-light-header h2 {
+  margin: 0 0 8px;
+  font-size: clamp(30px, 3.2vw, 46px);
+  letter-spacing: -0.02em;
+}
+
+.tower-light-header .subtext {
+  margin: 0;
+  color: var(--blink-soft);
+}
+
+.tower-light-hero {
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) minmax(280px, 1fr);
+  gap: 48px;
+  align-items: start;
+}
+
+.tower-light-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--blink-soft);
+  margin-bottom: 10px;
+}
+
+.tower-light-list {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--blink-gray);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.tower-light-right p {
+  margin: 0 0 10px;
+  color: var(--blink-gray);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.tower-light-physical {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+
+.tower-light-physical img {
+  width: 140px;
+  opacity: 0.9;
+}
+
+.tower-light-install {
+  margin-top: 46px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(148, 163, 184, 0.15);
+}
+
+.tower-light-install h3 {
+  margin: 0 0 10px;
+  font-size: 20px;
+}
+
+.tower-light-install .install-subhead {
+  margin: 0 0 18px;
+  color: var(--blink-soft);
+  font-size: 13px;
+}
+
+#towerLightReality::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 15% 40%, rgba(15, 23, 42, 0.6), transparent 65%),
+              radial-gradient(circle at 85% 10%, rgba(2, 6, 23, 0.6), transparent 55%);
+  pointer-events: none;
+}
+
+#towerLightReality > * {
+  position: relative;
+  z-index: 1;
+}
+
 @media (max-width: 900px) {
-  .goal-light-demo {
+  .tower-light-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .tower-light-physical {
+    justify-content: flex-start;
+  }
+}
+@media (max-width: 900px) {
+  .goal-light-layout {
     grid-template-columns: 1fr;
   }
 }
-@keyframes urgencyPulse {
-  0% { transform: scaleX(1); opacity: 0.9; }
-  50% { transform: scaleX(1.02); opacity: 1; }
-  100% { transform: scaleX(1); opacity: 0.9; }
+@keyframes urgencyCliff {
+  0% {
+    opacity: 0.85;
+    filter: brightness(1);
+    box-shadow: 0 0 12px rgba(248, 113, 113, 0.35);
+  }
+  50% {
+    opacity: 1;
+    filter: brightness(1.6) saturate(1.2);
+    box-shadow: 0 0 24px rgba(248, 113, 113, 0.65);
+  }
+  100% {
+    opacity: 0.8;
+    filter: brightness(1.1);
+    box-shadow: 0 0 14px rgba(248, 113, 113, 0.4);
+  }
 }
 #winnerMessage {
   font-weight: 600;

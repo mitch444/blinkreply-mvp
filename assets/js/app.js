@@ -277,19 +277,19 @@ function renderContests() {
 }
 
 function updateUrgencyBar(elapsedMs, fill) {
-  const capped = Math.min(elapsedMs, 180000);
-  const pct = Math.min((capped / 180000) * 100, 100);
+  const capped = Math.min(elapsedMs, 120000);
+  const pct = Math.min((capped / 120000) * 100, 100);
   fill.style.width = `${pct}%`;
 
   fill.style.background = "#FACC15";
 
-  if (elapsedMs >= 170000 && elapsedMs < 180000) {
+  if (elapsedMs >= 110000 && elapsedMs < 120000) {
     fill.classList.add("urgency-last");
   } else {
     fill.classList.remove("urgency-last");
   }
 
-  if (elapsedMs >= 180000) {
+  if (elapsedMs >= 120000) {
     fill.classList.add("urgency-past");
   } else {
     fill.classList.remove("urgency-past");
@@ -1266,9 +1266,89 @@ function initGoalLight() {
   setGoalLightState("IDLE");
 }
 
+let towerTimeout = null;
+
+function setTowerState(state) {
+  const tower = document.getElementById("towerLight");
+  const title = document.getElementById("towerStateTitle");
+  const rep = document.getElementById("towerRepCopy");
+  const manager = document.getElementById("towerManagerCopy");
+  if (!tower) return;
+
+  const states = {
+    idle: {
+      cls: "state-idle",
+      title: "System idle",
+      rep: "No lead is active. Stay ready.",
+      manager: "Quiet means nothing is happening yet."
+    },
+    blue: {
+      cls: "state-blue",
+      title: "System armed",
+      rep: "The system is ready. The next lead is yours to win.",
+      manager: "You can see the floor is armed without checking a screen."
+    },
+    amber: {
+      cls: "state-amber",
+      title: "Inbound lead",
+      rep: "A lead arrived. Move fast before the moment fades.",
+      manager: "Lead arrival is visible to everyone instantly."
+    },
+    race: {
+      cls: "state-race",
+      title: "Response window",
+      rep: "The clock is running. First response wins ownership.",
+      manager: "The response race is visible without dispatching."
+    },
+    green: {
+      cls: "state-green",
+      title: "Good response",
+      rep: "You responded quickly. The customer feels it.",
+      manager: "Clean behavior is visible without follow-up."
+    },
+    red: {
+      cls: "state-red",
+      title: "Missed SLA",
+      rep: "The response window slipped. The deal is at risk.",
+      manager: "You can see the miss without asking for updates."
+    },
+    goal: {
+      cls: "state-goal",
+      title: "Appointment set",
+      rep: "The follow-up converted. Keep the momentum.",
+      manager: "Wins are visible without chasing activity."
+    }
+  };
+
+  const next = states[state] || states.idle;
+  tower.className = `tower-light-wrap ${next.cls}`;
+
+  if (towerTimeout) {
+    clearTimeout(towerTimeout);
+    towerTimeout = null;
+  }
+
+  if (state === "goal") {
+    towerTimeout = setTimeout(() => {
+      tower.className = "tower-light-wrap state-blue";
+    }, 1400);
+  }
+
+  if (title) title.textContent = next.title;
+  if (rep) rep.textContent = `For reps: ${next.rep}`;
+  if (manager) manager.textContent = `For managers: ${next.manager}`;
+}
+
+function initTowerLight() {
+  const tower = document.getElementById("towerLight");
+  if (!tower) return;
+  setTowerState("idle");
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initRealityTimeline();
   initAccordion();
   initDsqPayoffs();
   initGoalLight();
+  initTowerLight();
 });
