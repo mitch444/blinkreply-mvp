@@ -544,6 +544,122 @@
     </div>
   </section>
 
+  <section id="goalLightReality">
+    <div class="section-header center">
+      <div>
+        <h2>Just imagine — when a lead comes in</h2>
+        <div class="subtext">No dashboards. No alerts. Just a light everyone understands.</div>
+      </div>
+    </div>
+
+    <div class="goal-light-demo">
+      <div class="goal-light-wrap">
+        <div class="goal-light" id="goalLight">
+          <div class="light-outer"></div>
+          <div class="light-inner"></div>
+          <div class="light-base">RESPONSE WINS</div>
+        </div>
+      </div>
+      <div class="goal-light-controls">
+        <div class="control-title">Set system truth</div>
+        <div class="control-buttons">
+          <button type="button" class="control-btn" onclick="setGoalLightState('GAME_ON')">GAME_ON</button>
+          <button type="button" class="control-btn" onclick="setGoalLightState('PUCK_DROPPED')">PUCK_DROPPED</button>
+          <button type="button" class="control-btn" onclick="setGoalLightState('RACE_ON')">RACE_ON</button>
+          <button type="button" class="control-btn" onclick="setGoalLightState('GOOD_PLAY')">GOOD_PLAY</button>
+          <button type="button" class="control-btn" onclick="setGoalLightState('MISSED_SLA')">MISSED_SLA</button>
+          <button type="button" class="control-btn" onclick="setGoalLightState('GOAL_SCORED')">GOAL_SCORED</button>
+        </div>
+        <div class="truth-rules">
+          <div class="truth-title">System truth rules</div>
+          <ul>
+            <li>Light reflects system truth, not emotion.</li>
+            <li>AI actions are silent.</li>
+            <li>Only human actions trigger wins.</li>
+            <li>Silence means nothing happened.</li>
+          </ul>
+        </div>
+        <div class="state-copy">
+          <h4 id="stateTitle"></h4>
+          <p id="stateRep"></p>
+          <p id="stateManager"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="goal-light-install">
+      <div class="install-header">
+        <h3>This isn’t a concept. It’s a real install.</h3>
+        <div class="subtext">Off-the-shelf hardware. Clean wiring. Professional commissioning.</div>
+      </div>
+      <div class="install-grid">
+        <div class="install-card">
+          <div class="install-title">Industrial Goal Light</div>
+          <ul>
+            <li>Commercial LED beacon</li>
+            <li>Industrial supplier (Alibaba-class)</li>
+            <li>Continuous duty rated</li>
+            <li>Typical cost: $150–$300</li>
+          </ul>
+        </div>
+        <div class="install-card">
+          <div class="install-title">Control &amp; Network</div>
+          <ul>
+            <li>Low-voltage relay / ESP32 / PLC-style</li>
+            <li>LAN or VLAN-isolated</li>
+            <li>API or webhook driven</li>
+            <li>No cloud dependency required</li>
+          </ul>
+        </div>
+        <div class="install-card">
+          <div class="install-title">Professional Install</div>
+          <ul>
+            <li>Wall-mounted in desking / tower</li>
+            <li>Conduit where required</li>
+            <li>CSA / UL-rated components</li>
+            <li>Clean labeled wiring</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="install-process">
+        <div class="install-title">Install process</div>
+        <ol>
+          <li>Site walk &amp; placement approval</li>
+          <li>Electrical install (licensed electrician)</li>
+          <li>Network integration (segmented LAN)</li>
+          <li>Blink state binding</li>
+          <li>Live testing &amp; commissioning</li>
+          <li>Documentation &amp; sign-off</li>
+        </ol>
+      </div>
+
+      <div class="install-authority">
+        <div>Installed by licensed contractor</div>
+        <div>CSA / UL-rated components</div>
+        <div>Mounted and wired to code</div>
+        <div>Treated as fixed facility equipment</div>
+        <div>No insurance exposure</div>
+      </div>
+
+      <div class="install-cost">
+        <div class="cost-callout">All-in: under $2,000</div>
+        <div class="cost-breakdown">
+          <span>Hardware: $300–$500</span>
+          <span>Control &amp; networking: $300–$600</span>
+          <span>Install &amp; commissioning: $500–$800</span>
+        </div>
+        <div class="cost-note">One missed appointment pays for this.</div>
+      </div>
+
+      <div class="install-cta">
+        <button class="primary">Make the Goal Light real</button>
+        <div class="subtext">We handle sourcing, install coordination, programming, and testing.</div>
+        <div class="install-note">This ships as part of Blink — not a science project.</div>
+      </div>
+    </div>
+  </section>
+
   <div id="toast" role="status" aria-live="polite"></div>
 
   <script src="assets/js/app.js"></script>

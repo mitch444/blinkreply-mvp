@@ -1184,8 +1184,91 @@ function initDsqPayoffs() {
   });
 }
 
+let goalLightTimeout = null;
+
+function setGoalLightState(stateName) {
+  const light = document.getElementById("goalLight");
+  const title = document.getElementById("stateTitle");
+  const rep = document.getElementById("stateRep");
+  const manager = document.getElementById("stateManager");
+  if (!light) return;
+
+  const states = {
+    IDLE: {
+      classes: [],
+      title: "System idle",
+      rep: "No lead is active yet. You are waiting on a real customer moment.",
+      manager: "Nothing to chase. No noise, no fake urgency."
+    },
+    GAME_ON: {
+      classes: ["light--blue", "light--pulse"],
+      title: "Game on",
+      rep: "A lead arrived. You are the first human who can win it.",
+      manager: "You see the moment instantly without opening a dashboard."
+    },
+    PUCK_DROPPED: {
+      classes: ["light--amber", "light--pulse"],
+      title: "Puck dropped",
+      rep: "The clock started. Speed matters more than perfect.",
+      manager: "The response window is visible to everyone in the store."
+    },
+    RACE_ON: {
+      classes: ["light--race"],
+      title: "Race on",
+      rep: "Multiple reps are moving. The first response wins ownership.",
+      manager: "Competition is visible. You don’t have to assign manually."
+    },
+    GOOD_PLAY: {
+      classes: ["light--green", "light--pulse"],
+      title: "Good play",
+      rep: "You moved quickly. The customer feels it.",
+      manager: "You can see clean response behavior in real time."
+    },
+    MISSED_SLA: {
+      classes: ["light--red-soft", "light--pulse"],
+      title: "Missed SLA",
+      rep: "The response window slipped. The deal is at risk.",
+      manager: "You know where the process broke without chasing people."
+    },
+    GOAL_SCORED: {
+      classes: ["light--blue", "light--goal"],
+      title: "Goal scored",
+      rep: "A real response happened. The lead is claimed and moving.",
+      manager: "You can trust the process without hovering."
+    }
+  };
+
+  const next = states[stateName] || states.IDLE;
+  const allClasses = ["light--blue", "light--amber", "light--race", "light--green", "light--red-soft", "light--goal", "light--pulse"];
+  light.classList.remove(...allClasses);
+  if (goalLightTimeout) {
+    clearTimeout(goalLightTimeout);
+    goalLightTimeout = null;
+  }
+
+  next.classes.forEach(cls => light.classList.add(cls));
+
+  if (stateName === "GOAL_SCORED") {
+    goalLightTimeout = setTimeout(() => {
+      light.classList.remove("light--goal");
+      light.classList.add("light--blue");
+    }, 1200);
+  }
+
+  if (title) title.textContent = next.title;
+  if (rep) rep.textContent = `For reps: ${next.rep}`;
+  if (manager) manager.textContent = `For managers: ${next.manager}`;
+}
+
+function initGoalLight() {
+  const light = document.getElementById("goalLight");
+  if (!light) return;
+  setGoalLightState("IDLE");
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initRealityTimeline();
   initAccordion();
   initDsqPayoffs();
+  initGoalLight();
 });

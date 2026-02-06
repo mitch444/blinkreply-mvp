@@ -724,6 +724,297 @@ button.primary {
 #toast.error {
   background: #1f2937;
 }
+
+#goalLightReality {
+  margin-top: 24px;
+  border: 1px solid var(--blink-border);
+  border-radius: 16px;
+  background: var(--blink-panel);
+  padding: 20px;
+}
+
+#goalLightReality .section-header.center {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.goal-light-demo {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 16px;
+  align-items: center;
+}
+
+.goal-light-wrap {
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: var(--blink-panel-2);
+  border-radius: 16px;
+  border: 1px solid var(--blink-border);
+}
+
+.goal-light {
+  width: 220px;
+  display: grid;
+  place-items: center;
+  gap: 12px;
+}
+
+.light-outer {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #1f2937 0%, #0b1220 55%, #05070f 100%);
+  border: 2px solid #1f2937;
+  position: relative;
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8);
+}
+
+.light-inner {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.08), rgba(15, 23, 42, 0.9));
+  border: 1px solid #111827;
+  margin-top: -150px;
+  z-index: 2;
+  box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.7);
+}
+
+.light-base {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--blink-soft);
+  text-transform: uppercase;
+  border: 1px solid var(--blink-border);
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #0b1220;
+}
+
+.goal-light-controls {
+  border: 1px solid var(--blink-border);
+  border-radius: 16px;
+  background: var(--blink-panel-2);
+  padding: 16px;
+}
+
+.control-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--blink-soft);
+  margin-bottom: 10px;
+}
+
+.control-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.control-btn {
+  border: 1px solid var(--blink-border);
+  background: #0f1b2d;
+  color: var(--blink-gray);
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.truth-rules {
+  margin-bottom: 12px;
+}
+
+.truth-title {
+  font-size: 12px;
+  color: var(--blink-soft);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.truth-rules ul {
+  margin: 0;
+  padding-left: 16px;
+  color: var(--blink-soft);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.state-copy h4 {
+  margin: 10px 0 6px;
+  font-size: 14px;
+}
+
+.state-copy p {
+  margin: 0 0 6px;
+  font-size: 12px;
+  color: var(--blink-soft);
+}
+
+.goal-light.light--blue .light-outer,
+.goal-light.light--blue .light-inner {
+  background: radial-gradient(circle at 30% 30%, rgba(59, 130, 246, 0.9), rgba(30, 58, 138, 0.9));
+  box-shadow: 0 0 24px rgba(59, 130, 246, 0.45);
+}
+
+.goal-light.light--amber .light-outer,
+.goal-light.light--amber .light-inner {
+  background: radial-gradient(circle at 30% 30%, rgba(245, 158, 11, 0.9), rgba(120, 53, 15, 0.9));
+  box-shadow: 0 0 24px rgba(245, 158, 11, 0.45);
+}
+
+.goal-light.light--green .light-outer,
+.goal-light.light--green .light-inner {
+  background: radial-gradient(circle at 30% 30%, rgba(34, 197, 94, 0.9), rgba(20, 83, 45, 0.9));
+  box-shadow: 0 0 24px rgba(34, 197, 94, 0.45);
+}
+
+.goal-light.light--red-soft .light-outer,
+.goal-light.light--red-soft .light-inner {
+  background: radial-gradient(circle at 30% 30%, rgba(248, 113, 113, 0.9), rgba(127, 29, 29, 0.9));
+  box-shadow: 0 0 24px rgba(248, 113, 113, 0.4);
+}
+
+.goal-light.light--race .light-outer,
+.goal-light.light--race .light-inner {
+  animation: racePulse 1.2s ease-in-out infinite;
+}
+
+.goal-light.light--pulse .light-outer,
+.goal-light.light--pulse .light-inner {
+  animation: slowPulse 2.2s ease-in-out infinite;
+}
+
+.goal-light.light--goal .light-outer,
+.goal-light.light--goal .light-inner {
+  animation: goalStrobe 0.4s ease-in-out 4;
+}
+
+@keyframes slowPulse {
+  0%, 100% { opacity: 0.7; box-shadow: 0 0 18px rgba(59, 130, 246, 0.25); }
+  50% { opacity: 1; box-shadow: 0 0 28px rgba(59, 130, 246, 0.45); }
+}
+
+@keyframes racePulse {
+  0% { background: radial-gradient(circle at 30% 30%, rgba(59, 130, 246, 0.9), rgba(30, 58, 138, 0.9)); box-shadow: 0 0 24px rgba(59, 130, 246, 0.45); }
+  50% { background: radial-gradient(circle at 30% 30%, rgba(245, 158, 11, 0.9), rgba(120, 53, 15, 0.9)); box-shadow: 0 0 24px rgba(245, 158, 11, 0.45); }
+  100% { background: radial-gradient(circle at 30% 30%, rgba(59, 130, 246, 0.9), rgba(30, 58, 138, 0.9)); box-shadow: 0 0 24px rgba(59, 130, 246, 0.45); }
+}
+
+@keyframes goalStrobe {
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+.goal-light-install {
+  margin-top: 20px;
+  border-top: 1px solid var(--blink-border);
+  padding-top: 18px;
+}
+
+.install-header h3 {
+  margin: 0 0 6px;
+}
+
+.install-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin: 12px 0 16px;
+}
+
+.install-card {
+  border: 1px solid var(--blink-border);
+  border-radius: 12px;
+  background: var(--blink-panel-2);
+  padding: 12px;
+}
+
+.install-card ul {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--blink-soft);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.install-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--blink-soft);
+  margin-bottom: 8px;
+}
+
+.install-process ol {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--blink-soft);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.install-authority {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 6px;
+  margin: 12px 0;
+  font-size: 12px;
+  color: var(--blink-soft);
+}
+
+.install-cost {
+  border: 1px solid rgba(250, 204, 21, 0.4);
+  background: rgba(250, 204, 21, 0.08);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.cost-callout {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.cost-breakdown {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--blink-soft);
+}
+
+.cost-note {
+  font-size: 12px;
+  color: var(--blink-soft);
+  margin-top: 6px;
+}
+
+.install-cta {
+  display: grid;
+  gap: 6px;
+}
+
+.install-cta .primary {
+  align-self: start;
+}
+
+.install-note {
+  font-size: 12px;
+  color: var(--blink-soft);
+}
+
+@media (max-width: 900px) {
+  .goal-light-demo {
+    grid-template-columns: 1fr;
+  }
+}
 @keyframes urgencyPulse {
   0% { transform: scaleX(1); opacity: 0.9; }
   50% { transform: scaleX(1.02); opacity: 1; }
