@@ -55,6 +55,24 @@
       letter-spacing: -0.02em;
     }
 
+    .hero-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: rgba(229, 231, 235, 0.6);
+      text-decoration: none;
+      margin-bottom: 18px;
+      transition: color 200ms ease;
+    }
+
+    .hero-back:hover {
+      color: rgba(229, 231, 235, 0.9);
+      text-decoration: underline;
+      text-decoration-color: rgba(229, 231, 235, 0.35);
+      text-underline-offset: 4px;
+    }
+
     .hero p {
       font-size: 16px;
       line-height: 1.6;
@@ -90,7 +108,7 @@
     }
 
     .hero-visual img {
-      width: min(420px, 100%);
+      width: min(840px, 100%);
       height: auto;
       display: block;
       filter: drop-shadow(0 20px 60px rgba(0, 0, 0, 0.6));
@@ -176,6 +194,174 @@
       margin-top: 8px;
     }
 
+    .cta-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      display: grid;
+      justify-items: center;
+      text-align: center;
+      gap: 10px;
+    }
+
+    .cta-subhead {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .cta-copy {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .cta-footnote {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .reveal-section {
+      padding: 90px 8vw;
+      background: radial-gradient(circle at 20% 20%, rgba(17, 24, 39, 0.7), rgba(4, 7, 14, 0.95) 70%);
+      text-align: left;
+    }
+
+    .reveal-inner {
+      max-width: 980px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(320px, 1.1fr) minmax(280px, 1fr);
+      gap: 48px;
+      align-items: center;
+    }
+
+    .reveal-visual img {
+      width: min(520px, 100%);
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 24px 60px rgba(0, 0, 0, 0.6));
+    }
+
+    .reveal-eyebrow {
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .reveal-title {
+      font-size: clamp(30px, 3.8vw, 44px);
+      margin: 0 0 12px;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+
+    .reveal-subhead {
+      font-size: 15px;
+      color: var(--muted);
+      margin: 0 0 18px;
+      line-height: 1.6;
+    }
+
+    .reveal-body {
+      margin: 0 0 14px;
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .reveal-list {
+      margin: 12px 0 20px;
+      padding-left: 18px;
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .reveal-secondary-title {
+      margin: 20px 0 8px;
+      font-size: 18px;
+    }
+
+    .reveal-price {
+      margin-top: 14px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .reveal-price-note {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .reveal-close {
+      margin-top: 16px;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 900px) {
+      .reveal-inner {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    #blinkFooter {
+      margin-top: 40px;
+      padding: 28px 8vw 40px;
+      background: #070c15;
+      border-top: 1px solid rgba(148, 163, 184, 0.12);
+    }
+
+    .footer-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: grid;
+      gap: 14px;
+    }
+
+    .footer-brand img {
+      width: 180px;
+      height: auto;
+      opacity: 0.8;
+    }
+
+    .footer-copy {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .footer-credit {
+      display: block;
+      margin-top: 8px;
+      color: rgba(229, 231, 235, 0.7);
+      font-weight: 500;
+    }
+
+    .footer-easter-egg {
+      color: rgba(229, 231, 235, 0.6);
+      font-size: 12px;
+      text-decoration: none;
+      width: fit-content;
+      transition: color 200ms ease;
+    }
+
+    .footer-easter-egg:hover {
+      color: rgba(229, 231, 235, 0.9);
+      text-decoration: underline;
+      text-decoration-color: rgba(229, 231, 235, 0.35);
+      text-underline-offset: 4px;
+    }
+
     @media (max-width: 900px) {
       .hero {
         grid-template-columns: 1fr;
@@ -191,6 +377,7 @@
 <body>
   <section class="hero">
     <div class="hero-content">
+      <a class="hero-back" href="index.html">← Back to Blink Response Engine</a>
       <h1>This isn’t software. It’s a real goal light.</h1>
       <p>
         Blink connects a physical tower light to live CRM traffic,
@@ -205,60 +392,144 @@
   </section>
 
   <section>
-    <h2 class="section-title">A lead hits. The light tells the truth.</h2>
+    <h2 class="section-title">Can you imagine if every lead felt like a goal opportunity?</h2>
+    <p class="behavior-copy">
+      This isn’t another alert, report, or dashboard. It’s a physical signal the entire sales floor can feel in real time.
+    </p>
     <ul class="bullet-list">
-      <li>Lead arrives in the CRM</li>
-      <li>Blink timestamps and opens the response window</li>
-      <li>The tower light activates instantly</li>
-      <li>The floor knows demand is live</li>
-      <li>First real response wins</li>
+      <li>Can you imagine a lead arriving and the whole desking office knowing instantly</li>
+      <li>Can you imagine fast responses being felt, not tracked</li>
+      <li>Can you imagine booked appointments triggering visible celebration</li>
+      <li>Can you imagine hesitation becoming noticeable before it costs the deal</li>
+      <li>Can you imagine speed becoming a habit without anyone being called out</li>
     </ul>
+    <p class="behavior-copy">
+      This is a goal light. Wins become moments. Delays become visible. The system carries the pressure so managers don’t have to.
+    </p>
   </section>
 
   <section>
     <h2 class="section-title">Visible systems change behavior.</h2>
     <p class="behavior-copy">
       Dashboards get ignored. Notifications get muted. Physical signals are impossible to miss.
-      This light becomes a living process control — reinforcing good habits and exposing delay without confrontation.
+      This light becomes a living process control that reinforces good habits and exposes delay without confrontation.
     </p>
   </section>
 
   <section>
-    <h2 class="section-title">This is a real install — not a concept.</h2>
+    <h2 class="section-title">This is a real install, not a concept.</h2>
+    <p class="behavior-copy">
+      This is a physical infrastructure install, treated with the same discipline as any other commercial system inside a dealership.
+    </p>
     <div class="install-grid">
       <div class="install-column">
         <h4>Industrial hardware</h4>
-        <ul>
-          <li>Commercial LED tower light</li>
-          <li>Continuous-duty rated</li>
-          <li>CSA / UL components</li>
-        </ul>
+        <p>Commercial LED tower light, continuous-duty rated, designed for constant operation. CSA / UL certified components built for industrial and commercial environments.</p>
       </div>
       <div class="install-column">
         <h4>Control &amp; network</h4>
-        <ul>
-          <li>Blink-driven state logic</li>
-          <li>Secure LAN or VLAN</li>
-          <li>No cloud dependency required</li>
-        </ul>
+        <p>Blink-driven state logic integrated into dealership LAN or VLAN. Secure, deterministic behavior with no cloud dependency required to function. Designed to coexist cleanly with existing IT policies.</p>
       </div>
       <div class="install-column">
-        <h4>Professional install</h4>
-        <ul>
-          <li>Mounted in desking / manager office</li>
-          <li>Clean conduit and labeling</li>
-          <li>Installed by licensed contractor</li>
-        </ul>
+        <h4>Professional installation</h4>
+        <p>Mounted in the desking or sales manager office with clean conduit, labeling, and routing. Installed by licensed professionals, inspected and commissioned. No exposed wiring, no shortcuts, no “temporary” installs.</p>
       </div>
     </div>
-    <div class="cost-callout">All-in: under $2,000 installed.</div>
-    <div class="cost-note">One missed appointment pays for this.</div>
+    <p class="behavior-copy">
+      This is treated like installing a new paint booth, network rack, or shop equipment because it is infrastructure.
+    </p>
   </section>
 
   <section class="cta-band" id="cta">
-    <h3>Make response speed visible.</h3>
-    <a href="#" class="hero-cta">Install the Blink Goal Light</a>
-    <div class="hero-cta-note">Sourcing, wiring, programming, and commissioning handled.</div>
+    <div class="cta-inner">
+      <h3>Installed. Wired. Live.</h3>
+      <div class="cta-subhead">Yeah, this is real. Most installs land under $2,000.</div>
+      <p class="cta-copy">
+        This isn’t a prototype. It’s not a mockup.<br />
+        It’s a real, physical goal light installed in your desking office.<br />
+        wired into your CRM, pulsing in real time with live lead activity.
+      </p>
+      <p class="cta-copy">
+        Blink handles the sourcing, wiring, network coordination, and commissioning.<br />
+        You get a visible, undeniable signal that says: <strong>we move fast here.</strong>
+      </p>
+      <p class="cta-copy">
+        Most installs come in under $2,000.<br />
+        When they don’t, you’ll know upfront. No surprises. No bullshit.
+      </p>
+      <p class="cta-copy">This is lean process, CANI, and accountability made physical.</p>
+      <a href="mailto:mgallant@winnipeghyundai.com?subject=BRO%20-%20Let%E2%80%99s%20install%20the%20Blink%20Goal%20Light%20%F0%9F%9A%A8&body=BRO!!!%0A%0AWe%E2%80%99re%20on.%20This%20is%20sick.%0A%0ALet%E2%80%99s%20make%20the%20Blink%20Goal%20Light%20real.%0AInstall%20it%20in%20the%20desking%20office.%0AWire%20it%20into%20the%20system.%0AMake%20lead%20response%20impossible%20to%20ignore.%0A%0AThis%20is%20exactly%20the%20kind%20of%20thing%20that%20makes%20the%20floor%20move%20faster.%0A%0AFUCK%20YEAH.%20Let%E2%80%99s%20go.%0A%0A-%20Mitch" class="hero-cta">Install the Blink Goal Light</a>
+    <div class="hero-cta-note">We’ll coordinate IT, installation, and commissioning.</div>
+      <div class="cta-footnote">
+        Install requirements vary by site and IT standards.<br />
+        We coordinate with facilities and internal IT, handle sequencing,<br />
+        and act as GC through completion.
+      </div>
+    </div>
   </section>
+
+  <section class="reveal-section">
+    <div class="reveal-inner">
+      <div class="reveal-visual">
+        <img src="assets/images/light2.png" alt="BlinkLight 2.0" />
+      </div>
+      <div class="reveal-copy">
+        <div class="reveal-eyebrow">BlinkLight 2.0 — Expanded</div>
+        <h3 class="reveal-title">The light doesn’t just flash. It talks back.</h3>
+        <p class="reveal-subhead">
+          A real-world signal tower, paired with a custom AI layer that listens, speaks, and drives action from your CRM.
+        </p>
+        <p class="reveal-body">
+          BlinkLight 2.0 is physical infrastructure. Metal. Wiring. LEDs. A speaker. Installed in your sales environment.
+        </p>
+        <p class="reveal-body">The AI layer takes it further.</p>
+        <p class="reveal-body">
+          When something matters, the system says it out loud: Appointments booked. Response windows closing. Momentum building.
+        </p>
+        <p class="reveal-body">
+          No dashboards. No guessing. No chasing updates. Just the room knowing what just happened, instantly.
+        </p>
+        <ul class="reveal-list">
+          <li>Speaks real events in plain language</li>
+          <li>Names the rep, the customer, and the action</li>
+          <li>Reinforces wins the moment they happen</li>
+          <li>Trains urgency without management noise</li>
+        </ul>
+        <h4 class="reveal-secondary-title">Add the AI layer that runs the room.</h4>
+        <p class="reveal-body">
+          This is a custom-programmed AI layer designed to sit on top of BlinkLight.
+        </p>
+        <p class="reveal-body">
+          It listens to system truth. It speaks only when something matters. It reinforces the behaviors that close deals.
+        </p>
+        <p class="reveal-body">
+          This is not a chatbot. It’s not customer-facing. It’s operational intelligence made audible.
+        </p>
+        <p class="reveal-body">Internally, we call it Wynn.</p>
+        <div class="reveal-price">$17,500 — one-time implementation</div>
+        <div class="reveal-price-note">Custom trained. Installed. Integrated. Owned.</div>
+        <div class="reveal-close">
+          This is how modern sales floors operate. Out loud. In real time. Without excuses.
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer id="blinkFooter">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="assets/images/blinkResponseSystems_logo.png" alt="Blink logo" />
+      </div>
+      <p class="footer-copy">
+        This page was built to show how Blink actually works — not features, not dashboards, not promises.
+        Just system truth, visible behavior, and response speed.
+        If you’re still reading, you’re probably who this was built for.
+        <span class="footer-credit">Made with love. A project produced by Gallant Works Co.</span>
+      </p>
+      <a href="tower-light.html" class="footer-easter-egg">
+        This part isn’t for everyone.
+      </a>
+    </div>
+  </footer>
+
 </body>
 </html>

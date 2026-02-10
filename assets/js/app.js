@@ -684,230 +684,154 @@ function markPhoneClaimed(repName) {
 }
 
 function initRealityTimeline() {
-  const clock = document.getElementById("delayClock");
-  const clockSub = document.getElementById("clockSub");
-  const card = document.getElementById("behaviorCard");
-  const title = document.getElementById("behaviorTitle");
-  const body = document.getElementById("behaviorBody");
-  const meta = document.getElementById("behaviorMeta");
-  const guest = document.getElementById("realityGuest");
-  const vehicle = document.getElementById("realityVehicle");
-  const source = document.getElementById("realitySource");
-  const reality = document.getElementById("reality");
-  const showroomScene = document.getElementById("showroomScene");
-  const showroomNarration = document.getElementById("showroomNarration");
-  const showroomOverlay = document.getElementById("showroomOverlay");
-  const thoughtLine = document.getElementById("thoughtLine");
-  const patienceFill = document.getElementById("patienceFill");
-  const patienceCopy = document.getElementById("patienceCopy");
-  const attentionYour = document.getElementById("attentionYour");
-  const attentionBirchwood = document.getElementById("attentionBirchwood");
-  const attentionFocus = document.getElementById("attentionFocus");
-  const attentionMurray = document.getElementById("attentionMurray");
-  const finalOverlay = document.getElementById("realityFinalOverlay");
-  if (!clock || !clockSub || !card || !title || !body || !meta || !guest || !vehicle || !source || !reality) return;
+  const section = document.getElementById("reality");
+  if (!section) return;
 
-  const total = 120;
-  const ranges = [
-    { from: 0, to: 20, headline: "Guest just walked in.", subtext: "They’re looking around. Expectations are high.", narration: "A guest just walked in." },
-    { from: 21, to: 40, headline: "They’re still waiting.", subtext: "They assume someone will be right with them.", narration: "They’re waiting near the desk." },
-    { from: 41, to: 60, headline: "This is starting to feel uncomfortable.", subtext: "No greeting. No acknowledgment.", narration: "No one has acknowledged them yet." },
-    { from: 61, to: 80, headline: "A manager would notice this.", subtext: "This wouldn’t be acceptable on the floor.", narration: "This would feel uncomfortable in person." },
-    { from: 81, to: 105, headline: "They’re questioning the store.", subtext: "Professionalism. Care. Attention.", narration: "A manager would step in by now." },
-    { from: 106, to: 119, headline: "They’re about to leave.", subtext: "And they won’t tell you why.", narration: "They’re deciding whether to leave." }
+  const timerBox = section.querySelector(".reality-timer");
+  const timerValue = section.querySelector("#realityTimerValue");
+  const timerStatus = section.querySelector("#realityTimerStatus");
+  const timerEscalation = section.querySelector("#realityTimerEscalation");
+  const trustFill = section.querySelector("#trustFill");
+  const trustValue = section.querySelector("#trustValue");
+  const competitorFill = section.querySelector("#competitorFill");
+  const competitorValue = section.querySelector("#competitorValue");
+  const statusLine = section.querySelector("#realityStatusLine");
+  const dots = section.querySelectorAll(".competitor-dot");
+
+  if (!timerBox || !timerValue || !timerStatus || !trustFill || !competitorFill || !statusLine) return;
+
+  section.classList.add("will-animate");
+
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const totalSeconds = 120;
+  const simulationMs = 14000;
+  let startTime = null;
+  let lastSecond = -1;
+  let lastStatus = "";
+  let lastLine = "";
+  let dotsActive = false;
+  let started = false;
+
+  const statusRanges = [
+    { from: 0, to: 20, text: "Fresh. Guest is hopeful." },
+    { from: 20, to: 60, text: "Uncertainty rises." },
+    { from: 60, to: 120, text: "Guest starts drifting." },
+    { from: 120, to: Infinity, text: "You're now chasing." }
   ];
 
-  const patienceStates = [
-    { from: 0, to: 30, text: "Engaged. Expecting a response." },
-    { from: 31, to: 60, text: "Waiting politely." },
-    { from: 61, to: 90, text: "Confidence slipping." },
-    { from: 91, to: 110, text: "Reconsidering the store." },
-    { from: 111, to: 120, text: "About to move on." }
+  const lineRanges = [
+    { from: 0, to: 50, text: "Still waiting... checking phone..." },
+    { from: 50, to: 90, text: "Still waiting... opening other tabs..." },
+    { from: 90, to: 120, text: "Still waiting... messaging other dealers..." },
+    { from: 120, to: Infinity, text: "You're now chasing." }
   ];
 
-  const thoughtLines = [
-    "Did my message even go through?",
-    "Maybe Birchwood will reply faster.",
-    "This is a big purchase — I don’t want to regret it.",
-    "If they’re slow now, what about service later?",
-    "Winter’s coming. I need confidence in the store.",
-    "I don’t want to make the wrong choice."
-  ];
-
-  const thoughtDurations = [10, 9, 11, 8, 10, 9];
-  let lastThoughtIndex = -1;
-  let lastPatienceText = "";
-
-  let startTime = Date.now();
-  let frozen = false;
-
-  function formatTime(seconds) {
+  const formatTime = seconds => {
     const m = Math.floor(seconds / 60);
-    const s = seconds % 60;
+    const s = Math.floor(seconds % 60);
     return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+  };
+
+  const findRangeText = (seconds, ranges) => {
+    const match = ranges.find(range => seconds >= range.from && seconds < range.to);
+    return match ? match.text : ranges[ranges.length - 1].text;
+  };
+
+  const updateText = seconds => {
+    const statusText = findRangeText(seconds, statusRanges);
+    if (statusText !== lastStatus) {
+      lastStatus = statusText;
+      timerStatus.textContent = statusText;
+    }
+
+    const lineText = findRangeText(seconds, lineRanges);
+    if (lineText !== lastLine) {
+      lastLine = lineText;
+      statusLine.textContent = lineText;
+    }
+  };
+
+  const updateBars = progress => {
+    const trust = Math.max(0.18, 1 - progress * 0.82);
+    const competitor = Math.min(0.85, progress * 0.85);
+    trustFill.style.width = `${(trust * 100).toFixed(1)}%`;
+    competitorFill.style.width = `${(competitor * 100).toFixed(1)}%`;
+    if (trustValue) trustValue.textContent = `${Math.round(trust * 100)}%`;
+    if (competitorValue) competitorValue.textContent = `${Math.round(competitor * 100)}%`;
+  };
+
+  const updateIndicators = seconds => {
+    const shouldActivateDots = seconds >= 90;
+    if (shouldActivateDots !== dotsActive) {
+      dotsActive = shouldActivateDots;
+      dots.forEach(dot => dot.classList.toggle("is-active", dotsActive));
+    }
+  };
+
+  const updateEscalation = seconds => {
+    if (!timerEscalation) return;
+    const escalated = seconds >= totalSeconds;
+    timerBox.classList.toggle("is-escalated", escalated);
+    timerEscalation.setAttribute("aria-hidden", escalated ? "false" : "true");
+  };
+
+  const setFrame = (seconds, progress) => {
+    timerBox.style.setProperty("--timer-progress", progress.toFixed(3));
+    updateText(seconds);
+    updateBars(progress);
+    updateIndicators(seconds);
+    updateEscalation(seconds);
+  };
+
+  const step = now => {
+    if (!startTime) startTime = now;
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / simulationMs, 1);
+    const seconds = Math.round(progress * totalSeconds);
+
+    if (seconds !== lastSecond) {
+      lastSecond = seconds;
+      timerValue.textContent = formatTime(seconds);
+    }
+
+    setFrame(seconds, progress);
+
+    if (progress < 1) {
+      realityTimer = requestAnimationFrame(step);
+    }
+  };
+
+  const start = () => {
+    if (started) return;
+    started = true;
+    section.classList.add("is-visible");
+    if (prefersReducedMotion) {
+      timerValue.textContent = formatTime(0);
+      setFrame(0, 0);
+      return;
+    }
+    if (realityTimer) cancelAnimationFrame(realityTimer);
+    startTime = null;
+    realityTimer = requestAnimationFrame(step);
+  };
+
+  if (!("IntersectionObserver" in window)) {
+    start();
+    return;
   }
 
-  function updateNarrative(elapsed) {
-    const range = ranges.find(r => elapsed >= r.from && elapsed <= r.to);
-    if (range) {
-      title.innerText = range.headline;
-      body.innerText = range.subtext;
-      meta.innerText = `${formatTime(range.from)}–${formatTime(range.to)}`;
-      if (showroomNarration) {
-        showroomNarration.style.opacity = "0";
-        showroomNarration.style.transform = "translateY(4px)";
-        setTimeout(() => {
-          showroomNarration.innerText = range.narration;
-          showroomNarration.style.opacity = "1";
-          showroomNarration.style.transform = "translateY(0)";
-        }, 200);
-      }
-    }
-  }
+  const observer = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        start();
+        observer.unobserve(section);
+      });
+    },
+    { threshold: 0.35 }
+  );
 
-  function mixColor(start, end, ratio) {
-    const mix = (a, b) => Math.round(a + (b - a) * ratio);
-    return `rgb(${mix(start[0], end[0])}, ${mix(start[1], end[1])}, ${mix(start[2], end[2])})`;
-  }
-
-  function updatePatience(elapsed) {
-    if (!patienceFill || !patienceCopy) return;
-    const baseRemaining = 1 - elapsed / total;
-    const accel = elapsed > 90 ? Math.pow((elapsed - 90) / 30, 2) * 0.08 : 0;
-    const remaining = Math.max(0.02, baseRemaining - accel);
-    patienceFill.style.width = `${Math.max(0, Math.min(1, remaining)) * 100}%`;
-
-    const progress = 1 - remaining;
-    const startColor = [120, 176, 208];
-    const midColor = [184, 192, 201];
-    const endColor = [214, 170, 120];
-    let color = "";
-    if (progress < 0.6) {
-      color = mixColor(startColor, midColor, progress / 0.6);
-    } else {
-      color = mixColor(midColor, endColor, (progress - 0.6) / 0.4);
-    }
-    patienceFill.style.backgroundColor = color;
-
-    const state = patienceStates.find(s => elapsed >= s.from && elapsed <= s.to);
-    if (state && state.text !== lastPatienceText) {
-      lastPatienceText = state.text;
-      patienceCopy.style.opacity = "0";
-      setTimeout(() => {
-        patienceCopy.textContent = state.text;
-        patienceCopy.style.opacity = "1";
-      }, 220);
-    }
-  }
-
-  function updateAttentionSplit(elapsed) {
-    if (!attentionYour || !attentionBirchwood || !attentionFocus || !attentionMurray) return;
-    const t = Math.min(1, elapsed / total);
-    const drift = Math.min(1, t + Math.max(0, (t - 0.75)) * 0.2);
-    let yourShare = 0.68 - drift * 0.18;
-    yourShare = Math.max(0.46, Math.min(0.7, yourShare));
-    const competitorTotal = 1 - yourShare;
-    const weights = [0.36, 0.34, 0.30];
-    const birchwood = competitorTotal * weights[0];
-    const focus = competitorTotal * weights[1];
-    const murray = competitorTotal * weights[2];
-
-    attentionYour.style.width = `${yourShare * 100}%`;
-    attentionBirchwood.style.width = `${birchwood * 100}%`;
-    attentionFocus.style.width = `${focus * 100}%`;
-    attentionMurray.style.width = `${murray * 100}%`;
-  }
-
-  function updateThoughts(elapsed) {
-    if (!thoughtLine) return;
-    const totalCycle = thoughtDurations.reduce((sum, value) => sum + value, 0);
-    const position = elapsed % totalCycle;
-    let index = 0;
-    let cursor = 0;
-    for (let i = 0; i < thoughtDurations.length; i++) {
-      cursor += thoughtDurations[i];
-      if (position < cursor) {
-        index = i;
-        break;
-      }
-    }
-    if (index !== lastThoughtIndex) {
-      lastThoughtIndex = index;
-      thoughtLine.style.opacity = "0";
-      setTimeout(() => {
-        thoughtLine.textContent = thoughtLines[index % thoughtLines.length];
-        thoughtLine.style.opacity = "1";
-      }, 240);
-    }
-  }
-
-  function updateVisuals(elapsed, remaining) {
-    const dimLevel = Math.min(6, Math.floor((elapsed / total) * 6) + 1);
-    const classes = ["reality-dim-1", "reality-dim-2", "reality-dim-3", "reality-dim-4", "reality-dim-5", "reality-dim-6"];
-    reality.classList.remove(...classes);
-    reality.classList.add(classes[dimLevel - 1]);
-
-    if (elapsed >= 75) {
-      reality.classList.add("reality-emphasis");
-    } else {
-      reality.classList.remove("reality-emphasis");
-    }
-
-    if (remaining <= 10) {
-      reality.classList.add("reality-last10");
-    } else {
-      reality.classList.remove("reality-last10");
-    }
-
-    if (showroomScene) {
-      const brightness = elapsed <= 75 ? 1 - (elapsed / 75) * 0.4 : 0.6 - ((elapsed - 75) / 45) * 0.2;
-      const saturation = elapsed <= 75 ? 1 - (elapsed / 75) * 0.25 : 0.75 - ((elapsed - 75) / 45) * 0.25;
-      showroomScene.style.filter = `brightness(${Math.max(0.4, brightness)}) saturate(${Math.max(0.4, saturation)})`;
-    }
-  }
-
-  function tick() {
-    if (frozen) return;
-    const elapsed = Math.min(total, Math.floor((Date.now() - startTime) / 1000));
-    const remaining = Math.max(0, total - elapsed);
-    clock.innerText = formatTime(remaining);
-    clockSub.innerText = remaining === 0 ? "Escalation reached" : "Countdown to escalation";
-    card.classList.remove("escalated");
-    updateNarrative(elapsed);
-    updateVisuals(elapsed, remaining);
-    updatePatience(elapsed);
-    updateAttentionSplit(elapsed);
-    updateThoughts(elapsed);
-
-    if (activeLead) {
-      guest.innerText = activeLead.customer || "New guest";
-      vehicle.innerText = activeLead.vehicle || "Vehicle interest";
-      source.innerText = activeLead.source || "Inbound lead";
-    }
-
-    if (remaining === 0) {
-      frozen = true;
-      title.innerText = "Blink escalates before this moment.";
-      body.innerText = "Digital and in-store response standards are aligned.";
-      meta.innerText = "Escalation / manager visibility";
-      card.classList.add("escalated");
-      if (finalOverlay) {
-        finalOverlay.classList.add("show");
-        finalOverlay.setAttribute("aria-hidden", "false");
-      }
-      setTimeout(() => {
-        frozen = false;
-        if (finalOverlay) {
-          finalOverlay.classList.remove("show");
-          finalOverlay.setAttribute("aria-hidden", "true");
-        }
-        startTime = Date.now();
-      }, 2500);
-    }
-  }
-
-  setInterval(tick, 1000);
-  tick();
+  observer.observe(section);
 }
 
 function renderLeadPreviews() {
@@ -1266,6 +1190,244 @@ function initGoalLight() {
   setGoalLightState("IDLE");
 }
 
+function initAutomationWorkflow() {
+  const section = document.getElementById("automation-workflow");
+  if (!section) return;
+
+  const panel = section.querySelector(".workflow-panel");
+  const svg = section.querySelector(".workflow-lines");
+  const grid = section.querySelector(".workflow-grid");
+  if (!panel || !svg || !grid) return;
+
+  section.classList.add("will-animate");
+
+  const connections = [
+    { id: "lead-contest", from: "lead", to: "contest", fromAnchor: "right", toAnchor: "left" },
+    { id: "contest-winner", from: "contest", to: "winner", fromAnchor: "bottom", toAnchor: "top" },
+    { id: "winner-late", from: "winner", to: "late", fromAnchor: "left", toAnchor: "right", fromOffsetY: 10 },
+    { id: "winner-ds", from: "winner", to: "ds", fromAnchor: "right", toAnchor: "left", fromOffsetY: -14 },
+    { id: "winner-vid", from: "winner", to: "vid", fromAnchor: "right", toAnchor: "left", fromOffsetY: 14 },
+    { id: "winner-call", from: "winner", to: "call", fromAnchor: "right", toAnchor: "left" },
+    { id: "call-appt", from: "call", to: "appt", fromAnchor: "bottom", toAnchor: "top" }
+  ];
+
+  const getAnchor = (element, anchor, panelRect, offset = {}) => {
+    const rect = element.getBoundingClientRect();
+    const x = rect.left - panelRect.left;
+    const y = rect.top - panelRect.top;
+    const width = rect.width;
+    const height = rect.height;
+    const midX = x + width / 2;
+    const midY = y + height / 2;
+    let point;
+
+    switch (anchor) {
+      case "left":
+        point = { x, y: midY };
+        break;
+      case "right":
+        point = { x: x + width, y: midY };
+        break;
+      case "top":
+        point = { x: midX, y };
+        break;
+      case "bottom":
+        point = { x: midX, y: y + height };
+        break;
+      default:
+        point = { x: midX, y: midY };
+        break;
+    }
+
+    return {
+      x: point.x + (offset.x || 0),
+      y: point.y + (offset.y || 0)
+    };
+  };
+
+  const buildCurve = (start, end) => {
+    const deltaX = (end.x - start.x) * 0.5;
+    return `M ${start.x} ${start.y} C ${start.x + deltaX} ${start.y} ${end.x - deltaX} ${end.y} ${end.x} ${end.y}`;
+  };
+
+  const drawLines = () => {
+    const panelRect = panel.getBoundingClientRect();
+    if (!panelRect.width || !panelRect.height) return;
+
+    svg.setAttribute("viewBox", `0 0 ${panelRect.width} ${panelRect.height}`);
+
+    connections.forEach(connection => {
+      const paths = svg.querySelectorAll(`[data-connector="${connection.id}"]`);
+      const fromEl = section.querySelector(`[data-node="${connection.from}"]`);
+      const toEl = section.querySelector(`[data-node="${connection.to}"]`);
+      if (!paths.length || !fromEl || !toEl) return;
+
+      const start = getAnchor(fromEl, connection.fromAnchor, panelRect, {
+        x: connection.fromOffsetX,
+        y: connection.fromOffsetY
+      });
+      const end = getAnchor(toEl, connection.toAnchor, panelRect, {
+        x: connection.toOffsetX,
+        y: connection.toOffsetY
+      });
+
+      if (connection.id === "spine") {
+        const y = (start.y + end.y) / 2;
+        start.y = y;
+        end.y = y;
+      }
+
+      if (connection.id === "response-insight" || connection.id === "handoff-outcomes") {
+        const x = (start.x + end.x) / 2;
+        start.x = x;
+        end.x = x;
+      }
+
+      const d = buildCurve(start, end);
+      paths.forEach(path => path.setAttribute("d", d));
+    });
+  };
+
+  let resizeTimer;
+  const handleResize = () => {
+    if (resizeTimer) clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(drawLines, 120);
+  };
+
+  requestAnimationFrame(drawLines);
+  window.addEventListener("resize", handleResize);
+
+  if (!("IntersectionObserver" in window)) {
+    section.classList.add("is-visible");
+    drawLines();
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        section.classList.add("is-visible");
+        drawLines();
+        observer.unobserve(section);
+      });
+    },
+    { threshold: 0.35 }
+  );
+
+  observer.observe(section);
+}
+
+function initOutcomesMap() {
+  const section = document.getElementById("outcomesOrbit");
+  if (!section) return;
+
+  const panel = section.querySelector(".outcomes-map-panel");
+  const svg = section.querySelector(".outcomes-lines");
+  if (!panel || !svg) return;
+
+  section.classList.add("will-animate");
+
+  const connections = [
+    { id: "spine", from: "lead", to: "handoff", fromAnchor: "right", toAnchor: "left" },
+    { id: "response-insight", from: "response", to: "insight", fromAnchor: "bottom", toAnchor: "top" },
+    { id: "handoff-outcomes", from: "handoff", to: "outcomes", fromAnchor: "bottom", toAnchor: "top" }
+  ];
+
+  const getAnchor = (element, anchor, panelRect, offset = {}) => {
+    const rect = element.getBoundingClientRect();
+    const x = rect.left - panelRect.left;
+    const y = rect.top - panelRect.top;
+    const width = rect.width;
+    const height = rect.height;
+    const midX = x + width / 2;
+    const midY = y + height / 2;
+    let point;
+
+    switch (anchor) {
+      case "left":
+        point = { x, y: midY };
+        break;
+      case "right":
+        point = { x: x + width, y: midY };
+        break;
+      case "top":
+        point = { x: midX, y };
+        break;
+      case "bottom":
+        point = { x: midX, y: y + height };
+        break;
+      default:
+        point = { x: midX, y: midY };
+        break;
+    }
+
+    return {
+      x: point.x + (offset.x || 0),
+      y: point.y + (offset.y || 0)
+    };
+  };
+
+  const buildCurve = (start, end) => {
+    const deltaX = (end.x - start.x) * 0.5;
+    return `M ${start.x} ${start.y} C ${start.x + deltaX} ${start.y} ${end.x - deltaX} ${end.y} ${end.x} ${end.y}`;
+  };
+
+  const drawLines = () => {
+    const panelRect = panel.getBoundingClientRect();
+    if (!panelRect.width || !panelRect.height) return;
+
+    svg.setAttribute("viewBox", `0 0 ${panelRect.width} ${panelRect.height}`);
+
+    connections.forEach(connection => {
+      const paths = svg.querySelectorAll(`[data-connector="${connection.id}"]`);
+      const fromEl = section.querySelector(`[data-node="${connection.from}"]`);
+      const toEl = section.querySelector(`[data-node="${connection.to}"]`);
+      if (!paths.length || !fromEl || !toEl) return;
+
+      const start = getAnchor(fromEl, connection.fromAnchor, panelRect, {
+        x: connection.fromOffsetX,
+        y: connection.fromOffsetY
+      });
+      const end = getAnchor(toEl, connection.toAnchor, panelRect, {
+        x: connection.toOffsetX,
+        y: connection.toOffsetY
+      });
+      const d = buildCurve(start, end);
+      paths.forEach(path => path.setAttribute("d", d));
+    });
+  };
+
+  let resizeTimer;
+  const handleResize = () => {
+    if (resizeTimer) clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(drawLines, 120);
+  };
+
+  requestAnimationFrame(drawLines);
+  window.addEventListener("resize", handleResize);
+
+  if (!("IntersectionObserver" in window)) {
+    section.classList.add("is-visible");
+    drawLines();
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        section.classList.add("is-visible");
+        drawLines();
+        observer.unobserve(section);
+      });
+    },
+    { threshold: 0.35 }
+  );
+
+  observer.observe(section);
+}
+
 let towerTimeout = null;
 
 function setTowerState(state) {
@@ -1350,5 +1512,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initAccordion();
   initDsqPayoffs();
   initGoalLight();
+  initAutomationWorkflow();
+  initOutcomesMap();
   initTowerLight();
 });

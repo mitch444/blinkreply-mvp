@@ -7,6 +7,97 @@
   <link rel="icon" href="assets/icons/ico.png" />
   <link rel="stylesheet" href="assets/css/styles.css" />
   <style>
+    #news {
+      margin-bottom: 22px;
+      border: 1px solid #1f2937;
+      border-radius: 16px;
+      padding: 20px;
+      background: linear-gradient(135deg, #0b1220 0%, #0f172a 50%, #111827 100%);
+    }
+
+    #news h1 {
+      margin: 0 0 6px;
+      font-size: 22px;
+    }
+
+    #news .subtext {
+      margin-bottom: 16px;
+      color: #cbd5f5;
+    }
+
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .news-card {
+      border: 1px solid #1f2937;
+      background: #0b1220;
+      border-radius: 16px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .news-thumb {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #1f2937;
+      background: #0f172a;
+    }
+
+    .news-thumb img {
+      width: 100%;
+      height: clamp(160px, 24vw, 200px);
+      object-fit: cover;
+      display: block;
+    }
+
+    .news-title {
+      margin: 0;
+      font-size: 18px;
+      color: #f8fafc;
+    }
+
+    .news-meta {
+      font-size: 12px;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .news-body {
+      margin: 0;
+      color: #e2e8f0;
+      line-height: 1.5;
+    }
+
+    .news-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: #a5b4fc;
+    }
+
+    .news-links a {
+      color: #facc15;
+      text-decoration: none;
+    }
+
+    .news-links a:hover {
+      text-decoration: underline;
+    }
+
+    .news-divider {
+      height: 1px;
+      background: #1f2937;
+      margin: 10px 0 2px;
+    }
+
     #examples {
       border: 1px solid #1f2937;
       border-radius: 14px;
@@ -171,7 +262,7 @@
 <body>
   <nav id="topNav">
     <div id="brandBlock">
-      <img src="assets/images/blink-logo-horizontal-dark.png" alt="Blink Response Engine logo" id="logo" />
+      <img src="assets/images/blinkResponseSystems_logo.png" alt="Blink Response Engine logo" id="logo" />
       <div>
         <div id="brandTitle">Blink Response Engine — Rapid Response (Local MVP)</div>
         <div class="helper-line">Operational lead routing with DealerSocket synchronization.</div>
@@ -187,6 +278,83 @@
       <a href="settings.html" class="nav-link">Settings</a>
     </div>
   </nav>
+
+  <section id="news">
+    <h1>News + Intelligence</h1>
+    <div class="subtext">Short, tactical posts on the mechanics that make Blink feel inevitable inside a dealership.</div>
+    <div class="news-grid">
+      <article class="news-card" id="post-rcs">
+        <div class="news-thumb">
+          <img class="lightboxable" src="assets/images/rcs.png" alt="RCS messaging concept thumbnail" />
+        </div>
+        <div class="news-meta">RCS • Conversion Lift</div>
+        <h2 class="news-title">RCS Messaging: Richer Threads, Faster Yes</h2>
+        <p class="news-body">
+          When every lead starts in a text thread, you can’t afford one-dimensional SMS. RCS adds rich cards,
+          suggested replies, and verified branding, which means the buyer feels the experience is anchored to a
+          real store with immediate context. That trust shows up as speed: faster replies, fewer drop-offs, and a
+          measurable lift in booked appointments. Blink uses RCS to keep every interaction brand-forward while
+          still pushing the next best action in a single tap.
+        </p>
+        <p class="news-body">
+          Pair this with the power dialer cadence and the inventory intelligence, and you create a “thread +
+          call + vehicle” loop that feels instant to the shopper.
+        </p>
+        <div class="news-links">
+          <span>Related:</span>
+          <a href="#post-dialer">Power Dialers</a>
+          <a href="#post-inventory">Smart Inventory Lists</a>
+        </div>
+      </article>
+
+      <article class="news-card" id="post-dialer">
+        <div class="news-thumb">
+          <img class="lightboxable" src="assets/images/powerDialer.jpg" alt="Power dialer workflow thumbnail" />
+        </div>
+        <div class="news-meta">Dialing • Productivity</div>
+        <h2 class="news-title">Power Dialers: Velocity You Can Feel</h2>
+        <p class="news-body">
+          Productivity isn’t the number of dials — it’s the time from lead to live human contact. A power dialer
+          compresses that window by automating call queues, logging outcomes, and re-routing missed calls to the
+          next available rep. Blink treats every call as a state transition in the response engine, so the system
+          knows exactly when to trigger a text follow-up or push an inventory suggestion.
+        </p>
+        <p class="news-body">
+          That’s why dialer activity looks like momentum instead of noise. The rep moves faster, the manager sees
+          more signal, and the shopper experiences a brand that responds like a concierge.
+        </p>
+        <div class="news-links">
+          <span>Related:</span>
+          <a href="#post-rcs">RCS Messaging</a>
+          <a href="#post-inventory">Smart Inventory Lists</a>
+        </div>
+      </article>
+
+      <article class="news-card" id="post-inventory">
+        <div class="news-thumb">
+          <img class="lightboxable" src="assets/images/concept_invmatch.png" alt="Smart inventory list thumbnail" />
+        </div>
+        <div class="news-meta">Inventory • Sales Enablement</div>
+        <h2 class="news-title">Smart Inventory Lists: The Rep’s Instant Advantage</h2>
+        <p class="news-body">
+          The old inventory list is just a catalog. A smart list is a live selling weapon. Blink surfaces units
+          based on lead intent, current incentives, and store priorities — so the rep doesn’t scroll, they act.
+          The list adapts in real time to match availability and buying signals, giving every conversation a
+          curated set of options that feel “made for me” to the shopper.
+        </p>
+        <p class="news-body">
+          When the list is in the rep’s pocket, the response engine keeps velocity high. It’s the bridge between
+          messaging and the showroom, where most CRMs still break.
+        </p>
+        <div class="news-links">
+          <span>Related:</span>
+          <a href="#post-rcs">RCS Messaging</a>
+          <a href="#post-dialer">Power Dialers</a>
+        </div>
+      </article>
+    </div>
+    <div class="news-divider"></div>
+  </section>
 
   <section id="examples">
     <h1>Product Examples</h1>
@@ -382,5 +550,22 @@
       moveLightbox(1);
     });
   </script>
+  <footer id="blinkFooter">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="assets/images/blinkResponseSystems_logo.png" alt="Blink logo" />
+      </div>
+      <p class="footer-copy">
+        This page was built to show how Blink actually works — not features, not dashboards, not promises.
+        Just system truth, visible behavior, and response speed.
+        If you’re still reading, you’re probably who this was built for.
+        <span class="footer-credit">Made with love. A project produced by Gallant Works Co.</span>
+      </p>
+      <a href="tower-light.html" class="footer-easter-egg">
+        This part isn’t for everyone.
+      </a>
+    </div>
+  </footer>
+
 </body>
 </html>

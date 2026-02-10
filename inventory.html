@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blink Response Engine — Inventory</title>
+  <link rel="icon" href="assets/icons/ico.png" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="assets/css/inventory.css" />
+</head>
+<body>
+  <nav id="topNav">
+    <div id="brandBlock">
+      <img src="assets/images/blinkResponseSystems_logo.png" alt="Blink Response Engine logo" id="logo" />
+      <div>
+        <div id="brandTitle">Blink Response Engine — Inventory</div>
+        <div class="helper-line">Operational inventory visibility with vAuto export alignment.</div>
+      </div>
+    </div>
+    <div id="navActions">
+      <a href="index.html" class="nav-link">Rapid Response</a>
+      <a href="dash.html" class="nav-link">Dashboard</a>
+      <a href="leads.html" class="nav-link">Leads</a>
+      <a href="vidping.html" class="nav-link">VidPing</a>
+      <a href="eg.html" class="nav-link">Examples</a>
+      <a href="walk.html" class="nav-link">Walkthrough</a>
+      <a href="settings.html" class="nav-link">Settings</a>
+    </div>
+  </nav>
+
+  <main class="inventory-page">
+    <header class="inventory-header">
+      <div>
+        <h1>Inventory Control</h1>
+        <p class="subtext">Retail-first inventory intelligence with clear wholesale separation.</p>
+      </div>
+      <div class="inventory-badges">
+        <span class="badge" id="inventoryLastUpdated">Last updated: —</span>
+        <span class="badge" id="inventoryWholesaleBadge" hidden>Wholesale view enabled</span>
+      </div>
+    </header>
+
+    <section class="inventory-kpis">
+      <div class="kpi-card">
+        <div class="kpi-label">Total Units</div>
+        <div class="kpi-value" id="kpiTotal">—</div>
+        <div class="kpi-sub" id="kpiRetail">Retail: —</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Average Days in Stock</div>
+        <div class="kpi-value" id="kpiAvgDays">—</div>
+        <div class="kpi-sub" id="kpiStale">90+ days: —</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Total Inventory Value</div>
+        <div class="kpi-value" id="kpiValue">—</div>
+        <div class="kpi-sub" id="kpiValueAvg">Avg per unit: —</div>
+      </div>
+    </section>
+
+    <section class="inventory-opportunities">
+      <div class="opportunity-card">
+        <div class="panel-title">Oldest Units</div>
+        <div id="oldestUnits" class="opportunity-list"></div>
+      </div>
+      <div class="opportunity-card">
+        <div class="panel-title">Price Outliers</div>
+        <div id="priceOutliers" class="opportunity-list"></div>
+      </div>
+      <div class="opportunity-card">
+        <div class="panel-title">Stale Inventory</div>
+        <div class="opportunity-highlight" id="staleSummary">—</div>
+        <div class="opportunity-meta">Units over 90 days in stock.</div>
+      </div>
+    </section>
+
+    <div class="inventory-notice" id="inventoryNotice" hidden></div>
+
+    <section class="inventory-controls">
+      <div class="control-group">
+        <div class="control-label">View</div>
+        <div class="control-buttons" role="tablist">
+          <button class="control-btn is-active" data-view="retail" type="button">Retail</button>
+          <button class="control-btn" data-view="wholesale" type="button">Wholesale-only</button>
+          <button class="control-btn" data-view="autooutlet" type="button">AutoOutlet</button>
+          <button class="control-btn" data-view="all" type="button">All inventory</button>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inventorySearch">Search</label>
+        <input id="inventorySearch" type="search" placeholder="Search VIN, stock #, make, model" />
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inventorySort">Sort</label>
+        <select id="inventorySort">
+          <option value="days_desc">Days in stock (high → low)</option>
+          <option value="days_asc">Days in stock (low → high)</option>
+          <option value="price_desc">Price (high → low)</option>
+          <option value="price_asc">Price (low → high)</option>
+          <option value="year_desc">Year (new → old)</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <div class="control-label">View mode</div>
+        <div class="control-buttons">
+          <button class="control-btn is-active" data-mode="cards" type="button">Cards</button>
+          <button class="control-btn" data-mode="table" type="button">Table</button>
+        </div>
+      </div>
+    </section>
+
+    <div id="wholesaleBanner" class="wholesale-banner" hidden>Wholesale units are visible. Retail decisions should remain retail-first.</div>
+
+    <section class="inventory-buckets" id="inventoryBuckets"></section>
+  </main>
+
+  <footer id="blinkFooter">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="assets/images/blinkResponseSystems_logo.png" alt="Blink logo" />
+      </div>
+      <p class="footer-copy">
+        This page was built to show how Blink actually works — not features, not dashboards, not promises.
+        Just system truth, visible behavior, and response speed.
+        If you’re still reading, you’re probably who this was built for.
+        <span class="footer-credit">Made with love. A project produced by Gallant Works Co.</span>
+      </p>
+      <a href="tower-light.html" class="footer-easter-egg">
+        This part isn’t for everyone.
+      </a>
+    </div>
+  </footer>
+
+  <script src="assets/js/vendor/xlsx.full.min.js"></script>
+  <script type="module" src="assets/js/inventory.js"></script>
+</body>
+</html>

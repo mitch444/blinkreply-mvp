@@ -9,7 +9,7 @@
 
   <nav id="topNav">
     <div id="brandBlock">
-      <img src="assets/images/blink-logo-horizontal-dark.png" alt="Blink Response Engine logo" id="logo" />
+      <img src="assets/images/blinkResponseSystems_logo.png" alt="Blink Response Engine logo" id="logo" />
       <div>
         <div id="brandTitle">Blink Response Engine — Rapid Response (Local MVP)</div>
         <div class="helper-line">Operational lead routing with DealerSocket synchronization.</div>
@@ -40,115 +40,304 @@
     </div>
   </section>
 
+  <section id="automation-workflow">
+    <div class="automation-inner">
+      <div class="automation-copy">
+        <div class="automation-eyebrow">Automate the first 10 minutes</div>
+        <h2>Turn every lead into a timed, trackable race.</h2>
+        <p class="automation-subhead">BlinkReply triggers an instant contest, routes the winner, and automates the follow-through—so no lead gets 'lost in the group chat.'</p>
+        <ul class="automation-list">
+          <li>Lead hits your store → contest starts automatically</li>
+          <li>Winner is clear. Everyone else is logged as 'late'</li>
+          <li>DealerSocket + video + call/text happen without chaos</li>
+        </ul>
+        <div class="automation-actions">
+          <a class="automation-btn primary" href="walk.html">See it in action</a>
+          <a class="automation-btn ghost" href="walk.html#how">How it works</a>
+        </div>
+      </div>
+      <div class="workflow-panel" aria-label="Automation workflow diagram">
+        <svg class="workflow-lines" aria-hidden="true" focusable="false">
+          <path class="line-main" data-connector="lead-contest" pathLength="100" style="--line-delay: 140ms"></path>
+          <path class="line-main" data-connector="contest-winner" pathLength="100" style="--line-delay: 220ms"></path>
+          <path data-connector="winner-late" pathLength="100" style="--line-delay: 300ms"></path>
+          <path data-connector="winner-ds" pathLength="100" style="--line-delay: 340ms"></path>
+          <path data-connector="winner-vid" pathLength="100" style="--line-delay: 380ms"></path>
+          <path data-connector="winner-call" pathLength="100" style="--line-delay: 420ms"></path>
+          <path class="line-success" data-connector="call-appt" pathLength="100" style="--line-delay: 520ms"></path>
+          <path class="line-pulse" data-connector="lead-contest" pathLength="100" style="--pulse-delay: 0s"></path>
+          <path class="line-pulse" data-connector="contest-winner" pathLength="100" style="--pulse-delay: 0.3s"></path>
+        </svg>
+        <div class="workflow-grid">
+          <div class="workflow-node lead node-trigger" data-node="lead" aria-label="Lead arrives. Inbound timer starts." style="--delay: 0ms">
+            <div class="node-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"></path>
+              </svg>
+            </div>
+            <div class="node-title">Lead arrives</div>
+            <div class="node-desc">Inbound timer starts</div>
+          </div>
+          <div class="workflow-node contest node-action" data-node="contest" aria-label="Contest triggered. All reps alerted instantly." style="--delay: 120ms">
+            <div class="node-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <circle cx="12" cy="13" r="7"></circle>
+                <path d="M12 13l3-2"></path>
+                <path d="M9 2h6"></path>
+              </svg>
+            </div>
+            <div class="node-title">Contest triggered</div>
+            <div class="node-desc">All reps alerted instantly</div>
+          </div>
+          <div class="workflow-node winner node-decision" data-node="winner" aria-label="Winner decided. First responder earns ownership." style="--delay: 240ms">
+            <div class="node-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M7 4h10v3a5 5 0 0 1-10 0V4z"></path>
+                <path d="M9 14h6"></path>
+                <path d="M10 14v4"></path>
+                <path d="M14 14v4"></path>
+              </svg>
+            </div>
+            <div class="node-title">Winner decided</div>
+            <div class="node-desc">First responder earns ownership</div>
+          </div>
+          <div class="workflow-node late node-outcome" data-node="late" aria-label="Late responders logged. Seven others marked late for coaching." style="--delay: 520ms">
+            <div class="node-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <circle cx="12" cy="12" r="8"></circle>
+                <path d="M12 8v5"></path>
+                <path d="M12 17h.01"></path>
+              </svg>
+            </div>
+            <div class="node-title">Late responders logged</div>
+            <div class="node-desc">7 others marked late for coaching</div>
+            <div class="node-tag">Coaching signal</div>
+          </div>
+          <div class="workflow-actions" style="--delay: 300ms">
+            <div class="workflow-cluster-label" style="--delay: 320ms">Winner actions (auto)</div>
+            <div class="workflow-actions-grid">
+              <div class="workflow-node ds node-action" data-node="ds" aria-label="Owner assigned in DealerSocket. Clean handoff." style="--delay: 360ms">
+                <div class="node-icon">
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <ellipse cx="12" cy="5" rx="7" ry="3"></ellipse>
+                    <path d="M5 5v6c0 1.7 3.1 3 7 3s7-1.3 7-3V5"></path>
+                    <path d="M5 11v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"></path>
+                  </svg>
+                </div>
+                <div class="node-title">Owner assigned in DealerSocket</div>
+                <div class="node-desc">Clean handoff. No double-work</div>
+              </div>
+              <div class="workflow-node vid node-action" data-node="vid" aria-label="VidPing sent. Personal touch in seconds." style="--delay: 420ms">
+                <div class="node-icon">
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <rect x="4" y="6" width="16" height="12" rx="2"></rect>
+                    <path class="fill" d="M10 9l5 3-5 3z"></path>
+                  </svg>
+                </div>
+                <div class="node-title">VidPing sent</div>
+                <div class="node-desc">Personal touch in seconds</div>
+              </div>
+              <div class="workflow-node call node-action" data-node="call" aria-label="Call and text started. Human follow-up begins now." style="--delay: 480ms">
+                <div class="node-icon">
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M6 4h3l2 4-2 2a10 10 0 0 0 5 5l2-2 4 2v3c-6 2-14-6-14-14z"></path>
+                    <path d="M15 4h5v5h-3l-2 2z"></path>
+                  </svg>
+                </div>
+                <div class="node-title">Call + text started</div>
+                <div class="node-desc">Human follow-up begins now</div>
+              </div>
+            </div>
+          </div>
+          <div class="workflow-node appt node-success" data-node="appt" aria-label="Appointment set. Conversion outcome tracked." style="--delay: 560ms">
+            <div class="node-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <rect x="4" y="6" width="16" height="14" rx="2"></rect>
+                <path d="M8 2v4"></path>
+                <path d="M16 2v4"></path>
+                <path d="M7 14l2 2 4-4"></path>
+              </svg>
+            </div>
+            <div class="node-title">Appointment set</div>
+            <div class="node-desc">Conversion outcome tracked</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section id="outcomesOrbit">
     <div class="section-header">
       <div>
         <h2>Employee Outcomes System</h2>
         <div class="subtext">Operational discipline from first response to clean handoff.</div>
+        <div class="outcomes-support">Blink makes response behavior visible, assigns ownership, and proves the handoff.</div>
       </div>
     </div>
     <div class="orbit-wrap">
-      <div class="orbit-core">
-        <div class="orbit-title">Blink Response Engine</div>
-        <div class="orbit-sub">Response Discipline Layer</div>
+      <div class="outcomes-map-panel" aria-label="Outcomes map">
+        <div class="outcomes-engine-chip" aria-hidden="true">
+          <div class="chip-title">Blink Response Engine</div>
+          <div class="chip-sub">Response discipline layer</div>
+        </div>
+        <svg class="outcomes-lines" aria-hidden="true" focusable="false">
+          <defs>
+            <marker id="outcomesArrow" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+              <path d="M0 0L10 4L0 8Z" fill="rgba(250, 204, 21, 0.8)"></path>
+            </marker>
+          </defs>
+          <path class="line-spine" data-connector="spine" pathLength="100" style="--line-delay: 620ms" marker-end="url(#outcomesArrow)"></path>
+          <path class="line-branch" data-connector="response-insight" pathLength="100" style="--line-delay: 700ms"></path>
+          <path class="line-branch" data-connector="handoff-outcomes" pathLength="100" style="--line-delay: 760ms"></path>
+        </svg>
+        <div class="outcomes-map-grid">
+          <div class="outcomes-card step lead" data-node="lead" style="--delay: 0ms">
+            <div class="step-badge">01</div>
+            <div class="card-title">Lead arrives</div>
+            <div class="card-desc">Website • OEM • Marketplace • Trade tools</div>
+          </div>
+          <div class="outcomes-card step visibility" data-node="visibility" style="--delay: 120ms">
+            <div class="step-badge">02</div>
+            <div class="card-title">Visibility broadcast</div>
+            <div class="card-desc">Everyone sees it at the same moment</div>
+          </div>
+          <div class="outcomes-card step response is-key" data-node="response" style="--delay: 240ms">
+            <div class="step-badge">03</div>
+            <div class="card-tag">Key mechanism</div>
+            <div class="card-title">First response wins</div>
+            <div class="card-desc">Ownership decided in seconds</div>
+            <div class="card-helper">Winner is the CRM owner</div>
+          </div>
+          <div class="outcomes-card step handoff is-handoff" data-node="handoff" style="--delay: 360ms">
+            <div class="step-badge">04</div>
+            <div class="card-title">Clean CRM handoff</div>
+            <div class="card-desc">DealerSocket gets one clear owner</div>
+            <div class="card-helper">No double-work. No confusion.</div>
+          </div>
+          <div class="outcomes-card secondary insight" data-node="insight" style="--delay: 520ms">
+            <div class="card-title">Live Manager Insight</div>
+            <div class="card-desc">Who reacted. Who hesitated.</div>
+            <div class="card-helper">Coaching based on facts.</div>
+          </div>
+          <div class="outcomes-card secondary outcomes is-success" data-node="outcomes" style="--delay: 600ms">
+            <div class="card-title">Better Outcomes</div>
+            <div class="card-desc">Faster contact • higher show rate • more sold units</div>
+            <div class="card-helper">Downstream systems perform better.</div>
+          </div>
+          <div class="outcomes-map-footer" style="--delay: 680ms">
+            <div class="outcomes-thesis">When the first 30 seconds are disciplined, everything downstream performs better.</div>
+            <div class="outcomes-subline">Blink doesn’t replace DealerSocket. It makes it work the way you expect.</div>
+          </div>
+        </div>
       </div>
-      <div class="orbit-ring"></div>
-      <div class="orbit-node n1">
-        <div class="node-title">Lead Arrives</div>
-        <div class="node-sub">Website, OEM, Marketplace, Trade Tools</div>
-      </div>
-      <div class="orbit-node n2">
-        <div class="node-title">Immediate Visibility</div>
-        <div class="node-sub">Everyone sees it at the same moment</div>
-      </div>
-      <div class="orbit-node n3 action">
-        <div class="node-title">First Response Wins</div>
-        <div class="node-sub">Human response measured in seconds</div>
-      </div>
-      <div class="orbit-node n4">
-        <div class="node-title">Clean CRM Handoff</div>
-        <div class="node-sub">DealerSocket receives a clear owner</div>
-      </div>
-      <div class="orbit-node n5">
-        <div class="node-title">Live Manager Insight</div>
-        <div class="node-sub">Who reacted, who hesitated</div>
-      </div>
-      <div class="orbit-node n6">
-        <div class="node-title">Better Outcomes</div>
-        <div class="node-sub">Faster contact, higher show rate, more sold units</div>
-      </div>
-    </div>
-    <div class="orbit-caption">
-      When the first 30 seconds are disciplined, every system downstream performs better.
-      <span>Blink doesn’t replace DealerSocket. It makes it work the way you expect.</span>
     </div>
   </section><section id="reality">
-    <div class="section-header">
-      <div>
+    <div class="reality-header">
+      <div class="reality-copy">
         <h2>The 120-Second Reality</h2>
-        <div class="subtext">Digital delay feels like showroom abandonment.</div>
+        <div class="subtext">This message is pure gold. Delay turns it into regret.</div>
+      </div>
+      <div class="reality-timer" id="realityTimer" aria-live="polite">
+        <div class="timer-label">LIVE RESPONSE TIMER</div>
+        <div class="timer-shell">
+          <div class="timer-value" id="realityTimerValue">00:00</div>
+        </div>
+        <div class="timer-caption">Time to drift</div>
+        <div class="timer-status" id="realityTimerStatus">Fresh. Guest is hopeful.</div>
+        <div class="timer-escalation" id="realityTimerEscalation" aria-hidden="true">Escalation threshold reached</div>
       </div>
     </div>
-    <div id="realityClock">
-      <div class="clock-label">Live Delay Clock</div>
-      <div class="clock-time" id="delayClock">02:00</div>
-      <div class="clock-sub" id="clockSub">Countdown to escalation</div>
-    </div>
-    <div id="realitySplit">
-      <div class="reality-panel">
-        <div class="panel-title">Digital Lead Summary</div>
-        <div class="panel-body">
-          <div class="lead-pill">Guest: <span id="realityGuest">New guest</span></div>
-          <div class="lead-pill">Vehicle: <span id="realityVehicle">Vehicle interest</span></div>
-          <div class="lead-pill">Source: <span id="realitySource">Inbound lead</span></div>
+    <div class="reality-main">
+      <div class="reality-panel gold">
+        <div class="panel-title">Inbound Lead &mdash; The Gold</div>
+        <div class="lead-stack">
+          <div class="lead-card lead-identity" style="--delay: 0ms">
+            <div class="lead-name">Shannon G.</div>
+            <div class="lead-meta-row">
+              <span>Phone: (412) 8**-**24</span>
+              <span>Email: shannon.g****@gmail.com</span>
+            </div>
+            <div class="lead-meta-row">
+              <span>Prefers: Text</span>
+              <span>Received: Just now</span>
+            </div>
+          </div>
+          <div class="lead-card lead-vehicle" style="--delay: 80ms">
+            <div class="lead-label">Vehicle of Interest</div>
+            <div class="lead-vehicle-title">2026 Palisade Ultimate Calligraphy</div>
+            <div class="lead-vehicle-meta">Hybrid AWD &bull; Serenity White &bull; Budget $650&ndash;$720/mo</div>
+          </div>
+          <div class="lead-card lead-trade" style="--delay: 160ms">
+            <div class="lead-label">Trade-In</div>
+            <div class="lead-vehicle-title">2018 Santa Fe Limited</div>
+            <div class="lead-vehicle-meta">78k mi &bull; Owing? No &bull; Clean title</div>
+          </div>
+          <div class="lead-question" id="leadQuestion" style="--delay: 240ms">
+            <div class="question-label">Guest Question</div>
+            <div class="question-body">"Is the Palisade Hybrid eligible for the iZEV credit, and can you confirm payment with $0 down? I can come today if it works."</div>
+          </div>
+          <div class="lead-chips" style="--delay: 320ms">
+            <span class="lead-chip">Ready today</span>
+            <span class="lead-chip">Payment focused</span>
+            <span class="lead-chip">Trade-in</span>
+            <span class="lead-chip">Wants rebate confirmation</span>
+            <span class="lead-chip">High intent</span>
+          </div>
         </div>
       </div>
-      <div class="reality-panel showroom" id="showroomPanel">
-        <div class="panel-title">If This Guest Were Standing on Your Floor</div>
-        <div class="showroom-scene" id="showroomScene">
-          <div class="showroom-narration" id="showroomNarration">A guest just walked in.</div>
-          <div class="showroom-overlay" id="showroomOverlay">
-            <div class="overlay-title">Blink escalates before this moment.</div>
-            <div class="overlay-sub">Because online guests deserve the same respect as in-store guests.</div>
+      <div class="reality-panel human">
+        <div class="panel-title">If this guest were standing on your floor</div>
+        <div class="human-meters">
+          <div class="meter-block">
+            <div class="meter-label">
+              <span>Trust remaining</span>
+              <span class="meter-value" id="trustValue">100%</span>
+            </div>
+            <div class="meter-bar">
+              <div class="meter-fill trust" id="trustFill"></div>
+            </div>
+          </div>
+          <div class="meter-block">
+            <div class="meter-label">
+              <span>Competitor pull</span>
+              <span class="meter-value" id="competitorValue">0%</span>
+            </div>
+            <div class="meter-bar">
+              <div class="meter-fill competitor" id="competitorFill"></div>
+            </div>
           </div>
         </div>
-        <div class="thought-line" id="thoughtLine">Did my message even go through?</div>
-        <div class="patience-block">
-          <div class="patience-label">Guest Attention Remaining</div>
-          <div class="patience-bar">
-            <div class="patience-fill" id="patienceFill"></div>
+        <div class="human-status" id="realityStatusLine">Still waiting... checking phone...</div>
+        <div class="competitor-list">
+          <div class="competitor-label">Other dealers they can message in 10 seconds</div>
+          <div class="competitor-item">
+            <span class="competitor-dot" style="--delay: 0s"></span>
+            <span class="competitor-name">Northpark Hyundai</span>
           </div>
-          <div class="patience-copy" id="patienceCopy">Engaged. Expecting a response.</div>
-        </div>
-        <div class="attention-block">
-          <div class="attention-label">Where the guest’s attention may be drifting</div>
-          <div class="attention-row">
-            <div class="attention-name">Your Store</div>
-            <div class="attention-bar"><div class="attention-fill primary" id="attentionYour"></div></div>
+          <div class="competitor-item">
+            <span class="competitor-dot" style="--delay: 0.4s"></span>
+            <span class="competitor-name">Valley Hyundai</span>
           </div>
-          <div class="attention-row">
-            <div class="attention-name">Birchwood Hyundai</div>
-            <div class="attention-bar"><div class="attention-fill" id="attentionBirchwood"></div></div>
+          <div class="competitor-item">
+            <span class="competitor-dot" style="--delay: 0.8s"></span>
+            <span class="competitor-name">Cedar Auto Mall</span>
           </div>
-          <div class="attention-row">
-            <div class="attention-name">Focus Hyundai</div>
-            <div class="attention-bar"><div class="attention-fill" id="attentionFocus"></div></div>
-          </div>
-          <div class="attention-row">
-            <div class="attention-name">Murray Hyundai</div>
-            <div class="attention-bar"><div class="attention-fill" id="attentionMurray"></div></div>
-          </div>
-        </div>
-        <div class="reality-final" id="realityFinalOverlay" aria-hidden="true">
-          <div class="overlay-title">Blink escalates before this moment.</div>
-          <div class="overlay-sub">Because online guests deserve the same respect as in-store guests.</div>
         </div>
       </div>
     </div>
-    <div class="behavior-card" id="behaviorCard">
-      <div class="behavior-title" id="behaviorTitle">Guest just walked in.</div>
-      <div class="behavior-body" id="behaviorBody">They’re looking around. Expectations are high.</div>
-      <div class="behavior-meta" id="behaviorMeta">00:00–00:20</div>
+    <div class="reality-actions">
+      <div class="reality-action" style="--delay: 0ms">
+        <div class="action-title">Instant visibility</div>
+        <div class="action-desc">Every rep sees it at once.</div>
+      </div>
+      <div class="reality-action" style="--delay: 120ms">
+        <div class="action-title">First response wins</div>
+        <div class="action-desc">Ownership decided in seconds.</div>
+      </div>
+      <div class="reality-action" style="--delay: 240ms">
+        <div class="action-title">Clean handoff</div>
+        <div class="action-desc">DealerSocket gets one clear owner.</div>
+      </div>
     </div>
   </section>
 
@@ -344,90 +533,91 @@
     <div id="leadPreviewList"></div>
   </section>
 
-  <section id="dsFaq">
+  <section id="dealersocket-questions">
     <h2>DealerSocket Questions</h2>
-    <div class="subtext">Blink Response Engine sits upstream. DealerSocket stays the system of record.</div>
-    <div class="dsq-grid">
-      <div class="dsq-group">
-        <h3>Lead Intake Reality</h3>
-        <ul>
-          <li>Do all of your leads arrive through the same dsmessage ADF inbox?</li>
-          <li>Can you tell which leads were seen immediately versus buried in email noise?</li>
-          <li>When multiple leads arrive at once, who actually notices first?</li>
-          <li>Do you know how long a lead sat untouched before DealerSocket even logged activity?</li>
-          <li>Are reps reacting to alerts or stumbling onto leads later?</li>
-        </ul>
-        <button class="dsq-toggle" type="button">What Blink changes</button>
-        <div class="dsq-payoff">
+    <p class="section-subhead">BlinkReply sits upstream of DealerSocket to enforce speed, clarity, and accountability without changing your CRM.</p>
+    <div class="qa-list">
+      <details class="qa" open>
+        <summary class="qa-q">What problem does BlinkReply solve inside DealerSocket?</summary>
+        <div class="qa-a">
+          <p><strong>BlinkReply fixes the first 10 minutes.</strong> It creates instant visibility, speed, and clean ownership so leads don’t die in silence and handoffs are accountable.</p>
+        </div>
+      </details>
+      <details class="qa">
+        <summary class="qa-q">How does the “contest” work?</summary>
+        <div class="qa-a">
+          <p><strong>First click wins.</strong> The first rep to click becomes the owner, and everyone sees the winner instantly. It’s simple, fair, and eliminates cherry-picking.</p>
+        </div>
+      </details>
+      <details class="qa">
+        <summary class="qa-q">What stops a rep from claiming a lead and then doing nothing?</summary>
+        <div class="qa-a">
+          <p><strong>Ownership is conditional.</strong> If no meaningful activity happens within 15 minutes, Blink re-arms the lead and runs the contest again.</p>
+          <div class="qa-note">Meaningful activity includes:</div>
           <ul>
-            <li>Normalizes every source into one event stream regardless of ADF or email noise.</li>
-            <li>Creates an immediate seen moment with a shared clock for all reps.</li>
-            <li>Logs the exact arrival time and first human action outside the CRM.</li>
-            <li>Prevents silent lead burial by pushing the moment to the team, not an inbox.</li>
-            <li>Preserves source and requestdate so DealerSocket receives clean context.</li>
+            <li>Opening the lead record in DealerSocket (or via the Blink link)</li>
+            <li>Clicking “Next Steps / Outcomes” in Blink and selecting an outcome</li>
+            <li>Creating a note/task or logging a disposition/outcome</li>
+            <li>Sending a call/text/video through Blink tools (or logging the event)</li>
+            <li>Setting an appointment</li>
+          </ul>
+          <p><strong>If none are detected:</strong> ownership is revoked or the lead is re-contested, with the previous winner marked as “stalled” (visible, not shamed).</p>
+        </div>
+      </details>
+      <details class="qa">
+        <summary class="qa-q">How do you detect meaningful activity if DealerSocket doesn’t expose every signal?</summary>
+        <div class="qa-a">
+          <p><strong>We implement layered enforcement.</strong> Exact event mapping depends on DealerSocket capabilities, but the enforcement loop is non-negotiable.</p>
+          <ul>
+            <li><strong>Best:</strong> DealerSocket events/webhooks (open, note, task, status, appointment)</li>
+            <li><strong>Good:</strong> Blink-side actions (outcome click, video sent, call/text started)</li>
+            <li><strong>Fallback:</strong> manager-confirmed outcome + timer-based re-contest</li>
           </ul>
         </div>
-      </div>
-      <div class="dsq-group">
-        <h3>Response Time Illusion</h3>
-        <ul>
-          <li>Does DealerSocket show when a human actually responded or just when a status changed?</li>
-          <li>Can you see who saw the lead first but didn’t act?</li>
-          <li>Do you know how many leads were claimed late but reported as on time?</li>
-          <li>Can you tell the difference between speed and compliance?</li>
-          <li>Are your fastest reps rewarded or are slow reps protected?</li>
-        </ul>
-        <button class="dsq-toggle" type="button">What Blink changes</button>
-        <div class="dsq-payoff">
+      </details>
+      <details class="qa">
+        <summary class="qa-q">Does Blink replace DealerSocket or fight it?</summary>
+        <div class="qa-a">
+          <p><strong>No.</strong> Blink enforces response discipline and handoff clarity while DealerSocket remains the system of record.</p>
+        </div>
+      </details>
+      <details class="qa">
+        <summary class="qa-q">Who sees what?</summary>
+        <div class="qa-a">
           <ul>
-            <li>Measures time to first human response, not time to status change.</li>
-            <li>Captures who saw it versus who acted for coaching clarity.</li>
-            <li>Produces a verifiable claim timestamp and response timestamp.</li>
-            <li>Makes compliance visible and speed visible in seconds.</li>
-            <li>Sends DealerSocket a lead that already has a clear owner and timeline.</li>
+            <li><strong>Reps:</strong> new lead alert + winner confirmation in real time</li>
+            <li><strong>Managers:</strong> response timelines, stalled wins, and outcomes</li>
           </ul>
         </div>
-      </div>
-      <div class="dsq-group">
-        <h3>Ownership and Behavior</h3>
-        <ul>
-          <li>Who really earns the lead, first response or first click?</li>
-          <li>Can two reps respond at the same time without clarity?</li>
-          <li>What happens when everyone assumes someone else is on it?</li>
-          <li>Do reps feel urgency or entitlement?</li>
-          <li>Is ownership clear in the first 30 seconds?</li>
-        </ul>
-        <button class="dsq-toggle" type="button">What Blink changes</button>
-        <div class="dsq-payoff">
-          <ul>
-            <li>Ownership is awarded by first response, not first click.</li>
-            <li>One lead, one winner. Everyone else sees closed instantly.</li>
-            <li>Removes ambiguity during bursts of inbound leads.</li>
-            <li>Rewards speed and execution consistently, reducing entitlement.</li>
-            <li>Creates a fair contest loop that drives repeatable habits.</li>
-          </ul>
+      </details>
+      <details class="qa">
+        <summary class="qa-q">What does the winner automatically get?</summary>
+        <div class="qa-a">
+          <p><strong>Clean handoff, zero ambiguity.</strong> The winner gets ownership assignment, a next-steps prompt, and optional video/call/text flows.</p>
         </div>
-      </div>
-      <div class="dsq-group">
-        <h3>Manager Visibility Gap</h3>
-        <ul>
-          <li>Can you see response races happening in real time?</li>
-          <li>Do you know which leads triggered urgency and which didn’t?</li>
-          <li>Can you intervene while a lead is still alive?</li>
-          <li>Do you see missed opportunities or only bad outcomes later?</li>
-          <li>Are you coaching behavior or just reading reports after the fact?</li>
-        </ul>
-        <button class="dsq-toggle" type="button">What Blink changes</button>
-        <div class="dsq-payoff">
-          <ul>
-            <li>Shows live contests: unclaimed, claimed, escalated, duplicate risk.</li>
-            <li>Escalates exceptions before the guest is gone using time thresholds.</li>
-            <li>Surfaces patterns by shift: hesitators, missed contests, slow periods.</li>
-            <li>Gives managers a coaching window while the lead is still alive.</li>
-            <li>Keeps DealerSocket as the record while Blink exposes the first 30 seconds.</li>
-          </ul>
+      </details>
+      <details class="qa">
+        <summary class="qa-q">What happens to the “late” reps?</summary>
+        <div class="qa-a">
+          <p><strong>Visibility creates coaching, not punishment.</strong> Late counts inform training and staffing decisions without shaming individuals.</p>
         </div>
-      </div>
+      </details>
+      <details class="qa">
+        <summary class="qa-q">How do we prevent chaos or double-contacting the customer?</summary>
+        <div class="qa-a">
+          <p><strong>One owner at a time.</strong> There’s a single live status and audit trail. If re-contested, the lead is clearly marked and tracked.</p>
+        </div>
+      </details>
+      <details class="qa">
+        <summary class="qa-q">What does implementation look like (realistically)?</summary>
+        <div class="qa-a">
+          <ul>
+            <li><strong>MVP:</strong> lead forwarding → contest link → Blink outcomes → DealerSocket owner assignment + notes/tasks</li>
+            <li><strong>Phase 2:</strong> deeper event signals/webhooks + richer automation</li>
+          </ul>
+          <p><strong>We’ll ship the enforcement loop</strong> before adding complexity.</p>
+        </div>
+      </details>
     </div>
   </section>
 
@@ -547,5 +737,22 @@
   <div id="toast" role="status" aria-live="polite"></div>
 
   <script src="assets/js/app.js"></script>
+  <footer id="blinkFooter">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="assets/images/blinkResponseSystems_logo.png" alt="Blink logo" />
+      </div>
+      <p class="footer-copy">
+        This page was built to show how Blink actually works — not features, not dashboards, not promises.
+        Just system truth, visible behavior, and response speed.
+        If you’re still reading, you’re probably who this was built for.
+        <span class="footer-credit">Made with love. A project produced by Gallant Works Co.</span>
+      </p>
+      <a href="tower-light.html" class="footer-easter-egg">
+        This part isn’t for everyone.
+      </a>
+    </div>
+  </footer>
+
 </body>
 </html>

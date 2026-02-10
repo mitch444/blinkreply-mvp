@@ -1,0 +1,48 @@
+.app-name {
+    color: #FFF;
+}
+
+ul.instruction_list {
+    list-style: none;
+    font-size: 14px;
+    margin: 15px !important;
+}
+
+ul.instruction_list li {
+    margin: 5px 0px;
+    text-align: center;
+}
+
+.username_chat {
+    text-transform: capitalize;
+}
+
+p.no-messages {
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+}
+.display-none
+{
+    display: none;
+}
+/* .text-end {
+    text-align: left !important;
+} */
+.agent-modal-footer {
+    padding: 12px 0px 0px 0px;
+    margin-top: 60px;
+}
+.bg-notify {
+    background-color: #ffcc00 !important;
+    color: #000000 !important;
+}
+.accordion-button span {
+    font-size: 12px;
+    font-weight: bold;
+}
+.pagination-links svg {
+    width: 25px;
+    line-height: 25px;
+}
+.pagination-links div:nth-child(2) div p {margin-top: 20px !important;}

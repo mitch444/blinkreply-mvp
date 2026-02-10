@@ -685,7 +685,7 @@
   </div>
   <nav id="topNav">
     <div id="brandBlock">
-      <img src="assets/images/blink-logo-horizontal-dark.png" alt="Blink Response Engine logo" id="logo" />
+      <img src="assets/images/blinkResponseSystems_logo.png" alt="Blink Response Engine logo" id="logo" />
       <div>
         <div id="brandTitle">Blink Response Engine — Rapid Response (Local MVP)</div>
         <div class="helper-line">Operational lead routing with DealerSocket synchronization.</div>
@@ -914,6 +914,11 @@
       { name: "Sasha V.", vehicle: "2020 Honda CR-V" }
     ];
 
+    const RANGE_ALERT_TO = "+14312761044";
+    const RANGE_ALERT_LABEL = "Mitch (431-276-1044)";
+    const RANGE_ALERT_MESSAGE =
+      "Range is hot. Contest engine is armed. Proceed with testing. Try not to blow anything up.";
+
     let timer = null;
     let remaining = 120;
     let activeSource = "CarGurus";
@@ -1066,6 +1071,32 @@
       }
     }
 
+    async function sendRangeAlert() {
+      if (!armed) {
+        logEvent("Range is safe. Toggle must be lifted before arming.");
+        return;
+      }
+
+      const base = serverUrlInput?.value?.trim() || "http://localhost:3030";
+      try {
+        const res = await fetch(`${base}/lead`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            source: "Range Alert",
+            to: RANGE_ALERT_TO,
+            message: RANGE_ALERT_MESSAGE
+          })
+        });
+        if (!res.ok) throw new Error("Range alert POST failed");
+        setServerStatus(true, `Range alert sent to ${RANGE_ALERT_LABEL}.`);
+        logEvent("Range alert SMS dispatched to Mitch.");
+      } catch (err) {
+        setServerStatus(false, `Failed to send range alert via ${base}/lead.`);
+        logEvent("Range alert SMS failed to send.");
+      }
+    }
+
     function startLead(source) {
       if (!armed) {
         logEvent("Range is safe. Toggle must be lifted before arming.");
@@ -1105,7 +1136,7 @@
 
     document.getElementById("simulateLead").addEventListener("click", () => startLead(activeSource));
     document.getElementById("pingServer").addEventListener("click", pingServer);
-    document.getElementById("armServer").addEventListener("click", () => startLead(activeSource));
+    document.getElementById("armServer").addEventListener("click", sendRangeAlert);
 
     if (armToggle && armSwitch) {
       armToggle.addEventListener("click", () => {
@@ -1125,5 +1156,22 @@
     renderTimer();
     setArmedState(false);
   </script>
+  <footer id="blinkFooter">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="assets/images/blinkResponseSystems_logo.png" alt="Blink logo" />
+      </div>
+      <p class="footer-copy">
+        This page was built to show how Blink actually works — not features, not dashboards, not promises.
+        Just system truth, visible behavior, and response speed.
+        If you’re still reading, you’re probably who this was built for.
+        <span class="footer-credit">Made with love. A project produced by Gallant Works Co.</span>
+      </p>
+      <a href="tower-light.html" class="footer-easter-egg">
+        This part isn’t for everyone.
+      </a>
+    </div>
+  </footer>
+
 </body>
 </html>
