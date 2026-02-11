@@ -65,6 +65,15 @@
       min-width: 120px;
     }
 
+    .date-picker-shell .form-select {
+      border: 0;
+      padding: 0 6px;
+      font-size: 12px;
+      color: #3f4254;
+      background: transparent;
+      min-width: 140px;
+    }
+
     .date-picker-shell .form-control:focus {
       box-shadow: none;
     }
@@ -376,6 +385,31 @@
       padding-left: 0;
     }
 
+    #kpi-hero .pulse-tabs {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    #kpi-hero .pulse-tab {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      color: rgba(255, 255, 255, 0.7);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    #kpi-hero .pulse-tab.active {
+      background: rgba(255, 255, 255, 0.16);
+      color: #ffffff;
+    }
+
     @media (max-width: 1399px) {
       #kpi-hero .kpi-hero-main {
         grid-template-columns: 1fr 1fr;
@@ -643,11 +677,18 @@
                     </div>
                     <div class="date-picker-caption">Campaign date range</div>
                   </div>
-                  <button class="btn btn-sm btn-light btn-active-light-primary d-flex align-items-center gap-2">
-                    <i class="bi bi-file-earmark-pdf"></i>
-                    Export PDF
-                  </button>
-                  <span class="badge badge-light-primary fs-8">Last 14 days</span>
+                  <div class="date-picker-shell">
+                    <div class="input-group input-group-solid input-group-sm date-picker-override">
+                      <span class="input-group-text"><i class="bi bi-building"></i></span>
+                      <select class="form-select form-select-sm">
+                        <option>All Dealerships</option>
+                        <option>Prairie Hyundai</option>
+                        <option>Prairie Toyota</option>
+                        <option>Prairie Honda</option>
+                      </select>
+                    </div>
+                    <div class="date-picker-caption">Choose dealership</div>
+                  </div>
                   <span class="badge badge-light-success fs-8">Updated Feb 10, 2026 09:42 AM</span>
                 </div>
               </div>
@@ -678,20 +719,17 @@
                   <div class="card card-flush kpi-hero-surface">
                     <div class="card-body">
                       <div class="d-flex align-items-center justify-content-between mb-3">
-                        <span class="kpi-hero-title">Weekend Event Score</span>
-                        <span class="badge kpi-hero-badge fs-8">Target 90%</span>
+                        <span class="kpi-hero-title">Delivered</span>
+                        <span class="badge kpi-hero-badge fs-8">92.2%</span>
                       </div>
-                      <div class="d-flex align-items-center gap-3">
-                        <svg width="76" height="76" viewBox="0 0 72 72" aria-hidden="true">
-                          <circle cx="36" cy="36" r="30" stroke="rgba(255,255,255,0.15)" stroke-width="8" fill="none"></circle>
-                          <circle cx="36" cy="36" r="30" stroke="#ffc700" stroke-width="8" fill="none" stroke-linecap="round" stroke-dasharray="188.5" stroke-dashoffset="41.5" transform="rotate(-90 36 36)"></circle>
-                        </svg>
-                        <div>
-                          <div class="kpi-hero-value">78%</div>
-                          <div class="kpi-hero-subtitle">RSVP readiness</div>
-                          <div class="kpi-hero-progress mt-3"><span style="width: 78%;"></span></div>
-                        </div>
+                      <div class="d-flex align-items-baseline gap-2">
+                        <span class="kpi-hero-value">16,990</span>
+                        <span class="trend-up fs-7 fw-semibold d-flex align-items-center">
+                          <i class="bi bi-arrow-up-right me-1"></i>Delivery rate
+                        </span>
                       </div>
+                      <div class="kpi-hero-subtitle mt-1">Delivered contacts</div>
+                      <div class="kpi-hero-progress mt-3"><span style="width: 92%;"></span></div>
                     </div>
                   </div>
                 </div>
@@ -804,7 +842,13 @@
                           <div class="pulse-donut-label">Response<br>vs<br>No-Response<br>vs<br>Appt</div>
                         </div>
                         <div>
-                          <div class="text-uppercase fs-7 fw-semibold text-gray-500 mb-2">Campaign Pulse</div>
+                          <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+                            <div class="text-uppercase fs-7 fw-semibold text-gray-500">Campaign Pulse</div>
+                            <div class="pulse-tabs">
+                              <span class="pulse-tab active">All Campaigns</span>
+                              <span class="pulse-tab">Select Campaign <i class="bi bi-chevron-down"></i></span>
+                            </div>
+                          </div>
                           <div class="d-flex flex-wrap gap-3">
                             <span class="badge kpi-hero-badge fs-8">Response 38%</span>
                             <span class="badge kpi-hero-badge fs-8">No-Response 34%</span>
@@ -841,250 +885,6 @@
               </div>
               <div id="campaign-dashboard" class="row g-5 g-xl-8">
                 <div class="col-xxl-9">
-                  <div class="row g-5 g-xl-8 mb-5">
-                    <div class="col-md-6 col-xl-4">
-                      <div class="card card-flush h-100 kpi-card">
-                        <div class="card-body d-flex flex-column">
-                          <div class="d-flex align-items-center justify-content-between mb-3">
-                            <span class="label text-gray-600 fw-semibold fs-7 text-uppercase">Contacts Uploaded</span>
-                            <span class="symbol symbol-40px symbol-circle bg-light-primary">
-                              <span class="symbol-label">
-                                <i class="bi bi-cloud-arrow-up text-primary fs-5"></i>
-                              </span>
-                            </span>
-                          </div>
-                          <div class="d-flex align-items-end">
-                            <span class="fs-2hx fw-bolder text-dark me-2">18,420</span>
-                            <span class="badge badge-light-success fs-8">+6.4%</span>
-                          </div>
-                          <span class="text-gray-500 fs-7 mt-1">vs prior 14 days</span>
-                          <div class="progress h-6px w-100 mt-4 bg-light">
-                            <div class="progress-bar bg-primary" style="width: 78%;"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-md-6 col-xl-4">
-                      <div class="card card-flush h-100 kpi-card">
-                        <div class="card-body d-flex flex-column">
-                          <div class="d-flex align-items-center justify-content-between mb-3">
-                            <span class="label text-gray-600 fw-semibold fs-7 text-uppercase">Delivered</span>
-                            <span class="symbol symbol-40px symbol-circle bg-light-success">
-                              <span class="symbol-label">
-                                <i class="bi bi-send-check text-success fs-5"></i>
-                              </span>
-                            </span>
-                          </div>
-                          <div class="d-flex align-items-end">
-                            <span class="fs-2hx fw-bolder text-dark me-2">16,990</span>
-                            <span class="badge badge-light-success fs-8">92.2%</span>
-                          </div>
-                          <span class="text-gray-500 fs-7 mt-1">Delivery rate</span>
-                          <div class="progress h-6px w-100 mt-4 bg-light">
-                            <div class="progress-bar bg-success" style="width: 92%;"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-md-6 col-xl-4">
-                      <div class="card card-flush h-100 kpi-card">
-                        <div class="card-body d-flex flex-column">
-                          <div class="d-flex align-items-center justify-content-between mb-3">
-                            <span class="label text-gray-600 fw-semibold fs-7 text-uppercase">Responses</span>
-                            <span class="symbol symbol-40px symbol-circle bg-light-info">
-                              <span class="symbol-label">
-                                <i class="bi bi-chat-left-text text-info fs-5"></i>
-                              </span>
-                            </span>
-                          </div>
-                          <div class="d-flex align-items-end">
-                            <span class="fs-2hx fw-bolder text-dark me-2">2,980</span>
-                            <span class="badge badge-light-success fs-8">+11.8%</span>
-                          </div>
-                          <span class="text-gray-500 fs-7 mt-1">16.1% response rate</span>
-                          <div class="progress h-6px w-100 mt-4 bg-light">
-                            <div class="progress-bar bg-info" style="width: 64%;"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-md-6 col-xl-4">
-                      <div class="card card-flush h-100 kpi-card">
-                        <div class="card-body d-flex flex-column">
-                          <div class="d-flex align-items-center justify-content-between mb-3">
-                            <span class="label text-gray-600 fw-semibold fs-7 text-uppercase">Appointments Booked</span>
-                            <span class="symbol symbol-40px symbol-circle bg-light-warning">
-                              <span class="symbol-label">
-                                <i class="bi bi-calendar2-check text-warning fs-5"></i>
-                              </span>
-                            </span>
-                          </div>
-                          <div class="d-flex align-items-end">
-                            <span class="fs-2hx fw-bolder text-dark me-2">512</span>
-                            <span class="badge badge-light-success fs-8">+7.1%</span>
-                          </div>
-                          <span class="text-gray-500 fs-7 mt-1">17.2% of engaged</span>
-                          <div class="progress h-6px w-100 mt-4 bg-light">
-                            <div class="progress-bar bg-warning" style="width: 52%;"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-md-6 col-xl-4">
-                      <div class="card card-flush h-100 kpi-card">
-                        <div class="card-body d-flex flex-column">
-                          <div class="d-flex align-items-center justify-content-between mb-3">
-                            <span class="label text-gray-600 fw-semibold fs-7 text-uppercase">Calls Routed</span>
-                            <span class="symbol symbol-40px symbol-circle bg-light-primary">
-                              <span class="symbol-label">
-                                <i class="bi bi-telephone-forward text-primary fs-5"></i>
-                              </span>
-                            </span>
-                          </div>
-                          <div class="d-flex align-items-end">
-                            <span class="fs-2hx fw-bolder text-dark me-2">1,340</span>
-                            <span class="badge badge-light-success fs-8">98.2% success</span>
-                          </div>
-                          <span class="text-gray-500 fs-7 mt-1">32 failed routes</span>
-                          <div class="progress h-6px w-100 mt-4 bg-light">
-                            <div class="progress-bar bg-primary" style="width: 90%;"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-md-6 col-xl-4">
-                      <div class="card card-flush h-100 kpi-card">
-                        <div class="card-body d-flex flex-column">
-                          <div class="d-flex align-items-center justify-content-between mb-3">
-                            <span class="label text-gray-600 fw-semibold fs-7 text-uppercase">Weekend Event Readiness</span>
-                            <span class="symbol symbol-40px symbol-circle bg-light-success">
-                              <span class="symbol-label">
-                                <i class="bi bi-flag text-success fs-5"></i>
-                              </span>
-                            </span>
-                          </div>
-                          <div class="d-flex align-items-end">
-                            <span class="fs-2hx fw-bolder text-dark me-2">86%</span>
-                            <span class="badge badge-light-success fs-8">On track</span>
-                          </div>
-                          <span class="text-gray-500 fs-7 mt-1">RSVP coverage at 74%</span>
-                          <div class="progress h-6px w-100 mt-4 bg-light">
-                            <div class="progress-bar bg-success" style="width: 86%;"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="card card-flush mb-5">
-                    <div class="card-header pt-6">
-                      <div class="card-title flex-column">
-                        <span class="card-label fw-bolder text-dark">Campaign Funnel</span>
-                        <span class="text-gray-500 fs-7">Uploaded -> Delivered -> Engaged -> Booked</span>
-                      </div>
-                    </div>
-                    <div class="card-body pt-2">
-                      <div class="campaign-funnel">
-                        <div class="funnel-step">
-                          <div class="d-flex align-items-center justify-content-between">
-                            <span class="text-gray-600 fw-semibold">Uploaded</span>
-                            <span class="badge badge-light-primary fs-8">100%</span>
-                          </div>
-                          <div class="d-flex align-items-end mt-3">
-                            <span class="fs-2 fw-bolder text-dark me-2">18,420</span>
-                            <span class="text-gray-500 fs-7">records</span>
-                          </div>
-                          <div class="progress h-6px mt-4 bg-light">
-                            <div class="progress-bar bg-primary" style="width: 100%;"></div>
-                          </div>
-                        </div>
-                        <div class="funnel-step">
-                          <div class="d-flex align-items-center justify-content-between">
-                            <span class="text-gray-600 fw-semibold">Delivered</span>
-                            <span class="badge badge-light-success fs-8">92.2%</span>
-                          </div>
-                          <div class="d-flex align-items-end mt-3">
-                            <span class="fs-2 fw-bolder text-dark me-2">16,990</span>
-                            <span class="text-gray-500 fs-7">delivered</span>
-                          </div>
-                          <div class="progress h-6px mt-4 bg-light">
-                            <div class="progress-bar bg-success" style="width: 92%;"></div>
-                          </div>
-                        </div>
-                        <div class="funnel-step">
-                          <div class="d-flex align-items-center justify-content-between">
-                            <span class="text-gray-600 fw-semibold">Engaged</span>
-                            <span class="badge badge-light-info fs-8">19.3%</span>
-                          </div>
-                          <div class="d-flex align-items-end mt-3">
-                            <span class="fs-2 fw-bolder text-dark me-2">3,280</span>
-                            <span class="text-gray-500 fs-7">responses</span>
-                          </div>
-                          <div class="progress h-6px mt-4 bg-light">
-                            <div class="progress-bar bg-info" style="width: 64%;"></div>
-                          </div>
-                        </div>
-                        <div class="funnel-step">
-                          <div class="d-flex align-items-center justify-content-between">
-                            <span class="text-gray-600 fw-semibold">Booked</span>
-                            <span class="badge badge-light-warning fs-8">15.6%</span>
-                          </div>
-                          <div class="d-flex align-items-end mt-3">
-                            <span class="fs-2 fw-bolder text-dark me-2">512</span>
-                            <span class="text-gray-500 fs-7">appointments</span>
-                          </div>
-                          <div class="progress h-6px mt-4 bg-light">
-                            <div class="progress-bar bg-warning" style="width: 52%;"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="row g-5 g-xl-8 mb-5">
-                    <div class="col-xl-6">
-                      <div class="card card-flush h-100">
-                        <div class="card-header pt-6">
-                          <div class="card-title flex-column">
-                            <span class="card-label fw-bolder text-dark">Response Volume by Day</span>
-                            <span class="text-gray-500 fs-7">Last 14 days of inbound replies</span>
-                          </div>
-                          <div class="card-toolbar">
-                            <span class="badge badge-light-info fs-8">Avg 213/day</span>
-                          </div>
-                        </div>
-                        <div class="card-body pt-2">
-                          <div class="chart-wrapper">
-                            <canvas id="responseChart"></canvas>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-xl-6">
-                      <div class="card card-flush h-100">
-                        <div class="card-header pt-6">
-                          <div class="card-title flex-column">
-                            <span class="card-label fw-bolder text-dark">Appointments Booked by Day</span>
-                            <span class="text-gray-500 fs-7">Target pace line included</span>
-                          </div>
-                          <div class="card-toolbar">
-                            <span class="badge badge-light-success fs-8">Target 40/week</span>
-                          </div>
-                        </div>
-                        <div class="card-body pt-2">
-                          <div class="chart-wrapper">
-                            <canvas id="appointmentsChart"></canvas>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
                   <div class="card card-flush mb-5">
                     <div class="card-header pt-6">
                       <div class="card-title flex-column">
@@ -1110,152 +910,10 @@
                       </div>
                     </div>
                   </div>
-
-                  <div class="row g-5 g-xl-8">
-                    <div class="col-md-4">
-                      <div class="card card-flush h-100">
-                        <div class="card-header pt-6">
-                          <div class="card-title flex-column">
-                            <span class="card-label fw-bolder text-dark">Routing Health</span>
-                            <span class="text-gray-500 fs-7">Carrier + switchboard status</span>
-                          </div>
-                        </div>
-                        <div class="card-body pt-2">
-                          <div class="d-flex align-items-center mb-3">
-                            <span class="symbol symbol-40px symbol-circle bg-light-success me-3">
-                              <span class="symbol-label">
-                                <i class="bi bi-diagram-3 text-success fs-5"></i>
-                              </span>
-                            </span>
-                            <div>
-                              <div class="fs-2 fw-bolder text-dark">98.2%</div>
-                              <div class="text-gray-500 fs-7">Success rate</div>
-                            </div>
-                          </div>
-                          <div class="d-flex justify-content-between">
-                            <span class="text-gray-600">Failed routes</span>
-                            <span class="fw-bold text-gray-800">32</span>
-                          </div>
-                          <div class="d-flex justify-content-between mt-2">
-                            <span class="text-gray-600">Avg response time</span>
-                            <span class="fw-bold text-gray-800">1.3s</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="card card-flush h-100">
-                        <div class="card-header pt-6">
-                          <div class="card-title flex-column">
-                            <span class="card-label fw-bolder text-dark">Data Health</span>
-                            <span class="text-gray-500 fs-7">Imports + mapping coverage</span>
-                          </div>
-                        </div>
-                        <div class="card-body pt-2">
-                          <div class="d-flex align-items-center mb-3">
-                            <span class="symbol symbol-40px symbol-circle bg-light-warning me-3">
-                              <span class="symbol-label">
-                                <i class="bi bi-database-check text-warning fs-5"></i>
-                              </span>
-                            </span>
-                            <div>
-                              <div class="fs-6 fw-bolder text-dark">Updated Feb 10, 2026</div>
-                              <div class="text-gray-500 fs-7">09:42 AM CST</div>
-                            </div>
-                          </div>
-                          <div class="d-flex justify-content-between">
-                            <span class="text-gray-600">Missing mappings</span>
-                            <span class="fw-bold text-gray-800">7</span>
-                          </div>
-                          <div class="d-flex justify-content-between mt-2">
-                            <span class="text-gray-600">Invalid numbers</span>
-                            <span class="fw-bold text-gray-800">19</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="card card-flush h-100">
-                        <div class="card-header pt-6">
-                          <div class="card-title flex-column">
-                            <span class="card-label fw-bolder text-dark">Rep Coverage</span>
-                            <span class="text-gray-500 fs-7">Phone routing assignments</span>
-                          </div>
-                        </div>
-                        <div class="card-body pt-2">
-                          <div class="d-flex align-items-center mb-3">
-                            <span class="symbol symbol-40px symbol-circle bg-light-primary me-3">
-                              <span class="symbol-label">
-                                <i class="bi bi-people text-primary fs-5"></i>
-                              </span>
-                            </span>
-                            <div>
-                              <div class="fs-2 fw-bolder text-dark">94%</div>
-                              <div class="text-gray-500 fs-7">Coverage</div>
-                            </div>
-                          </div>
-                          <div class="d-flex justify-content-between">
-                            <span class="text-gray-600">Unassigned numbers</span>
-                            <span class="fw-bold text-gray-800">4</span>
-                          </div>
-                          <div class="d-flex justify-content-between mt-2">
-                            <span class="text-gray-600">Reps without mapping</span>
-                            <span class="fw-bold text-gray-800">3</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
 
                 <div class="col-xxl-3">
                   <div class="right-rail">
-                    <div class="card card-flush mb-5">
-                      <div class="card-header pt-6">
-                        <div class="card-title flex-column">
-                          <span class="card-label fw-bolder text-dark">Next Best Actions</span>
-                          <span class="text-gray-500 fs-7">Prioritized for today</span>
-                        </div>
-                      </div>
-                      <div class="card-body pt-2">
-                        <div class="d-flex align-items-start mb-4">
-                          <span class="badge badge-light-danger fs-8 me-3">High</span>
-                          <div>
-                            <div class="fw-bold text-gray-900">Re-engage Jan 31 drop-off leads</div>
-                            <div class="text-gray-500 fs-7">142 contacts have not replied in 5+ days</div>
-                          </div>
-                        </div>
-                        <div class="d-flex align-items-start mb-4">
-                          <span class="badge badge-light-warning fs-8 me-3">Med</span>
-                          <div>
-                            <div class="fw-bold text-gray-900">Add SMS fallback for after-hours calls</div>
-                            <div class="text-gray-500 fs-7">Improve routing success after 6 PM</div>
-                          </div>
-                        </div>
-                        <div class="d-flex align-items-start mb-4">
-                          <span class="badge badge-light-danger fs-8 me-3">High</span>
-                          <div>
-                            <div class="fw-bold text-gray-900">Verify DNC suppression sync</div>
-                            <div class="text-gray-500 fs-7">Last sync ran 3 days ago</div>
-                          </div>
-                        </div>
-                        <div class="d-flex align-items-start mb-4">
-                          <span class="badge badge-light-warning fs-8 me-3">Med</span>
-                          <div>
-                            <div class="fw-bold text-gray-900">Complete rep phone mappings</div>
-                            <div class="text-gray-500 fs-7">3 reps missing call routing numbers</div>
-                          </div>
-                        </div>
-                        <div class="d-flex align-items-start">
-                          <span class="badge badge-light-primary fs-8 me-3">Low</span>
-                          <div>
-                            <div class="fw-bold text-gray-900">Boost weekend event reminders</div>
-                            <div class="text-gray-500 fs-7">Increase RSVP coverage for Saturday</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
                     <div class="card card-flush">
                       <div class="card-header pt-6">
                         <div class="card-title flex-column">
@@ -1299,101 +957,6 @@
 
   <script src="Prairie CRM _ Dasboard_files/Chart.js"></script>
   <script>
-    const responseLabels = [
-      "Jan 28", "Jan 29", "Jan 30", "Jan 31", "Feb 1", "Feb 2", "Feb 3",
-      "Feb 4", "Feb 5", "Feb 6", "Feb 7", "Feb 8", "Feb 9", "Feb 10"
-    ];
-
-    const responseVolume = [
-      182, 196, 173, 210, 238, 221, 205, 189, 214, 232, 248, 219, 207, 230
-    ];
-
-    const appointmentBooked = [
-      22, 26, 18, 28, 30, 24, 21, 20, 27, 32, 29, 25, 23, 28
-    ];
-
-    const appointmentTarget = [
-      24, 24, 24, 26, 26, 26, 26, 26, 28, 28, 28, 28, 28, 28
-    ];
-
-    const responseChart = new Chart(document.getElementById("responseChart"), {
-      type: "bar",
-      data: {
-        labels: responseLabels,
-        datasets: [
-          {
-            label: "Responses",
-            data: responseVolume,
-            backgroundColor: "rgba(0, 158, 247, 0.6)",
-            borderColor: "#009ef7",
-            borderWidth: 1,
-            barPercentage: 0.65,
-            categoryPercentage: 0.7
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        legend: { display: false },
-        scales: {
-          xAxes: [{
-            gridLines: { display: false },
-            ticks: { fontSize: 11 }
-          }],
-          yAxes: [{
-            gridLines: { color: "#f1f1f2" },
-            ticks: { beginAtZero: true, fontSize: 11 }
-          }]
-        }
-      }
-    });
-
-    const appointmentsChart = new Chart(document.getElementById("appointmentsChart"), {
-      type: "line",
-      data: {
-        labels: responseLabels,
-        datasets: [
-          {
-            label: "Booked",
-            data: appointmentBooked,
-            borderColor: "#50cd89",
-            backgroundColor: "rgba(80, 205, 137, 0.15)",
-            borderWidth: 2,
-            pointRadius: 3,
-            pointBackgroundColor: "#50cd89",
-            fill: true,
-            tension: 0.3
-          },
-          {
-            label: "Target pace",
-            data: appointmentTarget,
-            borderColor: "#009ef7",
-            borderWidth: 2,
-            borderDash: [6, 4],
-            pointRadius: 0,
-            fill: false,
-            tension: 0.3
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        legend: { position: "bottom" },
-        scales: {
-          xAxes: [{
-            gridLines: { display: false },
-            ticks: { fontSize: 11 }
-          }],
-          yAxes: [{
-            gridLines: { color: "#f1f1f2" },
-            ticks: { beginAtZero: true, fontSize: 11, stepSize: 5 }
-          }]
-        }
-      }
-    });
-
     const campaignRows = [
       {
         name: "RVM Re-engage 2019-2020",
