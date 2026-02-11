@@ -974,6 +974,7 @@ section {
     "lead visibility response handoff"
     ". insight insight outcomes"
     "footer footer footer footer";
+  padding-top: clamp(18px, 2.8vw, 36px);
   row-gap: clamp(18px, 2.4vw, 30px);
   column-gap: clamp(16px, 2vw, 28px);
   align-items: stretch;
@@ -1027,6 +1028,12 @@ section {
 .outcomes-card.handoff { grid-area: handoff; }
 .outcomes-card.insight { grid-area: insight; }
 .outcomes-card.outcomes { grid-area: outcomes; }
+
+.outcomes-card.insight,
+.outcomes-card.outcomes {
+  margin-top: clamp(6px, 1vw, 14px);
+  margin-bottom: clamp(4px, 0.8vw, 10px);
+}
 
 .outcomes-map-footer {
   grid-area: footer;
