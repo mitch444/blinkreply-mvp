@@ -29,6 +29,7 @@
       flex-direction: column;
       gap: 4px;
       padding: 6px 10px;
+      margin: 6px 8px;
       border: 1px solid #e4e6ef;
       border-radius: 12px;
       background: #ffffff;
@@ -66,6 +67,70 @@
 
     .date-picker-shell .form-control:focus {
       box-shadow: none;
+    }
+
+    .prairie-hero {
+      padding: 18px 0 8px;
+    }
+
+    .prairie-hero .prairie-hero-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .prairie-hero .prairie-logo {
+      max-width: 320px;
+      width: min(320px, 70vw);
+      height: auto;
+      filter: drop-shadow(0 10px 30px rgba(255, 200, 79, 0.12));
+      animation: prairiePulse 10s ease-in-out infinite;
+    }
+
+    .prairie-hero .prairie-glow {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: rgba(21, 21, 33, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .prairie-hero .prairie-glow::after {
+      content: "";
+      position: absolute;
+      inset: -14px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(255, 200, 79, 0.24), rgba(255, 200, 79, 0) 60%);
+      opacity: 0.4;
+      animation: prairieGlow 10s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes prairiePulse {
+      0%, 100% {
+        transform: translateY(0) scale(1);
+        filter: drop-shadow(0 10px 30px rgba(255, 200, 79, 0.12));
+      }
+      50% {
+        transform: translateY(-2px) scale(1.01);
+        filter: drop-shadow(0 16px 40px rgba(255, 200, 79, 0.24));
+      }
+    }
+
+    @keyframes prairieGlow {
+      0%, 100% {
+        opacity: 0.35;
+        transform: scale(0.98);
+      }
+      50% {
+        opacity: 0.6;
+        transform: scale(1.02);
+      }
     }
 
     #campaign-dashboard .kpi-card .label {
@@ -587,6 +652,15 @@
         </div>
 
         <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+          <div class="prairie-hero">
+            <div class="container-fluid">
+              <div class="prairie-hero-wrap">
+                <div class="prairie-glow">
+                  <img class="prairie-logo" src="assets/images/prairielogo.png" alt="Prairie Automotive Group" />
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="toolbar" id="kt_toolbar">
             <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
               <div class="page-title d-flex flex-column justify-content-center me-3 mb-5 mb-lg-0">
