@@ -134,7 +134,7 @@
     }
 
     .wd-main {
-      padding: 106px 0 44px;
+      padding: 94px 0 40px;
     }
 
     .wd-layout {
@@ -152,10 +152,10 @@
     }
 
     .wd-engine {
-      padding: 30px;
+      padding: 24px;
       box-shadow: var(--shadow);
       display: grid;
-      gap: 22px;
+      gap: 16px;
     }
 
     .wd-overline {
@@ -164,13 +164,13 @@
       letter-spacing: 0.1em;
       color: #7485a3;
       font-weight: 650;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
     .wd-engine h1 {
       margin: 0;
       letter-spacing: -0.02em;
-      font-size: clamp(1.5rem, 2.8vw, 2.15rem);
+      font-size: clamp(1.38rem, 2.4vw, 1.92rem);
       line-height: 1.14;
     }
 
@@ -181,28 +181,28 @@
       gap: 20px;
       flex-wrap: wrap;
       border-bottom: 1px solid var(--line);
-      padding-bottom: 20px;
+      padding-bottom: 14px;
     }
 
     .wd-goal-stack {
       display: grid;
       gap: 12px;
-      min-width: 310px;
+      min-width: 280px;
     }
 
     .wd-goals {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
+      gap: 10px;
     }
 
     .wd-goal-item {
       border: 1px solid #e4eaf4;
       border-radius: 10px;
       background: #fff;
-      padding: 12px;
+      padding: 10px;
       display: grid;
-      gap: 6px;
+      gap: 4px;
     }
 
     .wd-goal-item span {
@@ -214,7 +214,7 @@
     }
 
     .wd-goal-item strong {
-      font-size: 1.38rem;
+      font-size: 1.2rem;
       line-height: 1;
       color: var(--text);
       font-weight: 740;
@@ -262,11 +262,18 @@
 
     .wd-session-stats {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
       gap: 8px;
       min-width: min(100%, 520px);
       width: 100%;
       max-width: 700px;
+    }
+
+    .wd-support-stack {
+      display: grid;
+      gap: 14px;
+      border-top: 1px solid var(--line);
+      padding-top: 20px;
     }
 
     .wd-session-item {
@@ -305,6 +312,62 @@
     .wd-metric-value.is-updating {
       transform: translateY(-1px);
       opacity: 0.72;
+    }
+
+    .wd-campaign-track {
+      border: 1px solid #e3e9f3;
+      border-radius: 10px;
+      background: #fbfdff;
+      padding: 12px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .wd-campaign-track-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 0.82rem;
+      color: #63748f;
+    }
+
+    .wd-campaign-track-head strong {
+      color: #213961;
+      font-size: 0.9rem;
+      letter-spacing: -0.01em;
+      font-weight: 700;
+    }
+
+    .wd-progress-shell {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: #e9eef7;
+      overflow: hidden;
+    }
+
+    .wd-progress-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: var(--gold);
+      transition: width 260ms ease;
+    }
+
+    .wd-campaign-track-foot {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      font-size: 0.82rem;
+      color: #6a7c9a;
+    }
+
+    .wd-campaign-track-foot strong {
+      color: #304a75;
+      font-weight: 700;
     }
 
     .wd-status-row {
@@ -382,6 +445,12 @@
       color: #5d6b84;
     }
 
+    .wd-status-pill[data-state="voicemail-delivered"] {
+      background: #fff5dc;
+      border-color: #f2dda5;
+      color: #6a5011;
+    }
+
     .wd-status-pill.is-pulsing {
       animation: wd-gold-pulse 900ms ease;
     }
@@ -408,6 +477,10 @@
       text-align: center;
     }
 
+    .wd-timer.is-dim {
+      opacity: 0.42;
+    }
+
     .wd-pause-indicator {
       margin-top: -8px;
       font-size: 0.84rem;
@@ -423,9 +496,58 @@
       transform: translateY(0);
     }
 
+    .wd-voicemail-inline {
+      margin-top: -8px;
+      min-height: 30px;
+      opacity: 0;
+      transform: translateY(-2px);
+      transition: opacity 180ms ease, transform 180ms ease;
+      display: grid;
+      gap: 6px;
+      align-content: start;
+    }
+
+    .wd-voicemail-inline.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .wd-voicemail-text {
+      font-size: 0.83rem;
+      font-weight: 620;
+      color: #6f5a1d;
+    }
+
+    .wd-voicemail-text.delivered {
+      color: #6a5011;
+      font-weight: 700;
+    }
+
+    .wd-voicemail-progress {
+      width: min(260px, 100%);
+      height: 5px;
+      border-radius: 999px;
+      background: #efe5c7;
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity 180ms ease;
+    }
+
+    .wd-voicemail-progress.show {
+      opacity: 1;
+    }
+
+    .wd-voicemail-progress-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: var(--gold);
+      transition: width 900ms linear;
+    }
+
     .wd-customer-panel {
       display: grid;
-      gap: 18px;
+      gap: 12px;
       transition: opacity 200ms ease, transform 200ms ease;
     }
 
@@ -440,23 +562,75 @@
     }
 
     .wd-customer-name {
-      font-size: clamp(2.05rem, 4.1vw, 3rem);
+      font-size: clamp(1.72rem, 3vw, 2.4rem);
       font-weight: 760;
       letter-spacing: -0.035em;
       line-height: 1.02;
       margin: 0;
     }
 
+    .wd-customer-name-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .wd-vm-sent-tag {
+      border: 1px solid #edd79a;
+      border-radius: 999px;
+      background: #fff5dc;
+      color: #6a5011;
+      padding: 5px 10px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      opacity: 0;
+      transform: translateY(2px);
+      transition: opacity 180ms ease, transform 180ms ease;
+      pointer-events: none;
+    }
+
+    .wd-vm-sent-tag.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     .wd-customer-meta-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .wd-customer-note {
+      border: 1px solid #e2e8f3;
+      border-radius: 10px;
+      background: #fbfdff;
+      padding: 10px 12px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .wd-customer-note span {
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #7485a3;
+      font-weight: 650;
+    }
+
+    .wd-customer-note p {
+      margin: 0;
+      color: #2a416d;
+      font-size: 0.92rem;
+      line-height: 1.45;
     }
 
     .wd-meta-item {
       display: grid;
-      gap: 6px;
-      padding: 12px;
+      gap: 4px;
+      padding: 10px;
       border: 1px solid #e4eaf4;
       border-radius: 10px;
       background: #fff;
@@ -527,14 +701,14 @@
       flex-wrap: wrap;
       gap: 12px;
       border-top: 1px solid var(--line);
-      padding-top: 20px;
+      padding-top: 14px;
     }
 
     .wd-btn {
       border: 1px solid transparent;
       border-radius: 10px;
-      min-height: 42px;
-      padding: 0 18px;
+      min-height: 40px;
+      padding: 0 16px;
       font-size: 0.92rem;
       font-weight: 640;
       letter-spacing: 0.01em;
@@ -610,6 +784,13 @@
     .wd-btn-ghost:hover:not(:disabled) {
       border-color: #c0cadb;
       transform: translateY(-1px);
+    }
+
+    .wd-voicemail-row {
+      margin-top: 4px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
     .wd-btn.wd-active {
@@ -993,6 +1174,20 @@
       transition: border-color 180ms ease, box-shadow 180ms ease;
     }
 
+    .wd-field-textarea {
+      min-height: 96px;
+      padding: 10px;
+      resize: vertical;
+      font-family: inherit;
+      line-height: 1.4;
+    }
+
+    .wd-helper-text {
+      margin: 0;
+      color: #5a6f94;
+      font-size: 0.86rem;
+    }
+
     .wd-field:focus,
     .wd-field-select:focus {
       border-color: #bccae3;
@@ -1078,6 +1273,10 @@
       .wd-session-stats {
         max-width: none;
       }
+
+      .wd-customer-meta-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
     }
 
     @media (max-width: 860px) {
@@ -1121,6 +1320,42 @@
 
       .wd-modal-slot-list {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-height: 900px) and (min-width: 861px) {
+      .wd-main {
+        padding-top: 86px;
+      }
+
+      .wd-engine {
+        padding: 20px;
+        gap: 12px;
+      }
+
+      .wd-engine-top {
+        padding-bottom: 12px;
+      }
+
+      .wd-goal-item {
+        padding: 8px;
+      }
+
+      .wd-customer-name {
+        font-size: clamp(1.52rem, 2.4vw, 2.1rem);
+      }
+
+      .wd-meta-item {
+        padding: 8px;
+      }
+
+      .wd-action-row {
+        padding-top: 12px;
+      }
+
+      .wd-btn {
+        min-height: 38px;
+        font-size: 0.88rem;
       }
     }
 
@@ -1191,39 +1426,23 @@
           </div>
         </div>
 
-        <div class="wd-session-bar">
-          <div class="wd-session-mode">
-            <span id="powerModeDot" class="wd-mode-dot" aria-hidden="true"></span>
-            <span id="powerModeLabel">Power Mode Inactive</span>
-          </div>
-          <div class="wd-session-stats">
-            <div class="wd-session-item">
-              <span>Session Timer</span>
-              <strong id="sessionTimerStat" class="wd-metric-value">00:00</strong>
-            </div>
-            <div class="wd-session-item">
-              <span>Calls Made</span>
-              <strong id="callsMadePower" class="wd-metric-value">0</strong>
-            </div>
-            <div class="wd-session-item">
-              <span>Bookings</span>
-              <strong id="bookingsPower" class="wd-metric-value wd-gold-number">0</strong>
-            </div>
-            <div class="wd-session-item">
-              <span>Booking Rate</span>
-              <strong id="bookingRatePower" class="wd-metric-value">0.0%</strong>
-            </div>
-          </div>
-        </div>
-
         <div class="wd-status-row">
           <div id="statusPill" class="wd-status-pill" data-state="ready">Ready</div>
           <div id="callTimer" class="wd-timer">00:00</div>
         </div>
         <div id="pauseIndicator" class="wd-pause-indicator">Will pause after current call</div>
+        <div id="voicemailInline" class="wd-voicemail-inline" aria-live="polite">
+          <div id="voicemailInlineText" class="wd-voicemail-text">Leaving Voicemail...</div>
+          <div id="voicemailInlineProgress" class="wd-voicemail-progress">
+            <div id="voicemailInlineFill" class="wd-voicemail-progress-fill"></div>
+          </div>
+        </div>
 
         <div id="customerPanel" class="wd-customer-panel">
-          <h2 id="customerName" class="wd-customer-name"></h2>
+          <div class="wd-customer-name-row">
+            <h2 id="customerName" class="wd-customer-name"></h2>
+            <span id="vmSentTag" class="wd-vm-sent-tag">VM Sent</span>
+          </div>
           <div class="wd-customer-meta-grid">
             <div class="wd-meta-item">
               <span>Phone</span>
@@ -1252,6 +1471,63 @@
           <button id="startBlockBtn" class="wd-btn wd-btn-primary" type="button">Start Booking Block</button>
           <button id="endBlockBtn" class="wd-btn wd-btn-danger" type="button">End Booking Block</button>
           <button id="pauseAfterBtn" class="wd-btn wd-btn-neutral" type="button">Pause After This Call</button>
+        </div>
+        <div class="wd-voicemail-row">
+          <button id="voicemailBeepBtn" class="wd-btn wd-btn-outline wd-hidden" type="button">Voicemail Beep Heard</button>
+          <button id="dropVoicemailBtn" class="wd-btn wd-btn-primary wd-hidden" type="button">Drop Voicemail &amp; Continue</button>
+        </div>
+
+        <div class="wd-support-stack">
+          <div class="wd-customer-note">
+            <span>Rep Context</span>
+            <p id="customerInsight">No info requests logged for this customer yet.</p>
+          </div>
+          <div class="wd-session-bar">
+            <div class="wd-session-mode">
+              <span id="powerModeDot" class="wd-mode-dot" aria-hidden="true"></span>
+              <span id="powerModeLabel">Power Mode Inactive</span>
+            </div>
+            <div class="wd-session-stats">
+              <div class="wd-session-item">
+                <span>Session Timer</span>
+                <strong id="sessionTimerStat" class="wd-metric-value">00:00</strong>
+              </div>
+              <div class="wd-session-item">
+                <span>Calls Made</span>
+                <strong id="callsMadePower" class="wd-metric-value">0</strong>
+              </div>
+              <div class="wd-session-item">
+                <span>Voicemails Left</span>
+                <strong id="voicemailsLeftPower" class="wd-metric-value wd-gold-number">0</strong>
+              </div>
+              <div class="wd-session-item">
+                <span>Calls Left</span>
+                <strong id="callsLeftPower" class="wd-metric-value">20</strong>
+              </div>
+              <div class="wd-session-item">
+                <span>Bookings</span>
+                <strong id="bookingsPower" class="wd-metric-value wd-gold-number">0</strong>
+              </div>
+              <div class="wd-session-item">
+                <span>Booking Rate</span>
+                <strong id="bookingRatePower" class="wd-metric-value">0.0%</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="wd-campaign-track">
+            <div class="wd-campaign-track-head">
+              <span>Campaign Progress</span>
+              <strong id="campaignProgressText">0/20 Finalized</strong>
+            </div>
+            <div class="wd-progress-shell">
+              <div id="campaignProgressFill" class="wd-progress-fill"></div>
+            </div>
+            <div class="wd-campaign-track-foot">
+              <span>Voicemails Left: <strong id="voicemailsLeftInline">0</strong></span>
+              <span>Callbacks Scheduled: <strong id="callbacksScheduledInline">0</strong></span>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -1361,6 +1637,18 @@
         </div>
       </div>
 
+      <div id="wantsInfoFields" class="wd-appointment-fields wd-hidden">
+        <p class="wd-helper-text">Capture what information they asked for and why it matters before continuing.</p>
+        <div>
+          <label class="wd-label" for="infoNeededInput">What Info Is Needed?</label>
+          <textarea id="infoNeededInput" class="wd-field wd-field-textarea" placeholder="Example: trade value breakdown, payment options, warranty details"></textarea>
+        </div>
+        <div>
+          <label class="wd-label" for="infoWhyInput">Why Do They Need It?</label>
+          <textarea id="infoWhyInput" class="wd-field wd-field-textarea" placeholder="Example: evaluating if upgrade payment stays under $550 with current mileage"></textarea>
+        </div>
+      </div>
+
       <div id="modalError" class="wd-modal-error"></div>
 
       <div class="wd-modal-actions">
@@ -1442,10 +1730,16 @@
         stats: {
           callsMade: 0,
           connections: 0,
-          bookings: 0
+          bookings: 0,
+          voicemailsLeft: 0,
+          callbacksScheduled: 0,
+          finalized: 0
         },
         modalOpen: false,
         pauseLightboxOpen: false,
+        voicemailPrompted: false,
+        voicemailDropping: false,
+        dispositionState: "",
         selectedOutcome: "",
         selectedDay: "Friday",
         selectedSlot: "",
@@ -1464,17 +1758,31 @@
         powerModeLabel: document.getElementById("powerModeLabel"),
         sessionTimerStat: document.getElementById("sessionTimerStat"),
         callsMadePower: document.getElementById("callsMadePower"),
+        voicemailsLeftPower: document.getElementById("voicemailsLeftPower"),
+        callsLeftPower: document.getElementById("callsLeftPower"),
         bookingsPower: document.getElementById("bookingsPower"),
         bookingRatePower: document.getElementById("bookingRatePower"),
+        campaignProgressText: document.getElementById("campaignProgressText"),
+        campaignProgressFill: document.getElementById("campaignProgressFill"),
+        voicemailsLeftInline: document.getElementById("voicemailsLeftInline"),
+        callbacksScheduledInline: document.getElementById("callbacksScheduledInline"),
         statusPill: document.getElementById("statusPill"),
         callTimer: document.getElementById("callTimer"),
         pauseIndicator: document.getElementById("pauseIndicator"),
+        voicemailInline: document.getElementById("voicemailInline"),
+        voicemailInlineText: document.getElementById("voicemailInlineText"),
+        voicemailInlineProgress: document.getElementById("voicemailInlineProgress"),
+        voicemailInlineFill: document.getElementById("voicemailInlineFill"),
+        vmSentTag: document.getElementById("vmSentTag"),
         bookedToday: document.getElementById("bookedToday"),
+        voicemailBeepBtn: document.getElementById("voicemailBeepBtn"),
+        dropVoicemailBtn: document.getElementById("dropVoicemailBtn"),
         customerPanel: document.getElementById("customerPanel"),
         customerName: document.getElementById("customerName"),
         customerPhone: document.getElementById("customerPhone"),
         customerVehicle: document.getElementById("customerVehicle"),
         customerPurchase: document.getElementById("customerPurchase"),
+        customerInsight: document.getElementById("customerInsight"),
         equityBadge: document.getElementById("equityBadge"),
         mileageInput: document.getElementById("mileageInput"),
         snapshotIdentity: document.getElementById("snapshotIdentity"),
@@ -1493,10 +1801,13 @@
         modalBackdrop: document.getElementById("modalBackdrop"),
         outcomeGrid: document.getElementById("outcomeGrid"),
         appointmentFields: document.getElementById("appointmentFields"),
+        wantsInfoFields: document.getElementById("wantsInfoFields"),
         appointmentDaySelect: document.getElementById("appointmentDaySelect"),
         modalSlotList: document.getElementById("modalSlotList"),
         confirmVehicleInput: document.getElementById("confirmVehicleInput"),
         confirmMileageInput: document.getElementById("confirmMileageInput"),
+        infoNeededInput: document.getElementById("infoNeededInput"),
+        infoWhyInput: document.getElementById("infoWhyInput"),
         modalError: document.getElementById("modalError"),
         completeDispositionBtn: document.getElementById("completeDispositionBtn"),
         pauseBackdrop: document.getElementById("pauseBackdrop"),
@@ -1571,15 +1882,19 @@
         }
       }
 
+      function clearCallDurationTimeout() {
+        if (runtime.callDurationTimeout) {
+          clearTimeout(runtime.callDurationTimeout);
+          runtime.callDurationTimeout = null;
+        }
+      }
+
       function clearFlowTimers() {
         runtime.flowTimers.forEach(function (timerId) {
           clearTimeout(timerId);
         });
         runtime.flowTimers = [];
-        if (runtime.callDurationTimeout) {
-          clearTimeout(runtime.callDurationTimeout);
-          runtime.callDurationTimeout = null;
-        }
+        clearCallDurationTimeout();
       }
 
       function triggerGoldPulse() {
@@ -1591,6 +1906,46 @@
       function updatePauseIndicator() {
         var show = pauseAfterCall && currentCallActive;
         els.pauseIndicator.classList.toggle("show", show);
+      }
+
+      function hideVoicemailInline() {
+        els.voicemailInline.classList.remove("show");
+        els.voicemailInlineText.classList.remove("delivered");
+        els.voicemailInlineText.textContent = "Leaving Voicemail...";
+        els.voicemailInlineProgress.classList.remove("show");
+        els.voicemailInlineFill.style.width = "0%";
+      }
+
+      function showVoicemailLeavingUi() {
+        els.voicemailInline.classList.add("show");
+        els.voicemailInlineText.classList.remove("delivered");
+        els.voicemailInlineText.textContent = "Leaving Voicemail...";
+        els.voicemailInlineProgress.classList.add("show");
+        els.voicemailInlineFill.style.width = "0%";
+        requestAnimationFrame(function () {
+          els.voicemailInlineFill.style.width = "100%";
+        });
+      }
+
+      function showVoicemailDeliveredUi() {
+        els.voicemailInline.classList.add("show");
+        els.voicemailInlineText.classList.add("delivered");
+        els.voicemailInlineText.textContent = "✔ Voicemail Delivered";
+        els.voicemailInlineProgress.classList.remove("show");
+      }
+
+      function flashVmSentTag() {
+        els.vmSentTag.classList.add("show");
+        setTimeout(function () {
+          els.vmSentTag.classList.remove("show");
+        }, 800);
+      }
+
+      function resetVoicemailState() {
+        runtime.voicemailPrompted = false;
+        runtime.voicemailDropping = false;
+        runtime.dispositionState = "";
+        hideVoicemailInline();
       }
 
       function updatePowerModeBadge() {
@@ -1630,21 +1985,36 @@
       function updateControlState() {
         var queueDone = runtime.nextIndex >= customers.length;
         var blockControls = runtime.modalOpen || runtime.pauseLightboxOpen;
+        var connectedState = currentCallActive && !runtime.modalOpen && !runtime.pauseLightboxOpen;
+        var showBeepButton = connectedState && !runtime.voicemailPrompted && !runtime.voicemailDropping;
+        var showDropButton = connectedState && runtime.voicemailPrompted && !runtime.voicemailDropping;
 
-        els.campaignSelect.disabled = powerModeActive || currentCallActive || blockControls;
-        els.startBlockBtn.disabled = powerModeActive || queueDone || blockControls;
+        els.campaignSelect.disabled = powerModeActive || currentCallActive || blockControls || runtime.voicemailDropping;
+        els.startBlockBtn.disabled = powerModeActive || queueDone || blockControls || runtime.voicemailDropping;
         els.endBlockBtn.disabled = (!powerModeActive && !currentCallActive) || blockControls;
-        els.pauseAfterBtn.disabled = (!powerModeActive && !currentCallActive) || blockControls;
+        els.pauseAfterBtn.disabled = (!powerModeActive && !currentCallActive) || blockControls || runtime.voicemailDropping;
 
         els.startBlockBtn.textContent = queueDone ? "Queue Complete" : (powerModeActive ? "Booking Block Running" : "Start Booking Block");
         els.pauseAfterBtn.textContent = pauseAfterCall && currentCallActive ? "Pause Queued" : "Pause After This Call";
+
+        els.voicemailBeepBtn.classList.toggle("wd-hidden", !showBeepButton);
+        els.dropVoicemailBtn.classList.toggle("wd-hidden", !showDropButton);
+        els.voicemailBeepBtn.disabled = !showBeepButton || runtime.voicemailDropping;
+        els.dropVoicemailBtn.disabled = !showDropButton || runtime.voicemailDropping;
+
+        els.callTimer.classList.toggle("is-dim", runtime.voicemailDropping);
       }
 
       function updateStats() {
         var calls = runtime.stats.callsMade;
         var connections = runtime.stats.connections;
         var bookings = runtime.stats.bookings;
+        var voicemailsLeft = runtime.stats.voicemailsLeft;
+        var callbacksScheduled = runtime.stats.callbacksScheduled;
+        var finalized = runtime.stats.finalized;
+        var callsLeft = Math.max(customers.length - runtime.nextIndex, 0);
         var bookingRate = calls ? (bookings / calls) * 100 : 0;
+        var progressPct = customers.length ? (finalized / customers.length) * 100 : 0;
 
         animateMetricValue(els.callsMadeStat, calls);
         animateMetricValue(els.connectionsStat, connections);
@@ -1653,8 +2023,14 @@
         animateMetricValue(els.bookedToday, bookings);
 
         animateMetricValue(els.callsMadePower, calls);
+        animateMetricValue(els.voicemailsLeftPower, voicemailsLeft);
+        animateMetricValue(els.callsLeftPower, callsLeft);
         animateMetricValue(els.bookingsPower, bookings);
         animateMetricValue(els.bookingRatePower, bookingRate.toFixed(1) + "%");
+        animateMetricValue(els.campaignProgressText, finalized + "/" + customers.length + " Finalized");
+        animateMetricValue(els.voicemailsLeftInline, voicemailsLeft);
+        animateMetricValue(els.callbacksScheduledInline, callbacksScheduled);
+        els.campaignProgressFill.style.width = progressPct.toFixed(1) + "%";
       }
 
       function updateCampaignText() {
@@ -1668,10 +2044,35 @@
         els.highMileageBadge.classList.toggle("wd-hidden", !isHighMileage);
       }
 
+      function renderCustomerInsight(customer) {
+        if (!customer) {
+          els.customerInsight.textContent = "No customer in queue.";
+          return;
+        }
+
+        var infoNeeded = customer.infoNeeded ? customer.infoNeeded.trim() : "";
+        var infoWhy = customer.infoWhy ? customer.infoWhy.trim() : "";
+
+        if (!infoNeeded && !infoWhy) {
+          els.customerInsight.textContent = "No info requests logged for this customer yet.";
+          return;
+        }
+
+        var notes = [];
+        if (infoNeeded) {
+          notes.push("Needs: " + infoNeeded);
+        }
+        if (infoWhy) {
+          notes.push("Why: " + infoWhy);
+        }
+        els.customerInsight.textContent = notes.join(" ");
+      }
+
       function renderCustomer(animate) {
         var customer = getCurrentCustomer();
 
         function writeCustomer() {
+          els.vmSentTag.classList.remove("show");
           if (!customer) {
             els.customerName.textContent = "Queue Complete";
             els.customerPhone.textContent = "-";
@@ -1685,6 +2086,7 @@
             els.snapshotPurchase.textContent = "Last Purchase: -";
             els.snapshotMileage.textContent = "Mileage: -";
             renderHighMileage(0);
+            renderCustomerInsight(null);
             return;
           }
 
@@ -1702,6 +2104,7 @@
           els.snapshotPurchase.textContent = "Last Purchase: " + customer.purchaseDate;
           els.snapshotMileage.textContent = "Mileage: " + customer.mileage.toLocaleString() + " mi";
           renderHighMileage(customer.mileage);
+          renderCustomerInsight(customer);
         }
 
         if (!animate) {
@@ -1752,9 +2155,13 @@
         if (customer) {
           els.confirmVehicleInput.value = customer.vehicle;
           els.confirmMileageInput.value = els.mileageInput.value || String(customer.mileage);
+          els.infoNeededInput.value = customer.infoNeeded || "";
+          els.infoWhyInput.value = customer.infoWhy || "";
         } else {
           els.confirmVehicleInput.value = "";
           els.confirmMileageInput.value = "";
+          els.infoNeededInput.value = "";
+          els.infoWhyInput.value = "";
         }
         els.confirmMileageInput.dataset.userEdited = "";
         els.appointmentDaySelect.value = runtime.selectedDay;
@@ -1774,6 +2181,8 @@
         runtime.selectedOutcome = "";
         runtime.selectedSlot = "";
         els.modalError.textContent = "";
+        els.infoNeededInput.value = "";
+        els.infoWhyInput.value = "";
         els.modalBackdrop.classList.remove("open");
         els.modalBackdrop.setAttribute("aria-hidden", "true");
         syncBodyLock();
@@ -1787,8 +2196,10 @@
       }
 
       function toggleAppointmentFields() {
-        var show = runtime.selectedOutcome === "Appointment Booked";
-        els.appointmentFields.classList.toggle("wd-hidden", !show);
+        var showAppointment = runtime.selectedOutcome === "Appointment Booked";
+        var showWantsInfo = runtime.selectedOutcome === "Wants Info";
+        els.appointmentFields.classList.toggle("wd-hidden", !showAppointment);
+        els.wantsInfoFields.classList.toggle("wd-hidden", !showWantsInfo);
       }
 
       function renderModalSlotList() {
@@ -1858,6 +2269,7 @@
         callTimer = 0;
         updateCallTimerDisplay();
         currentCallActive = false;
+        resetVoicemailState();
         updatePauseIndicator();
       }
 
@@ -1870,12 +2282,17 @@
         setStatus("Queue Complete");
         updatePowerModeBadge();
         updatePauseIndicator();
+        updateStats();
         updateControlState();
       }
 
       function endCurrentCallAndOpenDisposition() {
+        if (runtime.voicemailPrompted || runtime.voicemailDropping || runtime.dispositionState === "Left Voicemail") {
+          return;
+        }
         stopCallTimerTick();
         currentCallActive = false;
+        resetVoicemailState();
         setStatus("Call Ended");
         updatePauseIndicator();
         updateControlState();
@@ -1883,7 +2300,12 @@
       }
 
       function autoDialNext() {
-        if (!powerModeActive || pauseAfterCall || runtime.modalOpen || runtime.pauseLightboxOpen) {
+        if (!powerModeActive || runtime.modalOpen || runtime.pauseLightboxOpen) {
+          return;
+        }
+
+        if (pauseAfterCall) {
+          showPauseLightbox();
           return;
         }
 
@@ -1893,8 +2315,10 @@
         }
 
         runtime.queueComplete = false;
+        resetVoicemailState();
         loadQueueCustomer(runtime.nextIndex, true);
         runtime.nextIndex += 1;
+        updateStats();
 
         setStatus("Dialing Customer...");
         triggerGoldPulse();
@@ -1910,6 +2334,7 @@
             return;
           }
           currentCallActive = true;
+          runtime.dispositionState = "";
           setStatus("Connected");
           updatePauseIndicator();
           updateControlState();
@@ -1917,6 +2342,9 @@
 
           var simulatedDuration = 5 + Math.floor(Math.random() * 11);
           runtime.callDurationTimeout = setTimeout(function () {
+            if (runtime.voicemailPrompted || runtime.voicemailDropping) {
+              return;
+            }
             if (!powerModeActive && !currentCallActive) {
               return;
             }
@@ -1939,6 +2367,7 @@
         pauseAfterCall = false;
         currentCallActive = false;
         runtime.queueComplete = false;
+        resetVoicemailState();
         sessionStartTime = Date.now();
         startSessionTimer();
         setStatus("Connecting to You...");
@@ -1982,6 +2411,80 @@
         }
         pauseAfterCall = true;
         showPauseLightbox();
+      }
+
+      function recordAttempt(outcome) {
+        runtime.dispositionState = outcome;
+        runtime.stats.callsMade += 1;
+        if (Math.random() < CONNECT_PROBABILITY) {
+          runtime.stats.connections += 1;
+        }
+
+        if (outcome === "Appointment Booked") {
+          runtime.stats.bookings += 1;
+          runtime.stats.finalized += 1;
+        } else if (outcome === "Call Back Later") {
+          runtime.stats.callbacksScheduled += 1;
+        } else if (outcome === "Wants Info") {
+          runtime.stats.callbacksScheduled += 1;
+        } else if (outcome === "Left Voicemail") {
+          runtime.stats.voicemailsLeft += 1;
+          runtime.stats.callbacksScheduled += 1;
+        } else {
+          runtime.stats.finalized += 1;
+        }
+
+        updateStats();
+      }
+
+      function onVoicemailBeepHeard() {
+        if (!currentCallActive || runtime.voicemailDropping) {
+          return;
+        }
+        runtime.voicemailPrompted = true;
+        clearCallDurationTimeout();
+        updateControlState();
+      }
+
+      function onDropVoicemailAndContinue() {
+        if (!currentCallActive || runtime.voicemailDropping) {
+          return;
+        }
+
+        runtime.voicemailDropping = true;
+        runtime.dispositionState = "Left Voicemail";
+        clearFlowTimers();
+        stopCallTimerTick();
+        showVoicemailLeavingUi();
+        updateControlState();
+
+        runtime.flowTimers.push(setTimeout(function () {
+          if (!powerModeActive && !currentCallActive) {
+            return;
+          }
+
+          setStatus("Voicemail Delivered");
+          showVoicemailDeliveredUi();
+          flashVmSentTag();
+          closeDispositionModal();
+
+          currentCallActive = false;
+          runtime.voicemailPrompted = false;
+          runtime.voicemailDropping = false;
+          updatePauseIndicator();
+
+          recordAttempt("Left Voicemail");
+          updateControlState();
+
+          runtime.flowTimers.push(setTimeout(function () {
+            hideVoicemailInline();
+            if (pauseAfterCall) {
+              showPauseLightbox();
+              return;
+            }
+            autoDialNext();
+          }, 180));
+        }, 900));
       }
 
       function setOutcome(outcome) {
@@ -2036,18 +2539,34 @@
           }
 
           runtime.bookedSlots[runtime.selectedDay].add(runtime.selectedSlot);
-          runtime.stats.bookings += 1;
           runtime.justBookedKey = runtime.selectedDay + "|" + runtime.selectedSlot;
           renderBookingBoard(runtime.justBookedKey);
+        } else if (runtime.selectedOutcome === "Wants Info") {
+          var infoNeeded = els.infoNeededInput.value.trim();
+          var infoWhy = els.infoWhyInput.value.trim();
+
+          if (!infoNeeded) {
+            showModalError("Add what information the customer requested.");
+            return;
+          }
+
+          if (!infoWhy) {
+            showModalError("Add why the information matters to the customer.");
+            return;
+          }
+
+          if (customer) {
+            customer.infoNeeded = infoNeeded;
+            customer.infoWhy = infoWhy;
+            renderCustomerInsight(customer);
+          }
+
+          runtime.justBookedKey = "";
         } else {
           runtime.justBookedKey = "";
         }
 
-        runtime.stats.callsMade += 1;
-        if (Math.random() < CONNECT_PROBABILITY) {
-          runtime.stats.connections += 1;
-        }
-        updateStats();
+        recordAttempt(runtime.selectedOutcome);
 
         closeDispositionModal();
 
@@ -2074,6 +2593,9 @@
         runtime.nextIndex = 0;
         runtime.queueComplete = false;
         runtime.activeBoardDay = "Friday";
+        runtime.voicemailPrompted = false;
+        runtime.voicemailDropping = false;
+        runtime.dispositionState = "";
         runtime.selectedOutcome = "";
         runtime.selectedDay = "Friday";
         runtime.selectedSlot = "";
@@ -2085,11 +2607,15 @@
         runtime.stats = {
           callsMade: 0,
           connections: 0,
-          bookings: 0
+          bookings: 0,
+          voicemailsLeft: 0,
+          callbacksScheduled: 0,
+          finalized: 0
         };
 
         closeDispositionModal();
         closePauseLightbox();
+        hideVoicemailInline();
 
         updatePowerModeBadge();
         updateStats();
@@ -2145,6 +2671,14 @@
           requestPauseAfterCall();
         });
 
+        els.voicemailBeepBtn.addEventListener("click", function () {
+          onVoicemailBeepHeard();
+        });
+
+        els.dropVoicemailBtn.addEventListener("click", function () {
+          onDropVoicemailAndContinue();
+        });
+
         els.mileageInput.addEventListener("input", function () {
           var value = Number(els.mileageInput.value);
           if (!Number.isFinite(value) || value < 0) {
@@ -2195,6 +2729,14 @@
           els.confirmMileageInput.dataset.userEdited = "true";
         });
 
+        els.infoNeededInput.addEventListener("input", function () {
+          clearModalError();
+        });
+
+        els.infoWhyInput.addEventListener("input", function () {
+          clearModalError();
+        });
+
         els.completeDispositionBtn.addEventListener("click", function () {
           completeDisposition();
         });
@@ -2224,6 +2766,7 @@
         renderCustomer(false);
         renderBookingBoard("");
         updatePauseIndicator();
+        hideVoicemailInline();
         updateControlState();
         bindEvents();
       }
