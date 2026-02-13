@@ -1,0 +1,1052 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WynnDialer | Appointment Revenue Engine</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #0d1b3d;
+      --text-soft: #4f5f80;
+      --divider: #eef1f6;
+      --gold: #f4b400;
+      --gold-deep: #dd9f00;
+      --navy-deep: #08122a;
+      --card: #f8fafe;
+      --radius: 8px;
+      --max: 1100px;
+      --shadow-soft: 0 18px 50px rgba(13, 27, 61, 0.08);
+      --shadow-sm: 0 8px 24px rgba(13, 27, 61, 0.07);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, "SF Pro Display", "SF Pro Text", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    img,
+    svg {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(100% - 48px, var(--max));
+      margin-inline: auto;
+    }
+
+    section {
+      padding: 128px 0;
+      border-top: 1px solid var(--divider);
+    }
+
+    section:first-of-type {
+      border-top: 0;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      letter-spacing: -0.03em;
+      line-height: 1.08;
+    }
+
+    h1 {
+      font-size: clamp(2.35rem, 5.8vw, 4.6rem);
+      max-width: 12ch;
+      font-weight: 750;
+    }
+
+    h2 {
+      font-size: clamp(1.8rem, 4vw, 3.2rem);
+      font-weight: 720;
+      max-width: 14ch;
+    }
+
+    h3 {
+      font-size: clamp(1.1rem, 2.1vw, 1.45rem);
+      font-weight: 650;
+    }
+
+    p {
+      margin: 0;
+      color: var(--text-soft);
+      font-size: clamp(1rem, 1.2vw, 1.08rem);
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-soft);
+      font-weight: 620;
+      margin-bottom: 20px;
+    }
+
+    .kicker::before {
+      content: "";
+      width: 24px;
+      height: 1px;
+      background: rgba(13, 27, 61, 0.25);
+    }
+
+    .section-head {
+      display: grid;
+      gap: 16px;
+      margin-bottom: 56px;
+    }
+
+    .lead {
+      max-width: 64ch;
+      font-size: clamp(1.04rem, 1.35vw, 1.2rem);
+    }
+
+    .btn-row {
+      margin-top: 30px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 13px 20px;
+      border-radius: var(--radius);
+      border: 1px solid transparent;
+      font-size: 0.95rem;
+      font-weight: 620;
+      transition: transform 160ms ease, box-shadow 200ms ease, background-color 200ms ease, border-color 200ms ease, color 200ms ease;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 2px;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: #1f1700;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-primary:hover {
+      background: var(--gold-deep);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: #fff;
+      color: var(--text);
+      border-color: #d9dfeb;
+    }
+
+    .btn-secondary:hover {
+      border-color: #c2cbdb;
+      transform: translateY(-1px);
+    }
+
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      border-top: 0;
+      padding: 80px 0 72px;
+    }
+
+    .hero-inline-logo {
+      display: inline-flex;
+      align-items: center;
+      margin-bottom: 0;
+    }
+
+    .hero-inline-logo img {
+      width: clamp(190px, 26vw, 300px);
+      height: auto;
+    }
+
+    .hero-brand {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .hero-brand .kicker {
+      margin-bottom: 0;
+    }
+
+    .hero-brand .kicker::before {
+      display: none;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: min(48vw, 640px);
+      aspect-ratio: 1;
+      right: max(-16vw, -190px);
+      top: -10%;
+      border: 22px solid rgba(244, 180, 0, 0.13);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: min(32vw, 420px);
+      aspect-ratio: 1;
+      right: min(4vw, 84px);
+      top: 22%;
+      border: 10px solid rgba(244, 180, 0, 0.18);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1.06fr 0.94fr;
+      gap: 54px;
+      align-items: center;
+    }
+
+    .hero p {
+      margin-top: 22px;
+      max-width: 50ch;
+      font-size: clamp(1.05rem, 1.4vw, 1.24rem);
+    }
+
+    .ui-float {
+      background: #fff;
+      border: 1px solid #e4e9f2;
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: var(--shadow-soft);
+      width: min(100%, 470px);
+      justify-self: end;
+    }
+
+    .ui-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      gap: 12px;
+    }
+
+    .ui-title {
+      font-size: 0.9rem;
+      font-weight: 650;
+      letter-spacing: -0.01em;
+    }
+
+    .badge {
+      padding: 5px 10px;
+      border-radius: 100px;
+      background: rgba(244, 180, 0, 0.18);
+      color: #4b3800;
+      font-size: 0.72rem;
+      font-weight: 620;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .mock-panel {
+      border: 1px solid #e5eaf4;
+      border-radius: 10px;
+      padding: 12px;
+      background: #fcfdff;
+      display: grid;
+      gap: 10px;
+    }
+
+    .mock-line {
+      height: 10px;
+      border-radius: 6px;
+      background: #e6ecf7;
+    }
+
+    .mock-row {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 8px;
+    }
+
+    .mock-line.gold {
+      background: rgba(244, 180, 0, 0.5);
+    }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .problem-card {
+      border: 1px solid #e8edf6;
+      background: #fff;
+      border-radius: 12px;
+      padding: 28px 24px;
+      display: grid;
+      gap: 14px;
+      min-height: 220px;
+    }
+
+    .problem-card p {
+      max-width: 28ch;
+    }
+
+    .problem-link {
+      color: #27395f;
+      font-size: 0.9rem;
+      font-weight: 540;
+      letter-spacing: -0.01em;
+    }
+
+    .solution-stack {
+      display: grid;
+      gap: 26px;
+    }
+
+    .solution-row {
+      border: 1px solid #e6ebf4;
+      border-radius: 14px;
+      padding: 26px;
+      display: grid;
+      grid-template-columns: 1.18fr 0.82fr;
+      gap: 28px;
+      align-items: center;
+      background: #fff;
+    }
+
+    .solution-row p {
+      max-width: 54ch;
+    }
+
+    .row-tag {
+      margin-bottom: 8px;
+      color: #2d446e;
+      font-size: 0.82rem;
+      font-weight: 650;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .wire {
+      border: 1px solid #dce4f3;
+      border-radius: 12px;
+      padding: 14px;
+      background: #f9fbff;
+      display: grid;
+      gap: 10px;
+      min-height: 150px;
+    }
+
+    .wire-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .wire-pill {
+      width: 74px;
+      height: 9px;
+      background: #dce5f5;
+      border-radius: 999px;
+    }
+
+    .wire-pill.gold {
+      background: rgba(244, 180, 0, 0.56);
+    }
+
+    .wire-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .wire-list span {
+      height: 9px;
+      border-radius: 999px;
+      background: #e3eaf8;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .step-card {
+      border: 1px solid #e7ecf6;
+      border-radius: 12px;
+      padding: 24px 20px;
+      display: grid;
+      gap: 14px;
+      background: #fff;
+    }
+
+    .step-icon {
+      width: 38px;
+      height: 38px;
+      border: 1.2px solid #d4ddef;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      color: #2a3f69;
+    }
+
+    .step-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .step-index {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 620;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #263b61;
+      background: #eff3fa;
+      width: fit-content;
+    }
+
+    .metrics {
+      background: var(--navy-deep);
+      color: #f0f4ff;
+      border-top: 0;
+    }
+
+    .metrics h2,
+    .metrics .kicker {
+      color: #f5f7ff;
+    }
+
+    .metrics .kicker::before {
+      background: rgba(245, 247, 255, 0.36);
+    }
+
+    .metrics .lead {
+      color: #c0cae2;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .stat-card {
+      border: 1px solid rgba(243, 246, 255, 0.18);
+      border-radius: 12px;
+      padding: 30px 20px;
+      background: rgba(255, 255, 255, 0.03);
+      min-height: 202px;
+      display: grid;
+      align-content: start;
+      gap: 14px;
+    }
+
+    .stat-num {
+      color: var(--gold);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 740;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    .stat-label {
+      color: #eef2ff;
+      font-weight: 550;
+      letter-spacing: -0.01em;
+    }
+
+    .stat-sub {
+      color: #aebcda;
+      font-size: 0.94rem;
+    }
+
+    .integration-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .list {
+      display: grid;
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .list-item {
+      padding-left: 22px;
+      position: relative;
+      color: var(--text-soft);
+      font-size: 1rem;
+    }
+
+    .list-item::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.62em;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--gold);
+    }
+
+    .cards-mock {
+      display: grid;
+      gap: 12px;
+    }
+
+    .ui-card {
+      border: 1px solid #e4eaf5;
+      border-radius: 12px;
+      padding: 16px;
+      background: #fcfdff;
+      display: grid;
+      gap: 10px;
+    }
+
+    .ui-card .title {
+      font-size: 0.9rem;
+      color: #1f3359;
+      font-weight: 620;
+    }
+
+    .ui-card .line {
+      height: 9px;
+      border-radius: 999px;
+      background: #e6edf9;
+    }
+
+    .ui-card .line.gold {
+      background: rgba(244, 180, 0, 0.45);
+      width: 64%;
+    }
+
+    .future-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .ai-panel {
+      border: 1px solid #e3eaf6;
+      border-radius: 14px;
+      padding: 24px;
+      background: #fbfdff;
+      display: grid;
+      gap: 12px;
+    }
+
+    .ai-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #edf2fb;
+      font-size: 0.95rem;
+      color: #33496f;
+    }
+
+    .ai-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .tag {
+      font-size: 0.72rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #3b517a;
+      background: #edf2fc;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-weight: 610;
+      width: fit-content;
+    }
+
+    .cta-final {
+      text-align: center;
+      border-bottom: 0;
+    }
+
+    .cta-final h2 {
+      max-width: none;
+      margin-inline: auto;
+      font-size: clamp(2rem, 4.3vw, 3.6rem);
+    }
+
+    .cta-final p {
+      margin: 18px auto 0;
+      max-width: 44ch;
+    }
+
+    .cta-final .btn-row {
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 460ms ease, transform 460ms ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 1080px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .ui-float {
+        justify-self: start;
+      }
+
+      .problem-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .steps-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .stat-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .integration-layout,
+      .future-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      :root {
+        --max: 1100px;
+      }
+
+      section {
+        padding: 104px 0;
+      }
+
+      .container {
+        width: min(100% - 32px, var(--max));
+      }
+
+      .hero {
+        min-height: auto;
+        padding-top: 90px;
+      }
+
+      .hero::before {
+        width: 78vw;
+        right: -38vw;
+        border-width: 16px;
+      }
+
+      .hero::after {
+        width: 52vw;
+        right: -12vw;
+        top: 18%;
+        border-width: 8px;
+      }
+
+      .hero-inline-logo {
+        margin-bottom: 0;
+      }
+
+      .hero-inline-logo img {
+        width: clamp(170px, 56vw, 240px);
+      }
+
+      .hero-brand {
+        margin-bottom: 16px;
+      }
+
+      .problem-grid,
+      .steps-grid,
+      .stat-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .solution-row {
+        grid-template-columns: 1fr;
+      }
+
+      .btn-row {
+        width: 100%;
+      }
+
+      .btn {
+        flex: 1 1 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      .btn,
+      .reveal {
+        transition: none;
+      }
+
+      .reveal {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero" id="top">
+      <div class="container hero-grid">
+        <div class="reveal">
+          <div class="hero-brand">
+            <a class="hero-inline-logo" href="#top" aria-label="WynnDialer home">
+              <img src="assets/images/wynndialer_logo_clean.png" alt="WynnDialer logo">
+            </a>
+            <span class="kicker">WynnDialer by Blink</span>
+          </div>
+          <h1>Book 5–6 Qualified Appointments Per Day.</h1>
+          <p>WynnDialer turns outbound campaigns into predictable showroom traffic and inventory acquisition.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="#final-cta">Start a Booking Block</a>
+            <a class="btn btn-secondary" href="#how-it-works">See How It Works</a>
+          </div>
+        </div>
+        <aside class="ui-float reveal" aria-label="WynnDialer interface preview">
+          <div class="ui-head">
+            <div class="ui-title">Daily Booking Block</div>
+            <span class="badge">Live</span>
+          </div>
+          <div class="mock-panel">
+            <div class="mock-row">
+              <span class="mock-line"></span>
+              <span class="mock-line gold"></span>
+            </div>
+            <div class="mock-row">
+              <span class="mock-line"></span>
+              <span class="mock-line"></span>
+            </div>
+            <div class="mock-row">
+              <span class="mock-line gold"></span>
+              <span class="mock-line"></span>
+            </div>
+            <div class="mock-row">
+              <span class="mock-line"></span>
+              <span class="mock-line gold"></span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="problem">
+      <div class="container">
+        <header class="section-head reveal">
+          <span class="kicker">The Problem</span>
+          <h2>Outbound Should Create Revenue. Not Just Activity.</h2>
+        </header>
+        <div class="problem-grid">
+          <article class="problem-card reveal">
+            <h3>Dialing Without Structure → Wasted Time</h3>
+            <p>Reps burn hours chasing disconnected lists with no booking discipline, no block cadence, and no measurable output.</p>
+            <span class="problem-link">Activity rises, outcomes stall.</span>
+          </article>
+          <article class="problem-card reveal">
+            <h3>No Booking Visibility → Empty Calendar</h3>
+            <p>Without a live appointment view, teams cannot see momentum gaps until event day when opportunities are already lost.</p>
+            <span class="problem-link">Forecasts become guesswork.</span>
+          </article>
+          <article class="problem-card reveal">
+            <h3>No Mileage Capture → Missed Inventory</h3>
+            <p>Calls that should source inventory end with no mileage data captured, blocking timely appraisals and acquisition follow-up.</p>
+            <span class="problem-link">Inventory slips to competitors.</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="solution">
+      <div class="container">
+        <header class="section-head reveal">
+          <span class="kicker">The Solution</span>
+          <h2>The Appointment Revenue Engine.</h2>
+        </header>
+        <div class="solution-stack">
+          <article class="solution-row reveal">
+            <div>
+              <div class="row-tag">A) Smart Call Blocks</div>
+              <h3>Focused dialing windows built for booking volume.</h3>
+              <p>WynnDialer organizes outbound work into repeatable booking blocks so reps spend less time deciding and more time connecting with qualified prospects.</p>
+            </div>
+            <div class="wire" aria-hidden="true">
+              <div class="wire-top">
+                <span class="wire-pill"></span>
+                <span class="wire-pill gold"></span>
+              </div>
+              <div class="wire-list">
+                <span></span><span></span><span></span><span class="wire-pill gold"></span>
+              </div>
+            </div>
+          </article>
+
+          <article class="solution-row reveal">
+            <div>
+              <div class="row-tag">B) Campaign-Synced Dialing</div>
+              <h3>Outbound linked to SMS, RVM, and CRM campaigns.</h3>
+              <p>Every dial session syncs with campaign workflows, so messaging and calls reinforce each other while managers get one connected performance view across channels.</p>
+            </div>
+            <div class="wire" aria-hidden="true">
+              <div class="wire-top">
+                <span class="wire-pill gold"></span>
+                <span class="wire-pill"></span>
+              </div>
+              <div class="wire-list">
+                <span class="wire-pill gold"></span><span></span><span></span><span></span>
+              </div>
+            </div>
+          </article>
+
+          <article class="solution-row reveal">
+            <div>
+              <div class="row-tag">C) Booking Board</div>
+              <h3>Visual calendar pressure that drives rep urgency.</h3>
+              <p>A live booking board shows slot fill in real time, creating clear pacing targets while surfacing gaps early enough to recover before event day.</p>
+            </div>
+            <div class="wire" aria-hidden="true">
+              <div class="wire-top">
+                <span class="wire-pill"></span>
+                <span class="wire-pill gold"></span>
+              </div>
+              <div class="wire-list">
+                <span class="wire-pill gold"></span><span></span><span class="wire-pill gold"></span><span></span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="how-it-works">
+      <div class="container">
+        <header class="section-head reveal">
+          <span class="kicker">How It Works</span>
+          <h2>Execution in Four Steps.</h2>
+          <p class="lead">Structured flow keeps reps aligned and gives managers direct visibility into pipeline creation and revenue impact.</p>
+        </header>
+        <div class="steps-grid">
+          <article class="step-card reveal">
+            <div class="step-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M4 6h16M4 12h10M4 18h7"></path>
+              </svg>
+            </div>
+            <span class="step-index">Step 1</span>
+            <h3>Load Campaign Segment</h3>
+            <p>Select the exact audience and priority rules for the session.</p>
+          </article>
+          <article class="step-card reveal">
+            <div class="step-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 5v14M5 12h14"></path>
+              </svg>
+            </div>
+            <span class="step-index">Step 2</span>
+            <h3>Run Booking Block</h3>
+            <p>Launch a timed dial sprint designed to maximize connections.</p>
+          </article>
+          <article class="step-card reveal">
+            <div class="step-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M6 12h12M12 6l6 6-6 6"></path>
+              </svg>
+            </div>
+            <span class="step-index">Step 3</span>
+            <h3>Capture Mileage + Book Appointment</h3>
+            <p>Log inventory details while securing qualified event slots.</p>
+          </article>
+          <article class="step-card reveal">
+            <div class="step-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M5 16l4-5 4 3 6-8"></path>
+              </svg>
+            </div>
+            <span class="step-index">Step 4</span>
+            <h3>Track Revenue Impact</h3>
+            <p>Monitor booked volume, show rates, and close performance daily.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="metrics" id="metrics">
+      <div class="container">
+        <header class="section-head reveal">
+          <span class="kicker">Performance</span>
+          <h2>Built for Results.</h2>
+          <p class="lead">WynnDialer is positioned as a revenue acceleration engine, built for measurable operational lift.</p>
+        </header>
+        <div class="stat-grid">
+          <article class="stat-card reveal">
+            <div class="stat-num">5–6</div>
+            <div class="stat-label">Appointments Per Rep Per Day</div>
+          </article>
+          <article class="stat-card reveal">
+            <div class="stat-num">70%</div>
+            <div class="stat-label">Average Show Rate</div>
+          </article>
+          <article class="stat-card reveal">
+            <div class="stat-num">60%</div>
+            <div class="stat-label">Event Close Rate</div>
+          </article>
+          <article class="stat-card reveal">
+            <div class="stat-num">10x</div>
+            <div class="stat-label">Better Than Auction Inventory</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="integration">
+      <div class="container integration-layout">
+        <div class="reveal">
+          <span class="kicker">Dashboard Integration</span>
+          <h2>Fully Integrated Into PrairieCRM.</h2>
+          <div class="list" role="list">
+            <div class="list-item" role="listitem">Campaign tracking tied to every outbound session</div>
+            <div class="list-item" role="listitem">Dialer metrics visible by rep, store, and campaign</div>
+            <div class="list-item" role="listitem">Leaderboards that reinforce daily booking accountability</div>
+            <div class="list-item" role="listitem">Automatic manager email summary each day</div>
+          </div>
+        </div>
+        <aside class="cards-mock reveal" aria-label="PrairieCRM dashboard cards">
+          <div class="ui-card">
+            <div class="title">Campaign Tracking</div>
+            <span class="line gold"></span>
+            <span class="line"></span>
+            <span class="line"></span>
+          </div>
+          <div class="ui-card">
+            <div class="title">Dialer Metrics</div>
+            <span class="line"></span>
+            <span class="line gold"></span>
+            <span class="line"></span>
+          </div>
+          <div class="ui-card">
+            <div class="title">Leaderboard Snapshot</div>
+            <span class="line"></span>
+            <span class="line"></span>
+            <span class="line gold"></span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="ai-ready">
+      <div class="container future-grid">
+        <div class="reveal">
+          <span class="kicker">Future Ready</span>
+          <h2>Ready for AI Coaching.</h2>
+          <p class="lead">WynnDialer is structured for the next layer of performance coaching while keeping today’s booking workflow fast and practical.</p>
+        </div>
+        <aside class="ai-panel reveal">
+          <span class="tag">Optional</span>
+          <div class="ai-row"><span>Call recording</span><span>On Demand</span></div>
+          <div class="ai-row"><span>Transcript storage</span><span>Structured</span></div>
+          <div class="ai-row"><span>Post-call scoring</span><span>Configurable</span></div>
+          <div class="ai-row"><span>Rubric-based grading</span><span>Manager Ready</span></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="cta-final" id="final-cta">
+      <div class="container reveal">
+        <h2>Manufacture Revenue.</h2>
+        <p>Stop waiting for traffic. Engineer it.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="wynndialer-prototype.html">Launch WynnDialer</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      var elements = document.querySelectorAll(".reveal");
+      if (!("IntersectionObserver" in window)) {
+        elements.forEach(function (el) {
+          el.classList.add("visible");
+        });
+        return;
+      }
+
+      var observer = new IntersectionObserver(function (entries, obs) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.14, rootMargin: "0px 0px -8% 0px" });
+
+      elements.forEach(function (el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
+</body>
+</html>
