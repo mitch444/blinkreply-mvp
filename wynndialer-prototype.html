@@ -793,6 +793,99 @@
       flex-wrap: wrap;
     }
 
+    .wd-live-resolution {
+      border: 1px solid #e2e8f3;
+      border-radius: 10px;
+      background: #fbfdff;
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .wd-live-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .wd-live-head span {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #7485a3;
+      font-weight: 650;
+    }
+
+    .wd-live-head strong {
+      font-size: 0.83rem;
+      color: #2f456f;
+      font-weight: 700;
+    }
+
+    .wd-live-head strong.is-locked {
+      color: #6a5011;
+    }
+
+    .wd-live-outcomes {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .wd-live-outcome-btn {
+      border: 1px solid #dce4f2;
+      border-radius: 8px;
+      min-height: 34px;
+      padding: 0 10px;
+      background: #fff;
+      color: #334d77;
+      font-size: 0.82rem;
+      font-weight: 620;
+      cursor: pointer;
+      transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease;
+    }
+
+    .wd-live-outcome-btn:hover:not(:disabled) {
+      border-color: #bfcbe2;
+      background: #f8fafe;
+    }
+
+    .wd-live-outcome-btn.is-active {
+      border-color: var(--gold);
+      background: #fff5dc;
+      color: #5f480f;
+    }
+
+    .wd-live-fields {
+      border-top: 1px solid #e5ebf5;
+      padding-top: 10px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .wd-live-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .wd-live-error {
+      min-height: 18px;
+      font-size: 0.82rem;
+      color: #b43854;
+      font-weight: 600;
+    }
+
+    .wd-live-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
     .wd-btn.wd-active {
       background: #efb122;
       border-color: #efb122;
@@ -1310,7 +1403,8 @@
       }
 
       .wd-customer-meta-grid,
-      .wd-form-grid {
+      .wd-form-grid,
+      .wd-live-grid {
         grid-template-columns: 1fr;
       }
 
@@ -1475,6 +1569,64 @@
         <div class="wd-voicemail-row">
           <button id="voicemailBeepBtn" class="wd-btn wd-btn-outline wd-hidden" type="button">Voicemail Beep Heard</button>
           <button id="dropVoicemailBtn" class="wd-btn wd-btn-primary wd-hidden" type="button">Drop Voicemail &amp; Continue</button>
+        </div>
+
+        <div id="liveResolutionPanel" class="wd-live-resolution wd-hidden">
+          <div class="wd-live-head">
+            <span>In-Call Resolution</span>
+            <strong id="liveResolutionSummary">No resolution started</strong>
+          </div>
+
+          <div id="liveOutcomeButtons" class="wd-live-outcomes">
+            <button type="button" class="wd-live-outcome-btn" data-live-outcome="Appointment Booked">Appointment Booked</button>
+            <button type="button" class="wd-live-outcome-btn" data-live-outcome="Call Back Later">Call Back Later</button>
+            <button type="button" class="wd-live-outcome-btn" data-live-outcome="Wants Info">Wants Info</button>
+            <button type="button" class="wd-live-outcome-btn" data-live-outcome="Not Interested">Not Interested</button>
+          </div>
+
+          <div id="liveAppointmentFields" class="wd-live-fields wd-hidden">
+            <div class="wd-live-grid">
+              <div>
+                <label class="wd-label" for="liveDaySelect">Date</label>
+                <select id="liveDaySelect" class="wd-field-select">
+                  <option value="Friday">Friday</option>
+                  <option value="Saturday">Saturday</option>
+                </select>
+              </div>
+              <div>
+                <label class="wd-label" for="liveSlotSelect">Time Slot</label>
+                <select id="liveSlotSelect" class="wd-field-select"></select>
+              </div>
+            </div>
+            <div class="wd-live-grid">
+              <div>
+                <label class="wd-label" for="liveVehicleInput">Confirm Vehicle</label>
+                <input id="liveVehicleInput" class="wd-field" type="text">
+              </div>
+              <div>
+                <label class="wd-label" for="liveMileageInput">Confirm Mileage</label>
+                <input id="liveMileageInput" class="wd-field" type="number" min="0" step="1">
+              </div>
+            </div>
+          </div>
+
+          <div id="liveWantsInfoFields" class="wd-live-fields wd-hidden">
+            <div>
+              <label class="wd-label" for="liveInfoNeededInput">What Info Is Needed?</label>
+              <textarea id="liveInfoNeededInput" class="wd-field wd-field-textarea" placeholder="What does the customer need from us?"></textarea>
+            </div>
+            <div>
+              <label class="wd-label" for="liveInfoWhyInput">Why Is It Needed?</label>
+              <textarea id="liveInfoWhyInput" class="wd-field wd-field-textarea" placeholder="Why this matters for the customer's decision"></textarea>
+            </div>
+          </div>
+
+          <div id="liveResolutionError" class="wd-live-error"></div>
+
+          <div class="wd-live-actions">
+            <button id="clearLiveResolutionBtn" type="button" class="wd-btn wd-btn-ghost">Clear</button>
+            <button id="lockLiveResolutionBtn" type="button" class="wd-btn wd-btn-outline">Lock Resolution</button>
+          </div>
         </div>
 
         <div class="wd-support-stack">
@@ -1684,6 +1836,20 @@
         Saturday: "Saturday (9AM-6PM)"
       };
 
+      function createEmptyLiveResolution(day) {
+        return {
+          outcome: "",
+          day: day || "Friday",
+          slot: "",
+          vehicle: "",
+          mileage: "",
+          infoNeeded: "",
+          infoWhy: "",
+          locked: false,
+          summary: ""
+        };
+      }
+
       let powerModeActive = false;
       let pauseAfterCall = false;
       let currentCallActive = false;
@@ -1743,7 +1909,8 @@
         selectedOutcome: "",
         selectedDay: "Friday",
         selectedSlot: "",
-        justBookedKey: ""
+        justBookedKey: "",
+        liveResolution: createEmptyLiveResolution("Friday")
       };
 
       var els = {
@@ -1777,6 +1944,20 @@
         bookedToday: document.getElementById("bookedToday"),
         voicemailBeepBtn: document.getElementById("voicemailBeepBtn"),
         dropVoicemailBtn: document.getElementById("dropVoicemailBtn"),
+        liveResolutionPanel: document.getElementById("liveResolutionPanel"),
+        liveResolutionSummary: document.getElementById("liveResolutionSummary"),
+        liveOutcomeButtons: document.getElementById("liveOutcomeButtons"),
+        liveAppointmentFields: document.getElementById("liveAppointmentFields"),
+        liveWantsInfoFields: document.getElementById("liveWantsInfoFields"),
+        liveDaySelect: document.getElementById("liveDaySelect"),
+        liveSlotSelect: document.getElementById("liveSlotSelect"),
+        liveVehicleInput: document.getElementById("liveVehicleInput"),
+        liveMileageInput: document.getElementById("liveMileageInput"),
+        liveInfoNeededInput: document.getElementById("liveInfoNeededInput"),
+        liveInfoWhyInput: document.getElementById("liveInfoWhyInput"),
+        liveResolutionError: document.getElementById("liveResolutionError"),
+        clearLiveResolutionBtn: document.getElementById("clearLiveResolutionBtn"),
+        lockLiveResolutionBtn: document.getElementById("lockLiveResolutionBtn"),
         customerPanel: document.getElementById("customerPanel"),
         customerName: document.getElementById("customerName"),
         customerPhone: document.getElementById("customerPhone"),
@@ -1948,6 +2129,277 @@
         hideVoicemailInline();
       }
 
+      function setLiveResolutionError(message) {
+        els.liveResolutionError.textContent = message || "";
+      }
+
+      function clearLiveResolutionError() {
+        els.liveResolutionError.textContent = "";
+      }
+
+      function resetLiveResolutionState() {
+        runtime.liveResolution = createEmptyLiveResolution(runtime.activeBoardDay || "Friday");
+        clearLiveResolutionError();
+      }
+
+      function getLiveResolutionSummaryText() {
+        var live = runtime.liveResolution;
+        if (!live.outcome) {
+          return "No resolution started";
+        }
+        if (!live.locked) {
+          return live.outcome + " in progress";
+        }
+        return live.summary || (live.outcome + " locked");
+      }
+
+      function renderLiveResolutionSlots() {
+        var live = runtime.liveResolution;
+        var day = live.day || "Friday";
+        var slots = SLOT_TEMPLATE[day] || [];
+        var html = '<option value="">Select slot</option>';
+        var selectedValid = false;
+
+        slots.forEach(function (slot) {
+          var booked = runtime.bookedSlots[day].has(slot);
+          var selected = live.slot === slot && !booked;
+          if (selected) {
+            selectedValid = true;
+          }
+          html += '<option value="' + slot + '"' +
+            (selected ? " selected" : "") +
+            (booked ? " disabled" : "") +
+            ">" + slot + (booked ? " (Booked)" : "") + "</option>";
+        });
+
+        els.liveSlotSelect.innerHTML = html;
+
+        if (!selectedValid) {
+          runtime.liveResolution.slot = "";
+          els.liveSlotSelect.value = "";
+        }
+      }
+
+      function renderLiveResolutionPanel() {
+        var connectedState = currentCallActive && !runtime.modalOpen && !runtime.pauseLightboxOpen && !runtime.voicemailDropping;
+        var live = runtime.liveResolution;
+        var showAppointment = live.outcome === "Appointment Booked";
+        var showWantsInfo = live.outcome === "Wants Info";
+
+        els.liveResolutionPanel.classList.toggle("wd-hidden", !connectedState);
+        if (!connectedState) {
+          return;
+        }
+
+        els.liveResolutionSummary.textContent = getLiveResolutionSummaryText();
+        els.liveResolutionSummary.classList.toggle("is-locked", live.locked);
+
+        var liveButtons = els.liveOutcomeButtons.querySelectorAll(".wd-live-outcome-btn");
+        liveButtons.forEach(function (btn) {
+          var isActive = btn.dataset.liveOutcome === live.outcome;
+          btn.classList.toggle("is-active", isActive);
+          btn.disabled = live.locked;
+        });
+
+        els.liveAppointmentFields.classList.toggle("wd-hidden", !showAppointment);
+        els.liveWantsInfoFields.classList.toggle("wd-hidden", !showWantsInfo);
+
+        els.liveDaySelect.disabled = live.locked;
+        els.liveSlotSelect.disabled = live.locked;
+        els.liveVehicleInput.disabled = live.locked;
+        els.liveMileageInput.disabled = live.locked;
+        els.liveInfoNeededInput.disabled = live.locked;
+        els.liveInfoWhyInput.disabled = live.locked;
+
+        els.liveDaySelect.value = live.day || "Friday";
+        els.liveVehicleInput.value = live.vehicle || "";
+        els.liveMileageInput.value = live.mileage || "";
+        els.liveInfoNeededInput.value = live.infoNeeded || "";
+        els.liveInfoWhyInput.value = live.infoWhy || "";
+
+        if (showAppointment) {
+          renderLiveResolutionSlots();
+          els.liveSlotSelect.value = live.slot || "";
+        } else {
+          els.liveSlotSelect.innerHTML = "";
+        }
+
+        els.lockLiveResolutionBtn.disabled = !live.outcome || live.locked;
+        els.lockLiveResolutionBtn.textContent = live.locked ? "Resolution Locked" : "Lock Resolution";
+        els.clearLiveResolutionBtn.disabled = !live.outcome && !live.locked;
+      }
+
+      function setLiveOutcome(outcome) {
+        if (!currentCallActive || runtime.voicemailDropping) {
+          return;
+        }
+
+        var live = runtime.liveResolution;
+        var customer = getCurrentCustomer();
+        live.outcome = outcome;
+        live.locked = false;
+        live.summary = "";
+
+        if (outcome === "Appointment Booked" && customer) {
+          if (!live.vehicle) {
+            live.vehicle = customer.vehicle;
+          }
+          if (!live.mileage) {
+            live.mileage = String(customer.mileage);
+          }
+          if (!live.day) {
+            live.day = runtime.activeBoardDay || "Friday";
+          }
+        }
+
+        clearLiveResolutionError();
+        renderLiveResolutionPanel();
+      }
+
+      function validateOutcomeDetails(outcome, details, onError) {
+        function fail(message) {
+          if (onError) {
+            onError(message);
+          }
+          return null;
+        }
+
+        if (outcome === "Appointment Booked") {
+          var vehicleValue = (details.vehicle || "").trim();
+          var mileageValue = Number(details.mileage);
+          var dayValue = details.day || "";
+          var slotValue = details.slot || "";
+
+          if (!dayValue) {
+            return fail("Select a date before completing.");
+          }
+
+          if (!slotValue) {
+            return fail("Select an open time slot before completing.");
+          }
+
+          if (!vehicleValue) {
+            return fail("Confirm the vehicle to continue.");
+          }
+
+          if (!Number.isFinite(mileageValue) || mileageValue < 0) {
+            return fail("Confirm mileage with a valid number.");
+          }
+
+          if (runtime.bookedSlots[dayValue].has(slotValue)) {
+            return fail("That slot has already been booked.");
+          }
+
+          return {
+            day: dayValue,
+            slot: slotValue,
+            vehicle: vehicleValue,
+            mileage: Math.floor(mileageValue)
+          };
+        }
+
+        if (outcome === "Wants Info") {
+          var infoNeeded = (details.infoNeeded || "").trim();
+          var infoWhy = (details.infoWhy || "").trim();
+
+          if (!infoNeeded) {
+            return fail("Add what information the customer requested.");
+          }
+
+          if (!infoWhy) {
+            return fail("Add why the information matters to the customer.");
+          }
+
+          return {
+            infoNeeded: infoNeeded,
+            infoWhy: infoWhy
+          };
+        }
+
+        return {};
+      }
+
+      function applyOutcomeDetails(outcome, details, customer, onError) {
+        var normalized = validateOutcomeDetails(outcome, details, onError);
+        if (!normalized) {
+          return false;
+        }
+
+        if (outcome === "Appointment Booked") {
+          if (customer) {
+            customer.vehicle = normalized.vehicle;
+            customer.mileage = normalized.mileage;
+          }
+
+          runtime.bookedSlots[normalized.day].add(normalized.slot);
+          runtime.justBookedKey = normalized.day + "|" + normalized.slot;
+          renderBookingBoard(runtime.justBookedKey);
+          return true;
+        }
+
+        if (outcome === "Wants Info") {
+          if (customer) {
+            customer.infoNeeded = normalized.infoNeeded;
+            customer.infoWhy = normalized.infoWhy;
+            renderCustomerInsight(customer);
+          }
+
+          runtime.justBookedKey = "";
+          return true;
+        }
+
+        runtime.justBookedKey = "";
+        return true;
+      }
+
+      function lockLiveResolution() {
+        if (!currentCallActive) {
+          return;
+        }
+
+        var live = runtime.liveResolution;
+
+        if (!live.outcome) {
+          setLiveResolutionError("Select a resolution before locking.");
+          return;
+        }
+
+        var normalized = validateOutcomeDetails(
+          live.outcome,
+          {
+            day: live.day,
+            slot: live.slot,
+            vehicle: live.vehicle,
+            mileage: live.mileage,
+            infoNeeded: live.infoNeeded,
+            infoWhy: live.infoWhy
+          },
+          setLiveResolutionError
+        );
+
+        if (!normalized) {
+          return;
+        }
+
+        if (live.outcome === "Appointment Booked") {
+          live.day = normalized.day;
+          live.slot = normalized.slot;
+          live.vehicle = normalized.vehicle;
+          live.mileage = String(normalized.mileage);
+          live.summary = "Appointment locked: " + live.day + " at " + live.slot + " (ready on hangup)";
+        } else if (live.outcome === "Wants Info") {
+          live.infoNeeded = normalized.infoNeeded;
+          live.infoWhy = normalized.infoWhy;
+          live.summary = "Wants Info locked (ready on hangup)";
+        } else {
+          live.summary = live.outcome + " locked (ready on hangup)";
+        }
+
+        live.locked = true;
+        clearLiveResolutionError();
+        renderLiveResolutionPanel();
+      }
+
       function updatePowerModeBadge() {
         var label = "Power Mode Inactive";
         if (powerModeActive) {
@@ -2003,6 +2455,7 @@
         els.dropVoicemailBtn.disabled = !showDropButton || runtime.voicemailDropping;
 
         els.callTimer.classList.toggle("is-dim", runtime.voicemailDropping);
+        renderLiveResolutionPanel();
       }
 
       function updateStats() {
@@ -2146,22 +2599,24 @@
       }
 
       function openDispositionModal(preselectedOutcome) {
+        var live = runtime.liveResolution;
+        var hasStagedResolution = !!live.outcome;
         runtime.modalOpen = true;
-        runtime.selectedOutcome = preselectedOutcome || "";
-        runtime.selectedDay = runtime.activeBoardDay;
-        runtime.selectedSlot = "";
+        runtime.selectedOutcome = preselectedOutcome || live.outcome || "";
+        runtime.selectedDay = hasStagedResolution ? (live.day || runtime.activeBoardDay) : runtime.activeBoardDay;
+        runtime.selectedSlot = hasStagedResolution ? (live.slot || "") : "";
 
         var customer = getCurrentCustomer();
         if (customer) {
-          els.confirmVehicleInput.value = customer.vehicle;
-          els.confirmMileageInput.value = els.mileageInput.value || String(customer.mileage);
-          els.infoNeededInput.value = customer.infoNeeded || "";
-          els.infoWhyInput.value = customer.infoWhy || "";
+          els.confirmVehicleInput.value = live.vehicle || customer.vehicle;
+          els.confirmMileageInput.value = live.mileage || els.mileageInput.value || String(customer.mileage);
+          els.infoNeededInput.value = live.infoNeeded || customer.infoNeeded || "";
+          els.infoWhyInput.value = live.infoWhy || customer.infoWhy || "";
         } else {
-          els.confirmVehicleInput.value = "";
-          els.confirmMileageInput.value = "";
-          els.infoNeededInput.value = "";
-          els.infoWhyInput.value = "";
+          els.confirmVehicleInput.value = live.vehicle || "";
+          els.confirmMileageInput.value = live.mileage || "";
+          els.infoNeededInput.value = live.infoNeeded || "";
+          els.infoWhyInput.value = live.infoWhy || "";
         }
         els.confirmMileageInput.dataset.userEdited = "";
         els.appointmentDaySelect.value = runtime.selectedDay;
@@ -2270,6 +2725,7 @@
         updateCallTimerDisplay();
         currentCallActive = false;
         resetVoicemailState();
+        resetLiveResolutionState();
         updatePauseIndicator();
       }
 
@@ -2295,8 +2751,42 @@
         resetVoicemailState();
         setStatus("Call Ended");
         updatePauseIndicator();
+        if (runtime.liveResolution.locked && runtime.liveResolution.outcome) {
+          var lockedOutcome = runtime.liveResolution.outcome;
+          var customer = getCurrentCustomer();
+          var lockedApplied = applyOutcomeDetails(
+            lockedOutcome,
+            {
+              day: runtime.liveResolution.day,
+              slot: runtime.liveResolution.slot,
+              vehicle: runtime.liveResolution.vehicle,
+              mileage: runtime.liveResolution.mileage,
+              infoNeeded: runtime.liveResolution.infoNeeded,
+              infoWhy: runtime.liveResolution.infoWhy
+            },
+            customer
+          );
+
+          if (!lockedApplied) {
+            runtime.liveResolution.locked = false;
+            updateControlState();
+            openDispositionModal(lockedOutcome);
+            return;
+          }
+
+          recordAttempt(lockedOutcome);
+          resetLiveResolutionState();
+          updateControlState();
+          if (pauseAfterCall) {
+            showPauseLightbox();
+            return;
+          }
+          autoDialNext();
+          return;
+        }
+
         updateControlState();
-        openDispositionModal("");
+        openDispositionModal(runtime.liveResolution.outcome || "");
       }
 
       function autoDialNext() {
@@ -2316,6 +2806,7 @@
 
         runtime.queueComplete = false;
         resetVoicemailState();
+        resetLiveResolutionState();
         loadQueueCustomer(runtime.nextIndex, true);
         runtime.nextIndex += 1;
         updateStats();
@@ -2368,6 +2859,7 @@
         currentCallActive = false;
         runtime.queueComplete = false;
         resetVoicemailState();
+        resetLiveResolutionState();
         sessionStartTime = Date.now();
         startSessionTimer();
         setStatus("Connecting to You...");
@@ -2474,6 +2966,7 @@
           updatePauseIndicator();
 
           recordAttempt("Left Voicemail");
+          resetLiveResolutionState();
           updateControlState();
 
           runtime.flowTimers.push(setTimeout(function () {
@@ -2503,70 +2996,26 @@
         }
 
         var customer = getCurrentCustomer();
+        var applied = applyOutcomeDetails(
+          runtime.selectedOutcome,
+          {
+            day: runtime.selectedDay,
+            slot: runtime.selectedSlot,
+            vehicle: els.confirmVehicleInput.value,
+            mileage: els.confirmMileageInput.value,
+            infoNeeded: els.infoNeededInput.value,
+            infoWhy: els.infoWhyInput.value
+          },
+          customer,
+          showModalError
+        );
 
-        if (runtime.selectedOutcome === "Appointment Booked") {
-          var vehicleValue = els.confirmVehicleInput.value.trim();
-          var mileageValue = Number(els.confirmMileageInput.value);
-
-          if (!runtime.selectedDay) {
-            showModalError("Select a date before completing.");
-            return;
-          }
-
-          if (!runtime.selectedSlot) {
-            showModalError("Select an open time slot before completing.");
-            return;
-          }
-
-          if (!vehicleValue) {
-            showModalError("Confirm the vehicle to continue.");
-            return;
-          }
-
-          if (!Number.isFinite(mileageValue) || mileageValue < 0) {
-            showModalError("Confirm mileage with a valid number.");
-            return;
-          }
-
-          if (runtime.bookedSlots[runtime.selectedDay].has(runtime.selectedSlot)) {
-            showModalError("That slot has already been booked.");
-            return;
-          }
-
-          if (customer) {
-            customer.vehicle = vehicleValue;
-            customer.mileage = Math.floor(mileageValue);
-          }
-
-          runtime.bookedSlots[runtime.selectedDay].add(runtime.selectedSlot);
-          runtime.justBookedKey = runtime.selectedDay + "|" + runtime.selectedSlot;
-          renderBookingBoard(runtime.justBookedKey);
-        } else if (runtime.selectedOutcome === "Wants Info") {
-          var infoNeeded = els.infoNeededInput.value.trim();
-          var infoWhy = els.infoWhyInput.value.trim();
-
-          if (!infoNeeded) {
-            showModalError("Add what information the customer requested.");
-            return;
-          }
-
-          if (!infoWhy) {
-            showModalError("Add why the information matters to the customer.");
-            return;
-          }
-
-          if (customer) {
-            customer.infoNeeded = infoNeeded;
-            customer.infoWhy = infoWhy;
-            renderCustomerInsight(customer);
-          }
-
-          runtime.justBookedKey = "";
-        } else {
-          runtime.justBookedKey = "";
+        if (!applied) {
+          return;
         }
 
         recordAttempt(runtime.selectedOutcome);
+        resetLiveResolutionState();
 
         closeDispositionModal();
 
@@ -2600,6 +3049,7 @@
         runtime.selectedDay = "Friday";
         runtime.selectedSlot = "";
         runtime.justBookedKey = "";
+        runtime.liveResolution = createEmptyLiveResolution("Friday");
         runtime.bookedSlots = {
           Friday: new Set(),
           Saturday: new Set()
@@ -2616,6 +3066,7 @@
         closeDispositionModal();
         closePauseLightbox();
         hideVoicemailInline();
+        clearLiveResolutionError();
 
         updatePowerModeBadge();
         updateStats();
@@ -2677,6 +3128,68 @@
 
         els.dropVoicemailBtn.addEventListener("click", function () {
           onDropVoicemailAndContinue();
+        });
+
+        els.liveOutcomeButtons.addEventListener("click", function (event) {
+          var button = event.target.closest(".wd-live-outcome-btn[data-live-outcome]");
+          if (!button || button.disabled) {
+            return;
+          }
+          setLiveOutcome(button.dataset.liveOutcome);
+        });
+
+        els.liveDaySelect.addEventListener("change", function () {
+          runtime.liveResolution.day = els.liveDaySelect.value;
+          runtime.liveResolution.slot = "";
+          runtime.liveResolution.locked = false;
+          runtime.liveResolution.summary = "";
+          clearLiveResolutionError();
+          renderLiveResolutionPanel();
+        });
+
+        els.liveSlotSelect.addEventListener("change", function () {
+          runtime.liveResolution.slot = els.liveSlotSelect.value;
+          runtime.liveResolution.locked = false;
+          runtime.liveResolution.summary = "";
+          clearLiveResolutionError();
+          renderLiveResolutionPanel();
+        });
+
+        els.liveVehicleInput.addEventListener("input", function () {
+          runtime.liveResolution.vehicle = els.liveVehicleInput.value;
+          runtime.liveResolution.locked = false;
+          runtime.liveResolution.summary = "";
+          clearLiveResolutionError();
+        });
+
+        els.liveMileageInput.addEventListener("input", function () {
+          runtime.liveResolution.mileage = els.liveMileageInput.value;
+          runtime.liveResolution.locked = false;
+          runtime.liveResolution.summary = "";
+          clearLiveResolutionError();
+        });
+
+        els.liveInfoNeededInput.addEventListener("input", function () {
+          runtime.liveResolution.infoNeeded = els.liveInfoNeededInput.value;
+          runtime.liveResolution.locked = false;
+          runtime.liveResolution.summary = "";
+          clearLiveResolutionError();
+        });
+
+        els.liveInfoWhyInput.addEventListener("input", function () {
+          runtime.liveResolution.infoWhy = els.liveInfoWhyInput.value;
+          runtime.liveResolution.locked = false;
+          runtime.liveResolution.summary = "";
+          clearLiveResolutionError();
+        });
+
+        els.lockLiveResolutionBtn.addEventListener("click", function () {
+          lockLiveResolution();
+        });
+
+        els.clearLiveResolutionBtn.addEventListener("click", function () {
+          resetLiveResolutionState();
+          renderLiveResolutionPanel();
         });
 
         els.mileageInput.addEventListener("input", function () {
